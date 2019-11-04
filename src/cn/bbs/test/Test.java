@@ -12,6 +12,7 @@ import cn.bbs.util.C3p0Utils;
 
 public class Test {
 	public static void main(String[] args) {
+<<<<<<< HEAD
 
 	       Connection conn = null;
 	       PreparedStatement pstmt = null;
@@ -44,4 +45,9 @@ public class Test {
 				//......
 	   }
 	
+=======
+		System.out.println("这个是我打的");
+		System.out.println("测试，这是第二次");
+	}
+>>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 }
