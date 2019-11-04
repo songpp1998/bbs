@@ -1,0 +1,4 @@
+<<<<<<< HEAD
+=======
+it is a test wmx
+>>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
