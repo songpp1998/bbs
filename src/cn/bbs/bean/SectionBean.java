@@ -6,10 +6,10 @@ package cn.bbs.bean;
  *
  */
 public class SectionBean {
-	public int sectionid;//这是板块id
-	public int districtid;//这是所属的分区id
-	public String name;//这是分区名
-	public int roleid;//这是版主id 
+	private int sectionid;//这是板块id
+	private int districtid;//这是所属的分区id
+	private String name;//这是分区名
+	private int roleid;//这是版主id 
 	@Override
 	public String toString() {
 		return "SectionBean [section=" + sectionid + ", districtid=" + districtid + ", name=" + name + ", roleid="

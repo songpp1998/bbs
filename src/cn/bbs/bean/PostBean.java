@@ -7,24 +7,25 @@ package cn.bbs.bean;
  *
  */
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class PostBean {
-	public int postid;//帖子id
-	public int userid;//发帖人id
-	public int sectionid;//所属板块id
-	public String content;//内容
-	public String title;//标题
-	public Date postdate;//发帖时间
-	public int posttype;//帖子类型  0为普通主题，1为投票主题，2为公告
-	public String postip;//发布者IP
-	public int readnum;//阅读次数
-	public int replynum;//回复总数
-	public int hot;//精华帖
-	public int hotid;//精华帖推荐人
-	public String edituser;//编辑者用户名
-	public Date edittime;//编辑时间
-	public String hotreason;//热帖推荐原因
+	private int postid;//帖子id
+	private int userid;//发帖人id
+	private int sectionid;//所属板块id
+	private String content;//内容
+	private String title;//标题
+	private Timestamp postdate;//发帖时间
+	private int posttype;//帖子类型  0为普通主题，1为投票主题，2为公告
+	private String postip;//发布者IP
+	private int readnum;//阅读次数
+	private int replynum;//回复总数
+	private int hot;//精华帖
+	private int hotid;//精华帖推荐人
+	private String edituser;//编辑者用户名
+	private Timestamp edittime;//编辑时间
+	private String hotreason;//热帖推荐原因
 	public int getPostid() {
 		return postid;
 	}
@@ -55,10 +56,10 @@ public class PostBean {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Date getPostdate() {
+	public Timestamp getPostdate() {
 		return postdate;
 	}
-	public void setPostdate(Date postdate) {
+	public void setPostdate(Timestamp postdate) {
 		this.postdate = postdate;
 	}
 	public int getPosttype() {
@@ -103,10 +104,10 @@ public class PostBean {
 	public void setEdituser(String edituser) {
 		this.edituser = edituser;
 	}
-	public Date getEdittime() {
+	public Timestamp getEdittime() {
 		return edittime;
 	}
-	public void setEdittime(Date edittime) {
+	public void setEdittime(Timestamp edittime) {
 		this.edittime = edittime;
 	}
 	public String getHotreason() {
@@ -115,8 +116,8 @@ public class PostBean {
 	public void setHotreason(String hotreason) {
 		this.hotreason = hotreason;
 	}
-	public PostBean(int postid, int userid, int sectionid, String content, String title, Date postdate, int posttype,
-			String postip, int readnum, int replynum, int hot, int hotid, String edituser, Date edittime,
+	public PostBean(int postid, int userid, int sectionid, String content, String title, Timestamp postdate, int posttype,
+			String postip, int readnum, int replynum, int hot, int hotid, String edituser, Timestamp edittime,
 			String hotreason) {
 		super();
 		this.postid = postid;

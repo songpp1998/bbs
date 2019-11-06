@@ -77,7 +77,7 @@ public class PostDaoImpl implements PostDao{
 	           pstmt.setInt(6, post.getHot());//加精
 	           pstmt.setInt(7, post.getHotid());//推荐人
 	           pstmt.setString(8, post.getEdituser());//编辑人
-	           pstmt.setString(9, post.hotreason);//推荐原因
+	           pstmt.setString(9, post.getHotreason());//推荐原因
 	           
 	           pstmt.setInt(10, post.getPostid());//要修改的帖子的id
 	           //5.执行操作
@@ -163,7 +163,7 @@ public class PostDaoImpl implements PostDao{
         	   post.setSectionid(rs.getInt("sectionid"));
         	   post.setContent(rs.getString("content"));
         	   post.setTitle(rs.getString("title"));
-        	   post.setPostdate(rs.getDate("postdate"));
+        	   post.setPostdate(rs.getTimestamp("postdate"));
         	   post.setPosttype(rs.getInt("posttype"));
         	   post.setPostip(rs.getString("postip"));
         	   post.setReadnum(rs.getInt("readnum"));
@@ -171,7 +171,7 @@ public class PostDaoImpl implements PostDao{
         	   post.setHot(rs.getInt("hot"));
         	   post.setHotid(rs.getInt("hotid"));
         	   post.setEdituser(rs.getString("edituser"));
-        	   post.setEdittime(rs.getDate("edittime"));
+        	   post.setEdittime(rs.getTimestamp("edittime"));
         	   post.setHotreason(rs.getString("hotreason"));
         	           	   
         	   list.add(post);
@@ -211,7 +211,7 @@ public class PostDaoImpl implements PostDao{
         	   post.setSectionid(rs.getInt("sectionid"));
         	   post.setContent(rs.getString("content"));
         	   post.setTitle(rs.getString("title"));
-        	   post.setPostdate(rs.getDate("postdate"));
+        	   post.setPostdate(rs.getTimestamp("postdate"));
         	   post.setPosttype(rs.getInt("posttype"));
         	   post.setPostip(rs.getString("postip"));
         	   post.setReadnum(rs.getInt("readnum"));
@@ -219,7 +219,7 @@ public class PostDaoImpl implements PostDao{
         	   post.setHot(rs.getInt("hot"));
         	   post.setHotid(rs.getInt("hotid"));
         	   post.setEdituser(rs.getString("edituser"));
-        	   post.setEdittime(rs.getDate("edittime"));
+        	   post.setEdittime(rs.getTimestamp("edittime"));
         	   post.setHotreason(rs.getString("hotreason"));
         	           	   
         	   list.add(post);
@@ -259,7 +259,7 @@ public class PostDaoImpl implements PostDao{
         	   post.setSectionid(rs.getInt("sectionid"));
         	   post.setContent(rs.getString("content"));
         	   post.setTitle(rs.getString("title"));
-        	   post.setPostdate(rs.getDate("postdate"));
+        	   post.setPostdate(rs.getTimestamp("postdate"));
         	   post.setPosttype(rs.getInt("posttype"));
         	   post.setPostip(rs.getString("postip"));
         	   post.setReadnum(rs.getInt("readnum"));
@@ -267,7 +267,7 @@ public class PostDaoImpl implements PostDao{
         	   post.setHot(rs.getInt("hot"));
         	   post.setHotid(rs.getInt("hotid"));
         	   post.setEdituser(rs.getString("edituser"));
-        	   post.setEdittime(rs.getDate("edittime"));
+        	   post.setEdittime(rs.getTimestamp("edittime"));
         	   post.setHotreason(rs.getString("hotreason"));
         	      	   
         	   list.add(post);
@@ -283,7 +283,6 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public PostBean selectPostbyId(PostBean p) {
-		List<PostBean> list=null;
 		try {
            //1.获取连接
            conn = C3p0Utils.getConn();
@@ -304,7 +303,7 @@ public class PostDaoImpl implements PostDao{
         	   post.setSectionid(rs.getInt("sectionid"));
         	   post.setContent(rs.getString("content"));
         	   post.setTitle(rs.getString("title"));
-        	   post.setPostdate(rs.getDate("postdate"));
+        	   post.setPostdate(rs.getTimestamp("postdate"));
         	   post.setPosttype(rs.getInt("posttype"));
         	   post.setPostip(rs.getString("postip"));
         	   post.setReadnum(rs.getInt("readnum"));
@@ -312,7 +311,7 @@ public class PostDaoImpl implements PostDao{
         	   post.setHot(rs.getInt("hot"));
         	   post.setHotid(rs.getInt("hotid"));
         	   post.setEdituser(rs.getString("edituser"));
-        	   post.setEdittime(rs.getDate("edittime"));
+        	   post.setEdittime(rs.getTimestamp("edittime"));
         	   post.setHotreason(rs.getString("hotreason"));
         	           	   
         	   return post;
@@ -352,7 +351,7 @@ public class PostDaoImpl implements PostDao{
         	   post.setSectionid(rs.getInt("sectionid"));
         	   post.setContent(rs.getString("content"));
         	   post.setTitle(rs.getString("title"));
-        	   post.setPostdate(rs.getDate("postdate"));
+        	   post.setPostdate(rs.getTimestamp("postdate"));
         	   post.setPosttype(rs.getInt("posttype"));
         	   post.setPostip(rs.getString("postip"));
         	   post.setReadnum(rs.getInt("readnum"));
@@ -360,7 +359,7 @@ public class PostDaoImpl implements PostDao{
         	   post.setHot(rs.getInt("hot"));
         	   post.setHotid(rs.getInt("hotid"));
         	   post.setEdituser(rs.getString("edituser"));
-        	   post.setEdittime(rs.getDate("edittime"));
+        	   post.setEdittime(rs.getTimestamp("edittime"));
         	   post.setHotreason(rs.getString("hotreason"));
         	      	   
         	   list.add(post);
