@@ -15,11 +15,21 @@ import cn.bbs.util.C3p0Utils;
 /***
  * 2019-11-06 10:27
  * 这是私信接口的实现类
+ * 这个实现类是单例的，使用getInstance()方法获取单例对象
  * @author wmx
  *
  */
 public class ShortMessageDaoImpl implements ShortMessageDao {
 
+	private ShortMessageDaoImpl(){
+	}
+	private static class Inner{
+		private static final ShortMessageDaoImpl instance = new ShortMessageDaoImpl();
+	}
+	public static ShortMessageDaoImpl getInstance() {
+		return Inner.instance;
+	}
+	
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;

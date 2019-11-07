@@ -7,7 +7,8 @@ public interface UserDao {
 	//根据账户名查找用户
 	public UserBean findUserBeanByAccount(int accuont);
 	
-	
+	//根据用户id查找用户
+	public UserBean selectUserById(int id);
 	
 	//根据账户名删除用户
 	public boolean deleteUserBeanByAccount(int account);

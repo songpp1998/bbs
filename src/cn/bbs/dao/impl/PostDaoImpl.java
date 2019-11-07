@@ -16,10 +16,21 @@ import cn.bbs.util.C3p0Utils;
 /**
  * 2019-11-05 10:06
  * post接口的实现类
+ * 这个实现类是单例的，使用getInstance()方法获取单例对象
  * @author wmx
  *
  */
 public class PostDaoImpl implements PostDao{
+	
+	private PostDaoImpl(){
+	}
+	private static class Inner{
+		private static final PostDaoImpl instance = new PostDaoImpl();
+	}
+	public static PostDaoImpl getInstance() {
+		return Inner.instance;
+	}
+	
 	
 	Connection conn = null;
 	PreparedStatement pstmt = null;

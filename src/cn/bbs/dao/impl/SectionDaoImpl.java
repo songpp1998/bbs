@@ -16,11 +16,21 @@ import cn.bbs.util.C3p0Utils;
  * 
  * 2019-11-06 16:30
  * 这是板块接口的实现类
+ * 这个实现类是单例的，使用getInstance()方法获取单例对象
  * @author wmx
  *
  */
 public class SectionDaoImpl implements SectionDao{
 
+	private SectionDaoImpl(){
+	}
+	private static class Inner{
+		private static final SectionDaoImpl instance = new SectionDaoImpl();
+	}
+	public static SectionDaoImpl getInstance() {
+		return Inner.instance;
+	}
+	
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;	
