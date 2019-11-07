@@ -23,21 +23,29 @@ public class RegisterServlet extends HttpServlet {
 		int account = Integer.parseInt(request.getParameter("account"));
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
+		int phone = Integer.parseInt(request.getParameter("phone"));
 //		System.out.println(account+username+password);
 		response.setContentType("text/html;charset=utf-8");
-		if(!reg.isExistAccount(account)) {
-			user = new UserBean();
-			user.setAccount(account);
-			user.setUsername(username);
-			user.setPassword(password);
-			if(reg.isRegister(user)) {
-				System.out.println(account+"注册成功");
+		try {
+			if(!reg.isExistAccount(account)) {
+				user = new UserBean();
+				user.setAccount(account);
+				user.setUsername(username);
+				user.setPassword(password);
+				user.setPhone(phone);
+				if(reg.isRegister(user)) {
+					System.out.println(account+"注册成功");
+					response.getWriter().write("注册成功");
+					response.setStatus(302);
+					response.sendRedirect("http://localhost:8020/bbs/login.html");
+				}else {
+					response.getWriter().append("注册失败，请检查注册信息是否合法");
+				}
 			}else {
-				System.out.println("500");
+				response.getWriter().append(account+"已被注册");
 			}
-		}else {
-			response.sendRedirect("http://127.0.0.1:8020/bbs/register.html");
-			System.out.println(account+"已被注册");
+		} catch (Exception e) {
+			response.getWriter().append("500内部服务器错误");
 		}
 	}
 

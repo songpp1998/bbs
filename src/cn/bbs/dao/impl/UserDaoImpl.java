@@ -95,7 +95,7 @@ public class UserDaoImpl implements UserDao{
 		return false;
 	}
 	
-	//增加用户，必填字段username,password,account
+	//增加用户，必填字段username,password,account,phone
 	@Override
 	public boolean addUserBeanAccount(UserBean user) {
 		Connection conn = null;
@@ -104,11 +104,12 @@ public class UserDaoImpl implements UserDao{
 		
 		try {
 			conn = C3p0Utils.getConn();
-			String sql = "insert into user(username,account,password,registertime) values(?,?,?,now())";
+			String sql = "insert into user(username,account,password,phone,registertime,roleid) values(?,?,?,?,now(),1)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getUsername());
 			pstmt.setInt(2, user.getAccount());
 			pstmt.setString(3, user.getPassword());
+			pstmt.setInt(4, user.getPhone());
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;
@@ -122,17 +123,18 @@ public class UserDaoImpl implements UserDao{
 	}
 
 	
-	//
+	//添加登陆时间和ip，登录成功时自动记录
 	@Override
-	public boolean addLoginTimeByAccount(int account) {
+	public boolean addLoginTimeByAccount(int account,String ip) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int rs = 0;
 		try {
 			conn = C3p0Utils.getConn();
-			String sql = "update user set logintime=now() where account=?";
+			String sql = "update user set logintime=now(),loginip=? where account=?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, account);
+			pstmt.setString(1, ip);
+			pstmt.setInt(2, account);
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;
@@ -144,9 +146,10 @@ public class UserDaoImpl implements UserDao{
 		}
 		return false;
 	}
-
+	
+	//添加上次登录时间和ip，注销时自动记录
 	@Override
-	public boolean addLastLoginTimeByAccount(int account) {
+	public boolean addLastLoginTimeByAccount(int account,String ip) {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;

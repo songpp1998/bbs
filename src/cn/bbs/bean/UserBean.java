@@ -18,9 +18,7 @@ public class UserBean {
 	private Date birthday;//生日
 	private short sex;//性别 
 	private String img;//图片url，头像
-	private String e_mail;//邮箱
-	private String problemhint;//问题提示
-	private String answerhint;//答案提示
+	private int phone;//手机号
 	private Timestamp registertime;//注册时间，精确到s
 	private Timestamp logintime;//登录时间
 	private Timestamp lastlogintime;//上次登录时间，精确到s
@@ -107,23 +105,12 @@ public class UserBean {
 	public void setImg(String img) {
 		this.img = img;
 	}
-	public String getE_mail() {
-		return e_mail;
+	
+	public int getPhone() {
+		return phone;
 	}
-	public void setE_mail(String e_mail) {
-		this.e_mail = e_mail;
-	}
-	public String getProblemhint() {
-		return problemhint;
-	}
-	public void setProblemhint(String problemhint) {
-		this.problemhint = problemhint;
-	}
-	public String getAnswerhint() {
-		return answerhint;
-	}
-	public void setAnswerhint(String answerhint) {
-		this.answerhint = answerhint;
+	public void setPhone(int phone) {
+		this.phone = phone;
 	}
 	public Timestamp getRegistertime() {
 		return registertime;

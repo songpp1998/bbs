@@ -18,9 +18,11 @@ public interface UserDao {
 	//添加用户
 	public boolean addUserBeanAccount(UserBean user);
 	
-	//记录登录时间
-	public boolean addLoginTimeByAccount(int account);
+	//记录登录时间和ip
+	public boolean addLoginTimeByAccount(int account,String ip);
 	
-	//记录上次登录时间
-	public boolean addLastLoginTimeByAccount(int account);
+	//记录上次登录时间和ip
+	public boolean addLastLoginTimeByAccount(int account,String ip);
+
+	
 }

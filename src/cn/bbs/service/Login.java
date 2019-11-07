@@ -11,6 +11,7 @@ public class Login {
 		userDaoImpl = new UserDaoImpl();
 		String password = userDaoImpl.findUserBeanByAccount(user.getAccount()).getPassword();
 		if(password.equals(user.getPassword())) {
+			userDaoImpl.addLoginTimeByAccount(user.getAccount(),user.getLoginIp());
 			return true;
 		}
 		return false;
