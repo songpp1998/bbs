@@ -20,7 +20,7 @@ public class testbywmx {
 	public static void main(String[] args) {
 		PostDao dao=new PostDaoImpl();
 		List<PostBean> list=null;
-		PostBean post=new PostBean(1,1,1,"这是内容123","标题",new Date(),0,"ip",0,0,0,0,"作者",new Date(),null);
+//		PostBean post=new PostBean(1,1,1,"这是内容123","标题",new Date(),0,"ip",0,0,0,0,"作者",new Date(),null);
 		SectionBean section=new SectionBean();
 		section.setSectionId(1);
 		UserBean user = new UserBean();

@@ -1,14 +1,15 @@
 package cn.bbs.dao;
 
+
+import java.util.List;
+
 import cn.bbs.bean.UserBean;
 
 public interface UserDao {
 	
 	//根据账户名查找用户
-	public UserBean findUserBeanByAccount(int accuont);
-	
-	
-	
+	public UserBean findUserBeanByAccount(int account);
+		
 	//根据账户名删除用户
 	public boolean deleteUserBeanByAccount(int account);
 	
@@ -18,11 +19,17 @@ public interface UserDao {
 	//添加用户
 	public boolean addUserBeanAccount(UserBean user);
 	
+	//批量显示用户
+	public List<UserBean> findUserBean(int page,int num);
+	
+	
 	//记录登录时间和ip
 	public boolean addLoginTimeByAccount(int account,String ip);
 	
-	//记录上次登录时间和ip
+	//注销时，记录上次登录时间和ip
 	public boolean addLastLoginTimeByAccount(int account,String ip);
-
 	
+	//通过account重置密码
+	public boolean resetPasswordByAccount(int account,int phone);
+
 }

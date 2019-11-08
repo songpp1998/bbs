@@ -16,7 +16,7 @@ public class UserBean {
 	private String blog;//个人网站
 	private String birplace;//籍贯
 	private Date birthday;//生日
-	private short sex;//性别 
+	private int sex;//性别 
 	private String img;//图片url，头像
 	private int phone;//手机号
 	private Timestamp registertime;//注册时间，精确到s
@@ -93,10 +93,10 @@ public class UserBean {
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
-	public short getSex() {
+	public int getSex() {
 		return sex;
 	}
-	public void setSex(short sex) {
+	public void setSex(int sex) {
 		this.sex = sex;
 	}
 	public String getImg() {
