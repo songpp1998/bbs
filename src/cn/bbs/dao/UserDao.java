@@ -8,8 +8,16 @@ import cn.bbs.bean.UserBean;
 public interface UserDao {
 	
 	//根据账户名查找用户
+<<<<<<< HEAD
 	public UserBean findUserBeanByAccount(int account);
 		
+=======
+	public UserBean findUserBeanByAccount(int accuont);
+	
+	//根据用户id查找用户
+	public UserBean selectUserById(int id);
+	
+>>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 	//根据账户名删除用户
 	public boolean deleteUserBeanByAccount(int account);
 	

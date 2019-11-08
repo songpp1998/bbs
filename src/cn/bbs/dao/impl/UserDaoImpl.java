@@ -10,7 +10,12 @@ import java.util.List;
 import cn.bbs.bean.UserBean;
 import cn.bbs.dao.UserDao;
 import cn.bbs.util.C3p0Utils;
-
+/***
+ * 2019-11-07 11:20
+ * 添加了selectUserById方法
+ * @author
+ *
+ */
 public class UserDaoImpl implements UserDao{
 
 	//根据account查询用户名,密码
@@ -176,6 +181,7 @@ public class UserDaoImpl implements UserDao{
 		return false;
 	}
 
+<<<<<<< HEAD
 	//重置密码为注册手机号
 	@Override
 	public boolean resetPasswordByAccount(int account,int phone) {
@@ -245,5 +251,31 @@ public class UserDaoImpl implements UserDao{
 			C3p0Utils.close(rs, pstmt, conn);
 		}
 		return list;
+=======
+	@Override
+	public UserBean selectUserById(int id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		UserBean user = null;
+		ResultSet rs = null;
+	    try {
+			conn = C3p0Utils.getConn();
+			String sql = "SELECT * FROM user where userid=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, id);
+			rs = pstmt.executeQuery();			
+			while(rs.next()) {
+				user = new UserBean();
+				user.setAccount(rs.getInt("account"));
+               	user.setUsername(rs.getString("username"));
+               	user.setPassword(rs.getString("password"));
+	        }
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			C3p0Utils.close(rs, pstmt, conn);
+		}
+	    return user;
+>>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 	}
 }

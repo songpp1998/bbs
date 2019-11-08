@@ -15,11 +15,21 @@ import cn.bbs.util.C3p0Utils;
 /***
  * 2019-11-06 15:04
  * 这是回复接口的实现类
+ * 这个实现类是单例的，使用getInstance()方法获取单例对象
  * @author wmx
  *
  */
 public class ReplyDaoImpl implements ReplyDao{
 
+	private ReplyDaoImpl(){
+	}
+	private static class Inner{
+		private static final ReplyDaoImpl instance = new ReplyDaoImpl();
+	}
+	public static ReplyDaoImpl getInstance() {
+		return Inner.instance;
+	}
+	
 	Connection conn = null;
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;

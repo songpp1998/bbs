@@ -15,7 +15,22 @@ public class ShortMessageBean {
 	private int receiverid;//收信人
 	private String title;//标题
 	private Timestamp createtime;//发送时间
-	private int status;//消息状态 0是草稿 1是未读 2是已读
+	private int status;//消息状态 0是草稿 1是已发送 2是未读 3是已读
+	
+	private String sendername;//发信人名
+	private String receivername;//收信人名
+	public String getSendername() {
+		return sendername;
+	}
+	public void setSendername(String sendername) {
+		this.sendername = sendername;
+	}
+	public String getReceivername() {
+		return receivername;
+	}
+	public void setReceivername(String receivername) {
+		this.receivername = receivername;
+	}
 	public int getMessageid() {
 		return messageid;
 	}
