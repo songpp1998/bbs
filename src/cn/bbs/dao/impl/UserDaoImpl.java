@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cn.bbs.bean.UserBean;
 import cn.bbs.dao.UserDao;
@@ -18,7 +20,7 @@ public class UserDaoImpl implements UserDao{
 
 	//根据account查询用户名,密码
 	@Override
-	public UserBean findUserBeanByAccount(int accuont) {
+	public UserBean findUserBeanByAccount(int account) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		UserBean user = null;
@@ -27,13 +29,15 @@ public class UserDaoImpl implements UserDao{
 			conn = C3p0Utils.getConn();
 			String sql = "SELECT * FROM user where account=?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, accuont);
+			pstmt.setInt(1, account);
 			rs = pstmt.executeQuery();			
 			while(rs.next()) {
 				user = new UserBean();
 				user.setAccount(rs.getInt("account"));
                	user.setUsername(rs.getString("username"));
                	user.setPassword(rs.getString("password"));
+               	user.setRoleid(rs.getInt("roleid"));
+               	user.setPhone(rs.getInt("phone"));
 	        }
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -161,9 +165,10 @@ public class UserDaoImpl implements UserDao{
 		int rs = 0;
 		try {
 			conn = C3p0Utils.getConn();
-			String sql = "update user set lastlogintime=now() where account=?";
+			String sql = "update user set lastlogintime=now(),lastloginip=? where account=?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, account);
+			pstmt.setString(1, ip);
+			pstmt.setInt(2, account);
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;
@@ -176,6 +181,77 @@ public class UserDaoImpl implements UserDao{
 		return false;
 	}
 
+<<<<<<< HEAD
+	//重置密码为注册手机号
+	@Override
+	public boolean resetPasswordByAccount(int account,int phone) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int rs = 0;
+		try {
+			conn = C3p0Utils.getConn();
+			String sql = "update user set password=? where account=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, phone);
+			pstmt.setInt(2, account);
+			rs = pstmt.executeUpdate();
+			if(rs==1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			C3p0Utils.close(null, pstmt, conn);
+		}
+		return false;
+	}
+
+	//批量显示所有用户
+	@Override
+	public List<UserBean> findUserBean(int page,int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		List<UserBean> list = null;
+		UserBean user = null;
+		try {
+			conn = C3p0Utils.getConn();
+			String sql = "select * from user limit ? offset ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			pstmt.setInt(2, page*num);
+			rs = pstmt.executeQuery();
+			list=new ArrayList<>();
+			while(rs.next()) {
+				user.setUserId(rs.getInt("userid"));
+				user.setUsername(rs.getString("username"));
+				user.setAccount(rs.getInt("account"));
+				user.setPassword(rs.getString("password"));
+				user.setSignature(rs.getString("signature"));
+				user.setIntrodure(rs.getString("introduce"));
+				user.setQq(rs.getInt("qq"));
+				user.setBlog(rs.getString("blog"));
+				user.setBirplace(rs.getString("birplace"));
+				user.setBirthday(rs.getDate("birthday"));
+				user.setSex(rs.getInt("sex"));
+				user.setImg(rs.getString("img"));
+				user.setRoleid(rs.getInt("roleid"));
+				user.setPhone(rs.getInt("phone"));
+				user.setRegistertime(rs.getTimestamp("registertime"));
+				user.setLogintime(rs.getTimestamp("logintime"));
+				user.setLoginIp(rs.getString("loginIp"));
+				user.setLastlogintime(rs.getTimestamp("lastlogintime"));
+				user.setLastloginIp(rs.getString("lastloginIp"));
+				
+				list.add(user);
+				}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			C3p0Utils.close(rs, pstmt, conn);
+		}
+		return list;
+=======
 	@Override
 	public UserBean selectUserById(int id) {
 		Connection conn = null;
@@ -201,5 +277,6 @@ public class UserDaoImpl implements UserDao{
 			C3p0Utils.close(rs, pstmt, conn);
 		}
 	    return user;
+>>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 	}
 }

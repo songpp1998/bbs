@@ -16,4 +16,11 @@ public class Login {
 		}
 		return false;
 	}
+	
+	//查看用户角色
+	public int findRoleByAccount(int account) {
+		userDaoImpl = new UserDaoImpl();
+		return userDaoImpl.findUserBeanByAccount(account).getRoleid();
+		
+	}
 }
