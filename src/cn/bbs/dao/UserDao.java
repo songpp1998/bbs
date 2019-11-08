@@ -14,11 +14,7 @@ public interface UserDao {
 	
 	//根据用户id查找用户
 	public UserBean selectUserById(int id);
-<<<<<<< HEAD
-	
-=======
-	
->>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
+
 	//根据账户名删除用户
 	public boolean deleteUserBeanByAccount(int account);
 	

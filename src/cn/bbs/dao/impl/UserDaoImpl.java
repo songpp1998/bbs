@@ -180,10 +180,7 @@ public class UserDaoImpl implements UserDao{
 		}
 		return false;
 	}
-<<<<<<< HEAD
 
-=======
->>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 
 	//重置密码为注册手机号
 	@Override
@@ -260,12 +257,7 @@ public class UserDaoImpl implements UserDao{
 		}
 		return list;
 	}
-<<<<<<< HEAD
-=======
-	
-	
-	//根据id查找用户
->>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
+
 	@Override
 	public UserBean selectUserById(int id) {
 		Connection conn = null;
@@ -290,11 +282,9 @@ public class UserDaoImpl implements UserDao{
 		}finally {
 			C3p0Utils.close(rs, pstmt, conn);
 		}
-<<<<<<< HEAD
+	    
 	    return user;
-=======
-	    return user;
->>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
+
 	}
 	
 	
