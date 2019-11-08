@@ -180,7 +180,10 @@ public class UserDaoImpl implements UserDao{
 		}
 		return false;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 
 	//重置密码为注册手机号
 	@Override
@@ -206,6 +209,8 @@ public class UserDaoImpl implements UserDao{
 		return false;
 	}
 
+	
+	
 	//批量显示所有用户
 	@Override
 	public List<UserBean> findUserBean(int page,int num) {
@@ -218,11 +223,14 @@ public class UserDaoImpl implements UserDao{
 			conn = C3p0Utils.getConn();
 			String sql = "select * from user limit ? offset ?";
 			pstmt = conn.prepareStatement(sql);
+//			System.out.println("sql编译");
 			pstmt.setInt(1, num);
 			pstmt.setInt(2, page*num);
 			rs = pstmt.executeQuery();
-			list=new ArrayList<>();
+			list=new ArrayList<UserBean>();
+//			System.out.println(rs.next());
 			while(rs.next()) {
+				user = new UserBean();
 				user.setUserId(rs.getInt("userid"));
 				user.setUsername(rs.getString("username"));
 				user.setAccount(rs.getInt("account"));
@@ -242,7 +250,7 @@ public class UserDaoImpl implements UserDao{
 				user.setLoginIp(rs.getString("loginIp"));
 				user.setLastlogintime(rs.getTimestamp("lastlogintime"));
 				user.setLastloginIp(rs.getString("lastloginIp"));
-				
+
 				list.add(user);
 				}
 		} catch (SQLException e) {
@@ -252,6 +260,12 @@ public class UserDaoImpl implements UserDao{
 		}
 		return list;
 	}
+<<<<<<< HEAD
+=======
+	
+	
+	//根据id查找用户
+>>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 	@Override
 	public UserBean selectUserById(int id) {
 		Connection conn = null;
@@ -276,6 +290,12 @@ public class UserDaoImpl implements UserDao{
 		}finally {
 			C3p0Utils.close(rs, pstmt, conn);
 		}
+<<<<<<< HEAD
 	    return user;
+=======
+	    return user;
+>>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 	}
+	
+	
 }
