@@ -273,6 +273,7 @@ public class UserDaoImpl implements UserDao{
 			rs = pstmt.executeQuery();			
 			while(rs.next()) {
 				user = new UserBean();
+				user.setUserId(rs.getInt("userid"));
 				user.setAccount(rs.getInt("account"));
                	user.setUsername(rs.getString("username"));
                	user.setPassword(rs.getString("password"));

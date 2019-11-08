@@ -1,7 +1,6 @@
 package cn.bbs.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,29 +15,23 @@ import net.sf.json.JSONObject;
 
 /**
  * 
- * 2019-11-07
- * 这是发送短消息的api接口
+ * 2019-11-08 09:46
+ * 删除私信的api
  * @author wmx
- *
- *     请求格式：
- * http://localhost:8080/bbs/MessageSend?message=%E8%BF%99%E6%98%AF%E5%86%85%E5%AE%B9&senderid=1&receiverid=1&title=%E8%BF%99%E6%98%AF%E6%A0%87%E9%A2%98&status=0
- *	其中status消息状态 0是草稿 1是已发送 2是未读 3是已读
+ * 请求格式：
+ * http://localhost:8080/bbs/MessageDelete?messageid=6
  *
  */
-@WebServlet("/MessageSend")
-public class MessageSendServlet extends HttpServlet{
+@WebServlet("/MessageDelete")
+public class MessageDeleteServlet extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		//获取数据
 		ShortMessageBean message=new ShortMessageBean();
-		message.setMessage(req.getParameter("message"));
-		message.setSenderid(Integer.parseInt(req.getParameter("senderid")));
-		message.setReceiverid(Integer.parseInt(req.getParameter("receiverid")));
-		message.setTitle(req.getParameter("title"));
-		message.setStatus(Integer.parseInt(req.getParameter("status")));
+		message.setMessageid(Integer.parseInt(req.getParameter("messageid")));
 		
 		//具体的操作放入ShortMessageService中
-		Message m=ShortMessageService.MessageSend(message);
+		Message m=ShortMessageService.MessageDelete(message);
 		System.out.println(m);
 		
 		//返回json
