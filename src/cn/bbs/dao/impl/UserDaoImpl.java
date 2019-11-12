@@ -258,6 +258,7 @@ public class UserDaoImpl implements UserDao{
 		return list;
 	}
 
+	
 	@Override
 	public UserBean selectUserById(int id) {
 		Connection conn = null;
@@ -285,6 +286,13 @@ public class UserDaoImpl implements UserDao{
 	    
 	    return user;
 
+	}
+
+	//管理员修改用户权限
+	@Override
+	public boolean modifyPower(int account, int roleid, int position) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	
