@@ -22,6 +22,7 @@ public class logoutServlet extends HttpServlet {
 		
 		HttpSession session = request.getSession(false);
 		String str = (String) session.getAttribute("ticket");
+		System.out.println(str);
 		response.setContentType("text/html;charset=utf-8");
 		if(str.equals("")) {
 			response.getWriter().write("你已退出，请问重复退出");

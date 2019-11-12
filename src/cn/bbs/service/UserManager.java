@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.bbs.bean.UserBean;
+import cn.bbs.dao.PageDao;
 import cn.bbs.dao.impl.UserDaoImpl;
 
 /** 
@@ -15,19 +16,22 @@ public class UserManager {
 	
 	private List<UserBean> list = null;
 	private UserDaoImpl userDaoImpl = null;
+	private PageDao pageDao = null;
 	//分页实现用户数据
 	public List<UserBean> findUserByPage(int page,int num) {
 		
 		userDaoImpl = new UserDaoImpl();
-		list = new ArrayList<UserBean>();
-		list = userDaoImpl.findUserBean(page, num);
+		pageDao = new PageDao(page, num);
 		
-//		for (UserBean a : list) {
-//			System.out.println(a.getUserId()+a.getUsername());
-//		}
+		list = new ArrayList<UserBean>();
+		
+//		if(pageDao.isHasNext())
+		list = userDaoImpl.findUserBean(pageDao.getPage(),pageDao.getNum());
+		
+		
 		return list;
 	}
-	public static void main(String[] args) {
-		new UserManager().findUserByPage(0, 5);
-	}
+//	public static void main(String[] args) {
+//		new UserManager().findUserByPage(0, 3);
+//	}
 }

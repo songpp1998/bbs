@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import cn.bbs.bean.UserBean;
 import cn.bbs.service.UserManager;
@@ -39,13 +40,21 @@ public class UserManagerServlet extends HttpServlet {
 //		} catch (Exception e) {
 //			
 //		}
+		
 		list = userManager.findUserByPage(page, num);
 		HashMap<String , Object> map=new HashMap<>();
 		map.put("users", list);
 		System.out.println(map);
+		HttpSession session = request.getSession();
+		String ticket = (String) session.getAttribute("ticket");
 		response.setContentType("text/josn;charset=utf-8");
-		response.setHeader("Access-Control-Allow-Origin", "*");
+		
+		//动态获取域
+		response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
+		//允许携带cookie
+		response.addHeader("Access-Control-Allow-Credentials","true");
 		JSONObject.fromObject(map).write(response.getWriter());
+		System.out.println(session.getAttribute("ticket"));
 	}
 
 

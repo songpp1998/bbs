@@ -18,4 +18,6 @@ import cn.bbs.dao.impl.PostDaoImpl;
  */
 public class testbywmx {
 	
+	public static void main(String[] args) {
+	}
 }
