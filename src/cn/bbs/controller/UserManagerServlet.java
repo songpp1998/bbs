@@ -32,7 +32,7 @@ public class UserManagerServlet extends HttpServlet {
 		userManager = new UserManager();
 		list = new ArrayList<UserBean>();
 		int page = 0;
-		int num = 5;
+		int num = 1;
 		
 //		try {
 //			page = Integer.parseInt(request.getParameter("page"));

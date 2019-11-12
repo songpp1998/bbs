@@ -181,7 +181,6 @@ public class UserDaoImpl implements UserDao{
 		return false;
 	}
 
-
 	//重置密码为注册手机号
 	@Override
 	public boolean resetPasswordByAccount(int account,int phone) {
@@ -257,9 +256,13 @@ public class UserDaoImpl implements UserDao{
 		}
 		return list;
 	}
+<<<<<<< HEAD
 
 	
 	@Override
+=======
+		@Override
+>>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 	public UserBean selectUserById(int id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -283,8 +286,7 @@ public class UserDaoImpl implements UserDao{
 		}finally {
 			C3p0Utils.close(rs, pstmt, conn);
 		}
-	    
-	    return user;
+		return user;
 
 	}
 
