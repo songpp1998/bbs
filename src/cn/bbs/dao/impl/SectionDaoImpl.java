@@ -114,7 +114,7 @@ public class SectionDaoImpl implements SectionDao{
 	}
 
 	@Override
-	public List<SectionBean> selectSectionByDistrictid(SectionBean section) {
+	public List<SectionBean> selectSectionByDistrictid(int sectionid) {
 		List<SectionBean> list=null;
 		try {
 	           //1.获取连接
@@ -124,7 +124,7 @@ public class SectionDaoImpl implements SectionDao{
 	           //3.获取数据库操作对象
 	           pstmt = conn.prepareStatement(sql);
 	         //4.解析参数
-			   pstmt.setInt(1, section.getSectionId());
+			   pstmt.setInt(1, sectionid);
 	           //5.执行操作
 	           rs = pstmt.executeQuery();
 	           //6.遍历结果集
@@ -179,6 +179,42 @@ public class SectionDaoImpl implements SectionDao{
 	           C3p0Utils.close(rs, pstmt, conn);
 	       }
 			return null;
+	}
+
+	@Override
+	public List<SectionBean> selectSectionByName(String name, int sectionid) {
+		List<SectionBean> list=null;
+		try {
+	           //1.获取连接
+	           conn = C3p0Utils.getConn();
+	           //2.定义sql
+	           String sql = "select * from section where districtid=? and name=?";
+	           //3.获取数据库操作对象
+	           pstmt = conn.prepareStatement(sql);
+	         //4.解析参数
+			   pstmt.setInt(1, sectionid);
+			   pstmt.setString(2, name);
+	           //5.执行操作
+	           rs = pstmt.executeQuery();
+	           //6.遍历结果集
+	           list=new ArrayList<>();
+	           SectionBean s=null;
+	           while (rs.next()) {
+	        	   s=new SectionBean();
+	        	   s.setSectionId(rs.getInt("sectionid"));
+	        	   s.setDistrictid(rs.getInt("districtid"));
+	        	   s.setName(rs.getString("name"));
+	        	   s.setRoleid(rs.getInt("roleid"));
+	        	   
+	        	   list.add(s);
+	           }
+	       } catch (SQLException e) {
+	           e.printStackTrace();
+	       } finally {
+	           //释放资源
+	           C3p0Utils.close(rs, pstmt, conn);
+	       }
+			return list;
 	}
 
 }

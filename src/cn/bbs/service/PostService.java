@@ -24,6 +24,7 @@ import cn.bbs.dao.impl.UserDaoImpl;
 import cn.bbs.message.Message;
 
 /**
+ * 
  * 2019-11-11 15:40 
  * 这是具体操作Post数据处理的方法
  * @author wmx
@@ -119,11 +120,85 @@ public class PostService {
 		List<ReplyBean> list = new ArrayList<>();
 		list=redao.selectReplyByPost(post);
 		
+		//阅读加一
+		post.setReadnum(post.getReadnum()+1);
+		postdao.updatePost(post);
+		
 		HashMap<String , Object> map=new HashMap<>();
 		map.put("post", post);
 		map.put("replylist", list);
 		
 		return new Message(true,112,"成功",map);
+	}
+	
+	/*推荐帖子*/
+	public static Message PostHot(PostBean post) {
+		//检查数据
+		PostBean p=postdao.selectPostbyId(post.getPostid());
+		if(p==null) return new Message(false,282,"找不到此文章",null);
+		UserBean user=userdao.selectUserById(post.getHotid());
+		if(user==null) return new Message(false,281,"查无此人",null);
+		//验证权限
+		boolean flag=true;
+		//
+		if(!flag) return new Message(false,282,"权限不足",null);
+		
+		//尝试修改数据
+		p.setHot(post.getHot());
+		p.setHotid(post.getHotid());
+		p.setHotreason(post.getHotreason());
+		if(postdao.updatePost(p)==1) {
+			//给发帖人发消息
+			ShortMessageBean message=new ShortMessageBean();
+			String t=null;
+			String co=null;
+			if(post.getHot()==1) {
+				t="你的帖子被置顶了";
+				co="你的帖子"+p.getTitle()+"在"+df.format(new Date())+"被置顶了，置顶原因："+p.getHotreason();
+			}else {
+				t="你的帖子被取消置顶";
+				co="你的帖子"+p.getTitle()+"在"+df.format(new Date())+"被取消置顶了，取消原因："+p.getHotreason();
+			}
+			message.setTitle(t);
+			message.setSenderid(0);
+			message.setReceiverid(p.getUserid());
+			message.setStatus(2);
+			message.setMessage(co);
+			smdao.addShortMessage(message);
+			
+			return new Message(true,113,"成功",null);
+		}
+		return new Message(false,280,"系统内部错误",null);
+	}
+	
+	/*删除帖子*/
+	public static Message postDelete(PostBean post) {
+		//验证数据
+		UserBean user = userdao.selectUserById(post.getUserid());
+		if(user==null) return new Message(false,291,"查无此人",null);
+		post=postdao.selectPostbyId(post.getPostid());
+		if(post==null) return new Message(false,292,"找不到此文章",null);
+		//检查权限
+		boolean flag=false;
+		if(user.getUserId()==post.getUserid()) flag=true;
+		//
+		
+		if(!flag) return new Message(false,293,"权限不足",null);
+		//尝试修改数据库
+		if(postdao.deletePost(post)==1){
+			//修改成功给作者发信息
+			ShortMessageBean message=new ShortMessageBean();
+			message.setTitle("你的帖子已被删除");
+			message.setSenderid(0);
+			message.setReceiverid(post.getUserid());
+			message.setStatus(2);
+			message.setMessage(user.getUsername()+"在"+df.format(new Date())+"删除了你的帖子"+post.getTitle());
+			smdao.addShortMessage(message);
+			
+			return new Message(true,114,"成功",null);
+		}
+		
+		return new Message(false,290,"系统内部错误",null);
 	}
 	
 }

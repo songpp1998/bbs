@@ -9,12 +9,20 @@ public class SectionBean {
 	private int sectionid;//这是板块id
 	private int districtid;//这是所属的分区id
 	private String name;//这是分区名
-	private int roleid;//这是版主id 
+	private int roleid;//这是版主id
+	private Object list;//这是下方的板块列
 	@Override
 	public String toString() {
 		return "SectionBean [section=" + sectionid + ", districtid=" + districtid + ", name=" + name + ", roleid="
 				+ roleid + "]";
 	}
+	public Object getList() {
+		return list;
+	}
+	public void setList(Object list) {
+		this.list = list;
+	}
+	
 	public int getSectionId() {
 		return sectionid;
 	}
