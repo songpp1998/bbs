@@ -256,7 +256,13 @@ public class UserDaoImpl implements UserDao{
 		}
 		return list;
 	}
+<<<<<<< HEAD
+
+	
+	@Override
+=======
 		@Override
+>>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 	public UserBean selectUserById(int id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -282,6 +288,13 @@ public class UserDaoImpl implements UserDao{
 		}
 		return user;
 
+	}
+
+	//管理员修改用户权限
+	@Override
+	public boolean modifyPower(int account, int roleid, int position) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	

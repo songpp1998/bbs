@@ -8,7 +8,6 @@ import cn.bbs.bean.UserBean;
 public interface UserDao {
 	
 	//根据账户名查找用户
-
 	public UserBean findUserBeanByAccount(int account);
 		
 	
@@ -24,10 +23,6 @@ public interface UserDao {
 	//添加用户
 	public boolean addUserBeanAccount(UserBean user);
 	
-	//批量显示用户
-	public List<UserBean> findUserBean(int page,int num);
-	
-	
 	//记录登录时间和ip
 	public boolean addLoginTimeByAccount(int account,String ip);
 	
@@ -36,5 +31,12 @@ public interface UserDao {
 	
 	//通过account重置密码
 	public boolean resetPasswordByAccount(int account,int phone);
-
+	
+	//批量显示用户
+	public List<UserBean> findUserBean(int page,int num);
+	
+	//修改用户权限
+	public boolean modifyPower(int account,int roleid,int position);
+	
+	
 }
