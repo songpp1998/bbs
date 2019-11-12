@@ -9,8 +9,11 @@ import cn.bbs.bean.SectionBean;
 import cn.bbs.bean.UserBean;
 import cn.bbs.dao.PostDao;
 import cn.bbs.dao.RoleDao;
+import cn.bbs.dao.SectionDao;
 import cn.bbs.dao.impl.PostDaoImpl;
 import cn.bbs.dao.impl.RoleDaoImpl;
+import cn.bbs.dao.impl.SectionDaoImpl;
+import cn.bbs.service.SectionService;
 
 /**
  * 
@@ -22,11 +25,16 @@ import cn.bbs.dao.impl.RoleDaoImpl;
 public class testbywmx {
 	
 	public static void main(String[] args) {
-		RoleBean role=new RoleBean(3,3,"456"); 
-		RoleDao dao=RoleDaoImpl.getInstance();
+//		RoleBean role=new RoleBean(3,3,"456"); 
+//		RoleDao dao=RoleDaoImpl.getInstance();
+//		System.out.println(dao.addRole(role));
 //		dao.addRole(role);
 //		dao.deleteRole(role);
-		dao.updateRole(role);
-		System.out.println(dao.selectRoleById(3));
+//		dao.updateRole(role);
+//		System.out.println(dao.selectRoleById(3));
+		
+//		SectionDao dao=SectionDaoImpl.getInstance();
+//		System.out.println(dao.selectSectionByDistrictid(0));
+		SectionService.showSection();
 	}
 }

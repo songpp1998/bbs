@@ -32,9 +32,11 @@ public class SectionService {
 	public static Message showSection() {
 		//获取所有的分区
 		List<SectionBean> list=sdao.selectSectionByDistrictid(0);
+//		System.out.println(list);
 		//分别获取所有分区下的各个板块
 		for (SectionBean s : list) {
-			s.setList(sdao.selectSectionByDistrictid(s.getRoleid()));
+//			System.out.println(s);
+			s.setList(sdao.selectSectionByDistrictid(s.getSectionId()));
 		}
 		//返回数据
 		return new Message(true,120,"成功",list);
@@ -46,7 +48,11 @@ public class SectionService {
 		if(section.getDistrictid()!=0&&s==null) return new Message(false,211,"所属分区不存在",null);
 		//不能重名
 		List<SectionBean> list=sdao.selectSectionByName(section.getName(), section.getDistrictid());
-		if(list!=null) return new Message(false,212,"重名",null);
+		if(list.size()!=0) {
+			System.out.println(list);
+			return new Message(false,212,"重名",null);
+		}
+		
 		//验证完成，创建对应的角色
 		int position=2;
 		String name=section.getName()+"版主";
@@ -55,6 +61,14 @@ public class SectionService {
 			name=section.getName()+"区主";
 		}
 		RoleBean role=new RoleBean(0,position,name);
-		return null;
+		int xl=roledao.addRole(role);
+		if(xl==0) return new Message(false,213,"系统内部错误",null);
+		
+		//创建新的板块
+		section.setRoleid(xl);
+		if(sdao.addSection(section)!=0) {
+			return new Message(true,121,"成功",null);
+		}
+		return new Message(false,213,"系统内部错误",null);
 	}
 }

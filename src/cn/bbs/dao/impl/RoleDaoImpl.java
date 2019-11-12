@@ -45,6 +45,19 @@ public class RoleDaoImpl implements RoleDao{
            pstmt.setInt(2, role.getPostion());
            //5.执行操作
            res = pstmt.executeUpdate();
+           if(res==0) return res;
+           
+           /*获取刚刚插入的数据的id*/
+            //2.定义sql
+ 	       sql = "SELECT LAST_INSERT_ID()";
+ 	       //3.获取数据库操作对象
+ 	       pstmt = conn.prepareStatement(sql);
+ 	       //获取返回数据
+ 	       rs = pstmt.executeQuery();
+ 	       while(rs.next()) {
+ 	    	   res=rs.getInt("LAST_INSERT_ID()");
+ 	    	   return res;
+ 	       }
 
        } catch (SQLException e) {
            e.printStackTrace();
@@ -69,6 +82,7 @@ public class RoleDaoImpl implements RoleDao{
            pstmt.setInt(1,role.getRoleId());
            //5.执行操作
            res = pstmt.executeUpdate();
+           
 
        } catch (SQLException e) {
            e.printStackTrace();

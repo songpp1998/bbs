@@ -256,13 +256,6 @@ public class UserDaoImpl implements UserDao{
 		}
 		return list;
 	}
-<<<<<<< HEAD
-
-	
-	@Override
-=======
-		@Override
->>>>>>> branch 'master' of https://github.com/songpp1998/bbs.git
 	public UserBean selectUserById(int id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
