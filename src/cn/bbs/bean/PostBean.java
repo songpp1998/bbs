@@ -26,6 +26,22 @@ public class PostBean {
 	private String edituser;//编辑者用户名
 	private Timestamp edittime;//编辑时间
 	private String hotreason;//热帖推荐原因
+	/****************************/
+	private String username;//作者名
+	private String sectionname;//板块名
+	
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	public String getSectionname() {
+		return sectionname;
+	}
+	public void setSectionname(String sectionname) {
+		this.sectionname = sectionname;
+	}
 	public int getPostid() {
 		return postid;
 	}

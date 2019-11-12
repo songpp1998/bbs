@@ -10,6 +10,12 @@ import cn.bbs.dao.impl.ShortMessageDaoImpl;
 import cn.bbs.dao.impl.UserDaoImpl;
 import cn.bbs.message.Message;
 
+/**
+ * 2019-11-09 
+ * 这是具体操作ShortMessage数据处理的方法
+ * @author wmx
+ *
+ */
 public class ShortMessageService {
 	
 	static UserDao userdao=null;

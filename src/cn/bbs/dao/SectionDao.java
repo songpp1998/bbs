@@ -16,5 +16,5 @@ public interface SectionDao {
 	public int updateSection(SectionBean section);
 	public int deleteSection(SectionBean section);
 	public List<SectionBean> selectSectionByDistrictid(SectionBean section);//按照分区查询板块  如果传入0则查询所有分区
-	public SectionBean selectSctionById(SectionBean section);//查询单个
+	public SectionBean selectSctionById(int sectionid);//查询单个
 }

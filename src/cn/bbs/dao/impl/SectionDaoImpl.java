@@ -149,7 +149,7 @@ public class SectionDaoImpl implements SectionDao{
 	}
 
 	@Override
-	public SectionBean selectSctionById(SectionBean section) {
+	public SectionBean selectSctionById(int sectionid) {
 		try {
 	           //1.获取连接
 	           conn = C3p0Utils.getConn();
@@ -158,7 +158,7 @@ public class SectionDaoImpl implements SectionDao{
 	           //3.获取数据库操作对象
 	           pstmt = conn.prepareStatement(sql);
 	         //4.解析参数
-			   pstmt.setInt(1, section.getSectionId());
+			   pstmt.setInt(1, sectionid);
 	           //5.执行操作
 	           rs = pstmt.executeQuery();
 	           //6.遍历结果集
