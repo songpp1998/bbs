@@ -43,9 +43,10 @@ public class LoginServlet extends HttpServlet {
 //				response.sendRedirect("/bbs/logout");
 				HttpSession session = request.getSession();
 				session.setAttribute("ticket", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account));
-				System.out.println(session.getAttribute("ticket"));
+//				System.out.println(session.getAttribute("ticket"));
 				response.getWriter().append("welcome"+account);
-				response.sendRedirect("/bbs/logout");
+				response.setContentType("html/text;charset=utf-8");
+				response.sendRedirect("http://127.0.0.1:8081/bbs/bbs/cross.html");
 			}else {
 				response.getWriter().append("账户名或密码错误");
 			}
