@@ -251,7 +251,7 @@ public class PostDaoImpl implements PostDao{
            //1.获取连接
            conn = C3p0Utils.getConn();
            //2.定义sql
-           String sql = "select * from post where sectionid=? limit ? offset ?;";
+           String sql = "select * from post where userid=? limit ? offset ?;";
            //3.获取数据库操作对象
            pstmt = conn.prepareStatement(sql);
            //4.解析参数
@@ -382,6 +382,95 @@ public class PostDaoImpl implements PostDao{
            C3p0Utils.close(rs, pstmt, conn);
        }
 		return list;
+	}
+
+	@Override
+	public int selectPostCountBySection(int sectionid) {
+		List<PostBean> list=null;
+		try {
+           //1.获取连接
+           conn = C3p0Utils.getConn();
+           //2.定义sql
+           String sql = "select count(postid) from post where sectionid=?";
+           //3.获取数据库操作对象
+           pstmt = conn.prepareStatement(sql);
+           //4.解析参数
+		   pstmt.setInt(1, sectionid);
+
+           //5.执行操作
+           rs = pstmt.executeQuery();
+           //6.遍历结果集
+           
+           while (rs.next()) {
+        	  return rs.getInt("count(postid)");
+        	  
+           }
+       } catch (SQLException e) {
+           e.printStackTrace();
+       } finally {
+           //释放资源
+           C3p0Utils.close(rs, pstmt, conn);
+       }
+		return 0;
+	}
+
+	@Override
+	public int selectPostCountByName(String name) {
+		List<PostBean> list=null;
+		try {
+           //1.获取连接
+           conn = C3p0Utils.getConn();
+           //2.定义sql
+           String sql = "select count(postid) from post where title like ?";
+           //3.获取数据库操作对象
+           pstmt = conn.prepareStatement(sql);
+           //4.解析参数
+		   pstmt.setString(1, "%"+name+"%");
+
+           //5.执行操作
+           rs = pstmt.executeQuery();
+           //6.遍历结果集
+           
+           while (rs.next()) {
+        	  return rs.getInt("count(postid)");
+           }
+       } catch (SQLException e) {
+           e.printStackTrace();
+       } finally {
+           //释放资源
+           C3p0Utils.close(rs, pstmt, conn);
+       }
+		return 0;
+	}
+
+	@Override
+	public int selectPostCountByUser(int userid) {
+		List<PostBean> list=null;
+		try {
+           //1.获取连接
+           conn = C3p0Utils.getConn();
+           //2.定义sql
+           String sql = "select count(postid) from post where userid=?";
+           //3.获取数据库操作对象
+           pstmt = conn.prepareStatement(sql);
+           //4.解析参数
+		   pstmt.setInt(1, userid);
+
+           //5.执行操作
+           rs = pstmt.executeQuery();
+           //6.遍历结果集
+           
+           while (rs.next()) {
+        	  return rs.getInt("count(postid)");
+        	  
+           }
+       } catch (SQLException e) {
+           e.printStackTrace();
+       } finally {
+           //释放资源
+           C3p0Utils.close(rs, pstmt, conn);
+       }
+		return 0;
 	}
 
 
