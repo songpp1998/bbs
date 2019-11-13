@@ -71,4 +71,53 @@ public class SectionService {
 		}
 		return new Message(false,213,"系统内部错误",null);
 	}
+	
+	/*删除板块*/
+	public static Message SectionDelete(int sectionid) {
+		SectionBean section=sdao.selectSctionById(sectionid);
+		if(section==null) return new Message(false,221,"没有此分区",null);
+		//修改对应的角色
+		RoleBean role=roledao.selectRoleById(section.getRoleid());
+		role.setName("板块已删除");
+		role.setPostion(1);
+		//修改数据库
+		if(sdao.deleteSection(section)==1&roledao.updateRole(role)==1) {
+			
+			//获取已删除的以下的板块
+			List<SectionBean> list=sdao.selectSectionByDistrictid(section.getSectionId());
+			//分别删除所有分区下的各个板块
+			for (SectionBean s : list) {
+				SectionDelete(s.getSectionId());
+			}
+			
+			return new Message(true,122,"成功",null);
+		}
+		return new Message(false,220,"内部错误",null);
+	}
+	
+	/*编辑板块*/
+	public static Message Sectionupdate(SectionBean section) {
+		SectionBean s = sdao.selectSctionById(section.getSectionId());
+		if(s==null) return new Message(false,231,"找不到此板块",null);
+		SectionBean s2 = sdao.selectSctionById(section.getDistrictid());
+		if(section.getDistrictid()!=0&&s2==null) return new Message(false,232,"找不到此分区",null);
+		
+		RoleBean role=roledao.selectRoleById(s.getRoleid());
+		System.out.println(role);
+		s.setName(section.getName());
+		if(s.getDistrictid()!=0) {
+			if(section.getDistrictid()==0) return new Message(false,233,"板块不能修改为分区",null);
+			s.setDistrictid(section.getDistrictid());
+			role.setName(section.getName()+"版主");
+		}else {
+			role.setName(section.getName()+"区主");
+		}
+		
+		
+		if(sdao.updateSection(s)==1&&roledao.updateRole(role)==1) {
+			return new Message(true,123,"成功",null);
+		}
+		
+		return new Message(false,230,"内部错误",null);
+	}
 }

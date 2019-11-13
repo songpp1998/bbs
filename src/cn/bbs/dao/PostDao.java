@@ -24,4 +24,8 @@ public interface PostDao {
 	public List<PostBean> selectPostBySection(SectionBean section,int page,int num);//根据板块查询
 	public List<PostBean> selectPostByUser(UserBean user,int page,int num);//根据作者查询
 	public List<PostBean> selectPostByName(String name,int page,int num);//根据名称搜索查询
+	/**查询总条数，用以计算页数**/
+	public int selectPostCountBySection(int sectionid);
+	public int selectPostCountByName(String name);
+	public int selectPostCountByUser(int userid);
 }
