@@ -43,15 +43,15 @@ public class PostDaoImpl implements PostDao{
            //1.获取连接
            conn = C3p0Utils.getConn();
            //2.定义sql
-           String sql = "insert into post"
-           		+ " VALUES (null,?,?,?,?,now(),?,?,0,0,0,null,?,now(),null);";
+           String sql = "insert into post(userid,sectionid,content,title,postdate,posttype,postip,replynum,readnum,hot,edituser,edittime)"
+           		+ " VALUES (?,?,?,?,now(),?,?,0,0,0,?,now())";
            //3.获取数据库操作对象
            pstmt = conn.prepareStatement(sql);
            //4.解析参数
            pstmt.setInt(1, post.getUserid());//传入作者
            pstmt.setInt(2, post.getSectionid());//所属板块
-           pstmt.setString(3, post.getContent());//内容
-           pstmt.setString(4, post.getTitle());//标题
+           pstmt.setString(4, post.getContent());//内容
+           pstmt.setString(3, post.getTitle());//标题
            pstmt.setInt(5, post.getPosttype());//类型
            pstmt.setString(6, post.getPostip());//ip
            pstmt.setString(7, post.getEdituser());//最后编辑人

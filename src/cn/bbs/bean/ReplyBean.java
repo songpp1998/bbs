@@ -1,6 +1,7 @@
 package cn.bbs.bean;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -14,13 +15,20 @@ public class ReplyBean {
 	private int postid;//回复的帖子
 	private int userid;//回复人
 	private String content;//回复的内容
-	private Timestamp replaytime;//回复时间
+	private String replaytime;//回复时间
+	private String username;//回复人名
+	public String getUsername() {
+		return username;
+	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	@Override
 	public String toString() {
 		return "ReplyBean [replyid=" + replyid + ", postid=" + postid + ", userid=" + userid + ", content=" + content
 				+ ", replaytime=" + replaytime + "]";
 	}
-	public ReplyBean(int replyid, int postid, int userid, String content, Timestamp replaytime) {
+	public ReplyBean(int replyid, int postid, int userid, String content, String replaytime) {
 		super();
 		this.replyid = replyid;
 		this.postid = postid;
@@ -56,10 +64,11 @@ public class ReplyBean {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Timestamp getReplaytime() {
+	public String getReplaytime() {
 		return replaytime;
 	}
 	public void setReplaytime(Timestamp replaytime) {
-		this.replaytime = replaytime;
+		SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		this.replaytime = df.format(replaytime);
 	}
 }

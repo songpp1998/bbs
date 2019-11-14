@@ -22,6 +22,7 @@ import cn.bbs.dao.impl.SectionDaoImpl;
 import cn.bbs.dao.impl.ShortMessageDaoImpl;
 import cn.bbs.dao.impl.UserDaoImpl;
 import cn.bbs.message.Message;
+import cn.bbs.util.PermissionsUtil;
 
 /**
  * 
@@ -62,6 +63,8 @@ public class PostService {
 		//板块
 		SectionBean section=sdao.selectSctionById(post.getSectionid());
 		if(section==null||section.getDistrictid()==0) return new Message(false,245,"板块有误",null);
+		
+		
 		//尝试存入数据库
 		if(postdao.addPost(post)==1) {
 			return new Message(true,110,"成功",null);
@@ -79,7 +82,7 @@ public class PostService {
 		if(user==null) return new Message(false,241,"查无此人",null);
 		//是否有权限修改此文章
 		boolean flag=false;
-		if(user.getUserId()==p.getUserid()) flag=true;
+		flag=PermissionsUtil.getJudge(user, post);
 		//注意！未完成！
 		if(!flag) return new Message(false,242,"权限不足",null);
 		
@@ -140,7 +143,8 @@ public class PostService {
 		if(user==null) return new Message(false,281,"查无此人",null);
 		//验证权限
 		boolean flag=true;
-		//
+		flag=PermissionsUtil.getJudge(user, post);
+		if(user.getUserId()==post.getUserid()) flag=false;
 		if(!flag) return new Message(false,282,"权限不足",null);
 		
 		//尝试修改数据
@@ -180,8 +184,8 @@ public class PostService {
 		if(post==null) return new Message(false,292,"找不到此文章",null);
 		//检查权限
 		boolean flag=false;
-		if(user.getUserId()==post.getUserid()) flag=true;
-		//
+//		if(user.getUserId()==post.getUserid()) flag=true;
+		flag=PermissionsUtil.getJudge(user, post);
 		
 		if(!flag) return new Message(false,293,"权限不足",null);
 		//尝试修改数据库

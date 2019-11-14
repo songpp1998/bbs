@@ -18,6 +18,7 @@ import cn.bbs.dao.impl.SectionDaoImpl;
 import cn.bbs.dao.impl.ShortMessageDaoImpl;
 import cn.bbs.dao.impl.UserDaoImpl;
 import cn.bbs.message.Message;
+import cn.bbs.util.PermissionsUtil;
 
 /**
  * 2019年11月12日 09点40分
@@ -49,6 +50,7 @@ public class ReplyService {
 			return new Message(false,271,"内容为空",null);
 		UserBean user=userdao.selectUserById(reply.getUserid());
 		if(user==null) return new Message(false,272,"没有此用户",null);
+		reply.setUsername(user.getUsername());
 		PostBean post=postdao.selectPostbyId(reply.getPostid());
 		if(post==null) return new Message(false,273,"找不到此贴",null);
 		post.setReplynum(post.getReplynum()+1);
@@ -81,9 +83,8 @@ public class ReplyService {
 		PostBean post=postdao.selectPostbyId(reply.getPostid());
 		//检查权限
 		boolean flag=false;
-		if(user.getUserId()==reply.getUserid()||user.getUserId()==post.getUserid())
-			flag=true;
-		//
+		if(user.getUserId()==reply.getUserid()) flag=true;
+		else flag=PermissionsUtil.getJudge(user, post);
 		if(!flag) return new Message(false,283,"权限不足",null);
 		
 		//尝试修改数据库

@@ -1,4 +1,4 @@
-package cn.bbs.controller;
+package cn.bbs.controller.message;
 
 import java.io.IOException;
 
@@ -28,12 +28,17 @@ public class MessageFindServlet extends HttpServlet{
 		ShortMessageBean message=new ShortMessageBean();
 		message.setMessageid(Integer.parseInt(req.getParameter("messageid")));
 		
-		//具体的操作放入ShortMessageService中
+		
 		Message m=ShortMessageService.MessageFind(message);
 		System.out.println(m);
 		
-		//返回json
-		resp.setContentType("text/josn;charset=utf-8");
+		//动态获取域
+		resp.setHeader("Access-Control-Allow-Origin",req.getHeader("origin"));
+		//允许携带cookie
+		resp.addHeader("Access-Control-Allow-Credentials","true");
+		
+		//返回json数据
+		resp.setContentType("text/json;charset=utf-8");
 		JSONObject.fromObject(m).write(resp.getWriter());
 	}
 	@Override
