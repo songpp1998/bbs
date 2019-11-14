@@ -24,7 +24,11 @@ import cn.bbs.service.SectionService;
  */
 public class testbywmx {
 	
+	private static final int[] a= {110}; 
 	public static void main(String[] args) {
+		a[0]=45;
+		a[1]=90;
+		System.out.println(a[1]);
 //		RoleBean role=new RoleBean(3,3,"456"); 
 //		RoleDao dao=RoleDaoImpl.getInstance();
 //		System.out.println(dao.addRole(role));
@@ -35,6 +39,10 @@ public class testbywmx {
 		
 //		SectionDao dao=SectionDaoImpl.getInstance();
 //		System.out.println(dao.selectSectionByDistrictid(0));
-		SectionService.showSection();
+//		SectionService.showSection();
+//		PostDao dao = PostDaoImpl.getInstance();
+//		System.out.println(dao.selectPostCountByName("标"));
+//		System.out.println(dao.selectPostCountBySection(2));
+//		System.out.println(dao.selectPostCountByUser(1));
 	}
 }
