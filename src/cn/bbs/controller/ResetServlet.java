@@ -23,6 +23,7 @@ public class ResetServlet extends HttpServlet {
 		
 		int account = Integer.parseInt(request.getParameter("account"));
 		int phone = Integer.parseInt(request.getParameter("phone"));
+		System.out.println(account+phone);
 		
 		reset = new ResetPassword();
 		response.setContentType("text/html;charset=utf-8");
