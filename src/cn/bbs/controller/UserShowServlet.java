@@ -48,10 +48,10 @@ public class UserShowServlet extends HttpServlet {
 		String ticket = (String) session.getAttribute("ticket");
 		response.setContentType("text/json;charset=utf-8");
 		
-		//动态获取域
-		response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
-		//允许携带cookie
-		response.addHeader("Access-Control-Allow-Credentials","true");
+//		//动态获取域
+//		response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
+//		//允许携带cookie
+//		response.addHeader("Access-Control-Allow-Credentials","true");
 		
 		JSONObject.fromObject(message).write(response.getWriter());
 		System.out.println(session.getAttribute("ticket"));

@@ -21,17 +21,16 @@ import javax.servlet.http.HttpServletResponse;
 public class CrossFilter implements Filter {
 
 	public void destroy() {
-		// TODO Auto-generated method stub
 	}
 
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		HttpServletResponse httpResponse =(HttpServletResponse)response;
-		HttpServletRequest httpRequest = (HttpServletRequest) request;
-		httpResponse.setHeader("Access-Control-Allow-Origin", httpRequest.getHeader("origin"));
-//		httpResponse.setHeader("Access-Control-Allow-Headers", "Authentication");
-		httpResponse.addHeader("Access-Control-Allow-Credentials","true");
-		chain.doFilter(httpRequest, httpResponse);
-		chain.doFilter(request, response);
+		HttpServletResponse Response =(HttpServletResponse)response;
+		HttpServletRequest Request = (HttpServletRequest) request;
+		//动态获取域
+		Response.setHeader("Access-Control-Allow-Origin",Request.getHeader("origin"));
+		//允许携带cookie
+		Response.addHeader("Access-Control-Allow-Credentials","true");
+		chain.doFilter(Request, Response);
 	}
 
 
