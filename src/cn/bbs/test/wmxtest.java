@@ -1,5 +1,7 @@
 package cn.bbs.test;
 
+import java.util.ArrayList;
+
 import cn.bbs.bean.ShortMessageBean;
 import cn.bbs.bean.UserBean;
 import cn.bbs.dao.ShortMessageDao;
@@ -15,10 +17,17 @@ public class wmxtest {
 //		Message m = ShortMessageService.MessageSend(message);
 //		
 //		System.out.println(m);
-		UserBean user = new UserBean();
-		user.setUserId(1);
-		ShortMessageDao dao = ShortMessageDaoImpl.getInstance();
-		System.out.println(dao.selectShortMessageBySender(user, 0));
+//		UserBean user = new UserBean();
+//		user.setUserId(1);
+//		ShortMessageDao dao = ShortMessageDaoImpl.getInstance();
+//		System.out.println(dao.selectShortMessageBySender(user, 0));
+//		String[] str = "123;456;789".split(";");
+//		ArrayList<Integer> a = new ArrayList<>();
+//		for (String s : str) {
+//			a.add(Integer.parseInt(s));
+//		}
+//		for (Integer integer : a) {
+//			System.out.println(integer);
+//		}
 	}
-
 }

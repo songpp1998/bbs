@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import cn.bbs.bean.UserBean;
+import cn.bbs.message.Message;
 import cn.bbs.service.UserManager;
 import net.sf.json.JSONObject;
 /**
@@ -21,8 +22,8 @@ import net.sf.json.JSONObject;
  *
  */
 
-@WebServlet("/userManager")
-public class UserManagerServlet extends HttpServlet {
+@WebServlet("/userShow")
+public class UserShowServlet extends HttpServlet {
 	
 	private List<UserBean> list = null;
 	private UserManager userManager = null;
@@ -41,19 +42,18 @@ public class UserManagerServlet extends HttpServlet {
 //			
 //		}
 		
-		list = userManager.findUserByPage(page, num);
-		HashMap<String , Object> map=new HashMap<>();
-		map.put("users", list);
-		System.out.println(map);
+		Message message = userManager.findUserByPage(page, num);
+		System.out.println(message.getData());
 		HttpSession session = request.getSession();
 		String ticket = (String) session.getAttribute("ticket");
-		response.setContentType("text/josn;charset=utf-8");
+		response.setContentType("text/json;charset=utf-8");
 		
 		//动态获取域
 		response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
 		//允许携带cookie
 		response.addHeader("Access-Control-Allow-Credentials","true");
-		JSONObject.fromObject(map).write(response.getWriter());
+		
+		JSONObject.fromObject(message).write(response.getWriter());
 		System.out.println(session.getAttribute("ticket"));
 	}
 

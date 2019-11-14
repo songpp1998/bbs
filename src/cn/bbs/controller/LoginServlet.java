@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
 		response.setContentType("text/html;charset=utf-8");
 		try {
 			//是否登陆成功
-			if(login.isLogin(user)) {
+			if(login.isLogin(user).success) {
 //				request.getSession().setAttribute("ticket", user.getLoginIp()+account);
 //				//设置JSESSIONID属性
 //				Cookie cookie = new Cookie("JSESSIONID", request.getSession().getId());
@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
 //				response.addCookie(cookie);
 //				response.sendRedirect("/bbs/logout");
 				HttpSession session = request.getSession();
-				session.setAttribute("ticket", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account));
+				session.setAttribute("ticket", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account)+login.findPositionByAccount(account));
 //				System.out.println(session.getAttribute("ticket"));
 				response.getWriter().append("welcome"+account);
 				response.setContentType("html/text;charset=utf-8");

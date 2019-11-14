@@ -37,7 +37,8 @@ public class IPFilter implements Filter {
 		
 		//获取访问的IP地址
 		String remoteAddr = request.getRemoteAddr();
-		System.out.println("===="+remoteAddr);
+		
+		response.setContentType("text/html;charset=utf-8");
 		
 		if(denyList.size()==0||denyList==null) {
 			chain.doFilter(request, response);
@@ -54,9 +55,8 @@ public class IPFilter implements Filter {
 			if(flag) {
 				chain.doFilter(request, response);
 			}else {
-//				request.getRequestDispatcher("WEB-INF/success/error.jsp").forward(request, response);
-//				response.setContentType("text/html;charset=utf-8");
 				response.getWriter().write("ip被禁止");
+				System.out.println("被禁止");
 			}
 		}
 		
