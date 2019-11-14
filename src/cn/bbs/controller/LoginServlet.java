@@ -29,20 +29,12 @@ public class LoginServlet extends HttpServlet {
 		user.setPassword(password);
 		user.setLoginIp(getRemortIP(request));
 		System.out.println(getRemortIP(request));
-		response.setContentType("text/html;charset=utf-8");
 		try {
 			//是否登陆成功
-			if(login.isLogin(user)) {
-//				request.getSession().setAttribute("ticket", user.getLoginIp()+account);
-//				//设置JSESSIONID属性
-//				Cookie cookie = new Cookie("JSESSIONID", request.getSession().getId());
-//				//永久有效
-//				cookie.setMaxAge(-1);
-//				cookie.setPath("/");
-//				response.addCookie(cookie);
-//				response.sendRedirect("/bbs/logout");
+			if(login.isLogin(user).success) {
+
 				HttpSession session = request.getSession();
-				session.setAttribute("ticket", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account));
+				session.setAttribute("ticket", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account)+login.findPositionByAccount(account));
 //				System.out.println(session.getAttribute("ticket"));
 				response.getWriter().append("welcome"+account);
 				response.setContentType("html/text;charset=utf-8");

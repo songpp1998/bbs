@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>源论坛主页</title>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<link rel="stylesheet" href="css/element-ui.css" />
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/element-ui.js"></script>
+		<style>
+			/*.el-row {
+				margin-bottom: 20px;
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+			
+			.el-col {
+				border-radius: 4px;
+			}
+			
+			.bg-purple-dark {
+				background: #99a9bf;
+			}
+			
+			.bg-purple {
+				background: #d3dce6;
+			}
+			
+			.bg-purple-light {
+				background: #e5e9f2;
+			}
+			
+			.grid-content {
+				border-radius: 4px;
+				min-height: 36px;
+			}
+			
+			.row-bg {
+				padding: 10px 0;
+				background-color: #f9fafc;
+			}*/
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<el-row>
+				<el-col :span="12">
+					<div><span>代码改变世界</span></div>
+				</el-col>
+				<el-col :span="8">
+					<div>
+						<el-image src="img/bbs-logo.png" fit='contain'></el-image>
+					</div>
+				</el-col>
+				<el-col :span="4">
+					<div> <button>写博客</button>
+						<button>登录</button>
+						<button>注册</button></div>
+				</el-col>
+			</el-row>
+		</div>
+	</body>
+	<script>
+		new Vue({
+			el: '#app'
+		});
+	</script>
+
+</html>

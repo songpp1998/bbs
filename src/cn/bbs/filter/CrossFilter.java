@@ -8,6 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 
@@ -19,25 +21,20 @@ import javax.servlet.annotation.WebFilter;
 public class CrossFilter implements Filter {
 
 	public void destroy() {
-		// TODO Auto-generated method stub
 	}
 
-	/**
-	 * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
-	 */
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		// place your code here
-
-		// pass the request along the filter chain
-		chain.doFilter(request, response);
+		HttpServletResponse Response =(HttpServletResponse)response;
+		HttpServletRequest Request = (HttpServletRequest) request;
+		//动态获取域
+		Response.setHeader("Access-Control-Allow-Origin",Request.getHeader("origin"));
+		//允许携带cookie
+		Response.addHeader("Access-Control-Allow-Credentials","true");
+		chain.doFilter(Request, Response);
 	}
 
-	/**
-	 * @see Filter#init(FilterConfig)
-	 */
+
 	public void init(FilterConfig fConfig) throws ServletException {
-		// TODO Auto-generated method stub
 	}
 
 }
