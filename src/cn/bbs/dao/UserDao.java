@@ -32,11 +32,13 @@ public interface UserDao {
 	//通过account重置密码
 	public boolean resetPasswordByAccount(int account,int phone);
 	
+	//用户修改密码 
+	public boolean modifyPassowrdByAccount(int account,String password);
+	
 	//批量显示用户
 	public List<UserBean> findUserBean(int page,int num);
 	
 	//修改用户权限
 	public boolean modifyPower(int account,int roleid,int position);
-	
-	
+
 }

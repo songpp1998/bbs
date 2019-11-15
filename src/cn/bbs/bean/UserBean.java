@@ -11,7 +11,7 @@ public class UserBean {
 	private int account;//登录账户，可用于登录
 	private String password;
 	private String signature;//个性签名
-	private String introdure;//自我介绍
+	private String introduce;//自我介绍
 	private int qq;
 	private String blog;//个人网站
 	private String birplace;//籍贯
@@ -63,11 +63,11 @@ public class UserBean {
 	public void setSignature(String signature) {
 		this.signature = signature;
 	}
-	public String getIntrodure() {
-		return introdure;
+	public String getIntroduce() {
+		return introduce;
 	}
-	public void setIntrodure(String introdure) {
-		this.introdure = introdure;
+	public void setIntroduce(String introduce) {
+		this.introduce = introduce;
 	}
 	public int getQq() {
 		return qq;

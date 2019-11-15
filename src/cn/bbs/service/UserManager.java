@@ -58,8 +58,28 @@ public class UserManager {
 	
 	//根据account修改用户数据
 	public Message updateUserByAccount(UserBean user) {
-		return null;
+		userDaoImpl = new UserDaoImpl();
+		if(userDaoImpl.updateUserBeanAccount(user)) {
+			return new Message(true, 200, "修改成功", user);
+		}
+		return new Message(false, 500, "修改失败", user);
 	}
 	
+	//根据account修改用户密码
+	public Message modifyPassword(int account,String password) {
+		userDaoImpl = new UserDaoImpl();
+		if(userDaoImpl.modifyPassowrdByAccount(account, password)) {
+			return new Message(false, 200, "修改成功", null);
+		}
+		return new Message(false, 500, "修改失败", null);
+	}
 	
+	//管理员修改用户权限
+	public Message modifyAccount(int account,int roleid,int position) {
+		userDaoImpl = new UserDaoImpl();
+		if(userDaoImpl.modifyPower(account, roleid,position)) {
+			return new Message(true, 200, "修改成功", null);
+		}
+		return new Message(false, 500, "修改失败", null);
+	}
 }

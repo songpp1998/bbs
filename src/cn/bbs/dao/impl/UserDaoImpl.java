@@ -84,7 +84,7 @@ public class UserDaoImpl implements UserDao{
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getSignature());
-			pstmt.setString(3, user.getIntrodure());
+			pstmt.setString(3, user.getIntroduce());
 			pstmt.setInt(4, user.getQq());
 			pstmt.setString(5, user.getBlog());
 			pstmt.setString(6, user.getBirplace());
@@ -232,7 +232,7 @@ public class UserDaoImpl implements UserDao{
 				user.setAccount(rs.getInt("account"));
 				user.setPassword(rs.getString("password"));
 				user.setSignature(rs.getString("signature"));
-				user.setIntrodure(rs.getString("introduce"));
+				user.setIntroduce(rs.getString("introduce"));
 				user.setQq(rs.getInt("qq"));
 				user.setBlog(rs.getString("blog"));
 				user.setBirplace(rs.getString("birplace"));
@@ -256,6 +256,9 @@ public class UserDaoImpl implements UserDao{
 		}
 		return list;
 	}
+	
+	
+	//根据id查找用户
 	public UserBean selectUserById(int id) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -285,8 +288,68 @@ public class UserDaoImpl implements UserDao{
 
 	//管理员修改用户权限
 	@Override
-	public boolean modifyPower(int account, int roleid, int position) {
-		// TODO Auto-generated method stub
+	public boolean modifyPower(int account, int roleid,int position) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int rs = 0;
+		try {
+			conn = C3p0Utils.getConn();
+			//禁止用户提交 
+			conn.setAutoCommit(false);
+			String sql = "update user set roleid=? where account=?;";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, roleid);
+			pstmt.setInt(2, account);
+			rs = pstmt.executeUpdate();
+			if(rs==1) {
+				return true;
+			}
+			
+			rs = 0;
+			sql = "update role set position=? where roleid=?;";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, position);
+			pstmt.setInt(2, roleid);
+			rs = pstmt.executeUpdate();
+			
+			//提交事务
+			conn.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			try {
+				//事务的回滚
+				conn.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}finally {
+			C3p0Utils.close(null, pstmt, conn);
+		}
+		return false;
+	}
+	
+	
+	//用户修改密码
+	@Override
+	public boolean modifyPassowrdByAccount(int account, String password) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int rs = 0;
+		try {
+			conn = C3p0Utils.getConn();
+			String sql = "update user set password=? where account=?;";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, password);
+			pstmt.setInt(2, account);
+			rs = pstmt.executeUpdate();
+			if(rs==1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			C3p0Utils.close(null, pstmt, conn);
+		}
 		return false;
 	}
 	
