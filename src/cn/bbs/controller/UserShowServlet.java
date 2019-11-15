@@ -2,7 +2,6 @@ package cn.bbs.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -52,6 +51,7 @@ public class UserShowServlet extends HttpServlet {
 //		response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
 //		//允许携带cookie
 //		response.addHeader("Access-Control-Allow-Credentials","true");
+		
 		
 		JSONObject.fromObject(message).write(response.getWriter());
 		System.out.println(session.getAttribute("ticket"));

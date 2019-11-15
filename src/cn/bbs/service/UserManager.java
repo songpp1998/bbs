@@ -1,5 +1,7 @@
 package cn.bbs.service;
 
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +10,7 @@ import cn.bbs.bean.UserBean;
 import cn.bbs.dao.PageDao;
 import cn.bbs.dao.impl.UserDaoImpl;
 import cn.bbs.message.Message;
+
 
 /** 
 * @author ——Hydra
@@ -31,9 +34,12 @@ public class UserManager {
 		
 		try {
 			list = userDaoImpl.findUserBean(page,num);
+						
 			HashMap<String, Object> map=new HashMap<>();
-//			map.put("num", );
+
 			map.put("list", list);
+			
+			
 			return new Message(true,200,"成功",map);
 		} catch (Exception e) {
 			System.out.println("失败");

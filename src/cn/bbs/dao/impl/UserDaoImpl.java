@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import cn.bbs.bean.UserBean;
 import cn.bbs.dao.UserDao;
 import cn.bbs.util.C3p0Utils;
@@ -241,10 +242,11 @@ public class UserDaoImpl implements UserDao{
 				user.setImg(rs.getString("img"));
 				user.setRoleid(rs.getInt("roleid"));
 				user.setPhone(rs.getInt("phone"));
-				user.setRegistertime(rs.getTimestamp("registertime"));
-				user.setLogintime(rs.getTimestamp("logintime"));
+				user.setRegistertime(rs.getString("registertime"));
+				System.out.println(rs.getTimestamp("registertime"));
+				user.setLogintime(rs.getString("logintime"));
 				user.setLoginIp(rs.getString("loginIp"));
-				user.setLastlogintime(rs.getTimestamp("lastlogintime"));
+				user.setLastlogintime(rs.getString("lastlogintime"));
 				user.setLastloginIp(rs.getString("lastloginIp"));
 
 				list.add(user);
@@ -301,9 +303,6 @@ public class UserDaoImpl implements UserDao{
 			pstmt.setInt(1, roleid);
 			pstmt.setInt(2, account);
 			rs = pstmt.executeUpdate();
-			if(rs==1) {
-				return true;
-			}
 			
 			rs = 0;
 			sql = "update role set position=? where roleid=?;";
@@ -311,7 +310,9 @@ public class UserDaoImpl implements UserDao{
 			pstmt.setInt(1, position);
 			pstmt.setInt(2, roleid);
 			rs = pstmt.executeUpdate();
-			
+			if(rs==1) {
+				return true;
+			}
 			//提交事务
 			conn.commit();
 		} catch (SQLException e) {

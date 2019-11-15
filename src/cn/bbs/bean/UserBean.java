@@ -19,14 +19,32 @@ public class UserBean {
 	private int sex;//性别 
 	private String img;//图片url，头像
 	private int phone;//手机号
-	private Timestamp registertime;//注册时间，精确到s
-	private Timestamp logintime;//登录时间
-	private Timestamp lastlogintime;//上次登录时间，精确到s
+	private String registertime;//注册时间，精确到s
+	private String logintime;//登录时间
+	private String lastlogintime;//上次登录时间，精确到s
 	private String loginIp;//登录ip
 	private String lastloginIp;//上次登录ip
 	
 	
 	
+	public String getRegistertime() {
+		return registertime;
+	}
+	public void setRegistertime(String registertime) {
+		this.registertime = registertime;
+	}
+	public String getLogintime() {
+		return logintime;
+	}
+	public void setLogintime(String logintime) {
+		this.logintime = logintime;
+	}
+	public String getLastlogintime() {
+		return lastlogintime;
+	}
+	public void setLastlogintime(String lastlogintime) {
+		this.lastlogintime = lastlogintime;
+	}
 	public int getUserId() {
 		return userId;
 	}
@@ -112,24 +130,7 @@ public class UserBean {
 	public void setPhone(int phone) {
 		this.phone = phone;
 	}
-	public Timestamp getRegistertime() {
-		return registertime;
-	}
-	public void setRegistertime(Timestamp registertime) {
-		this.registertime = registertime;
-	}
-	public Timestamp getLogintime() {
-		return logintime;
-	}
-	public void setLogintime(Timestamp logintime) {
-		this.logintime = logintime;
-	}
-	public Timestamp getLastlogintime() {
-		return lastlogintime;
-	}
-	public void setLastlogintime(Timestamp lastlogintime) {
-		this.lastlogintime = lastlogintime;
-	}
+	
 	public String getLoginIp() {
 		return loginIp;
 	}
