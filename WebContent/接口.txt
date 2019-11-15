@@ -1,0 +1,113 @@
+﻿3.2.2.1
+短消息部分：
+发送
+http://localhost:8080/bbs/MessageSend?message=%E8%BF%99%E6%98%AF%E5%86%85%E5%AE%B9&senderid=1&receiverid=1&title=%E8%BF%99%E6%98%AF%E6%A0%87%E9%A2%98&status=0
+其中status消息状态 0是草稿 1是已发送 2是未读 3是已读
+查看草稿箱，已发送，未读，已读
+http://localhost:8080/bbs/MessageSelect?userid=1&status=0
+查询具体某一条
+http://localhost:8080/bbs/MessageFind?messageid=26
+删除
+http://localhost:8080/bbs/MessageDelete?messageid=6
+
+3.2.3.1
+发布帖子
+http://localhost:8080/bbs/PostSend?userid=1&title=title&content=neirong&sectionid=2&posttype=0
+
+3.2.3.2
+编辑帖子（需要修改）
+http://localhost:8080/bbs/PostEdit?postid=4&title=&content=neirongxiugai&userid=1
+
+3.2.3.3
+浏览帖子
+http://localhost:8080/bbs/PostFind?postid=8
+
+3.2.3.4
+回复帖子
+发送评论
+http://localhost:8080/bbs/ReplySend?userid=1&postid=6&content=123456
+删除评论（需要修改）
+http://localhost:8080/bbs/ReplyDelete?replyid=7&userid=1
+
+3.2.3.5 收藏主题（暂不考虑）
+3.2.3.6 订阅主题（暂不考虑）
+
+3.2.3.7
+推荐帖子（需要修改）
+ http://localhost:8080/bbs/PostHot?postid=6&hot=1&hotid=1&hotreason=456456
+* hotid是推荐人id
+* hot 1代表推荐，0代表取消
+
+3.2.3.7举报帖子（之后会进行补充）
+
+3.2.3.8引用帖子（暂不考虑）
+
+3.2.3.9
+删除帖子（需要修改）
+http://localhost:8080/bbs/postDelete?userid=1&postid=14
+
+3.2.3.10 主题帖管理（如上）
+
+3.2.4.1 公告管理
+（见发布帖子）
+
+3.6.2.1 添加板块
+http://localhost:8080/bbs/SectionAdd?districtid=4&name=123
+
+3.2.6.3 删除板块
+http://localhost:8080/bbs/SectionDelete?sectionid=4
+
+3.2.6.4 编辑板块
+http://localhost:8080/bbs/SectionEdit?sectionid=1&name=yidongkaifa&districtid=0
+
+3.2.6.6 设置板块顺序（不做）
+
+查询贴
+按照用户
+http://localhost:8080/bbs/PostByUser?userid=1&page=0
+按关键字
+http://localhost:8080/bbs/PostByName?name=tit&page=0
+按板块
+http://localhost:8080/bbs/PostBySection?sectionid=1&page=0
+
+
+登录接口：http://localhost:8081/bbs/login
+需要传参account和register
+
+注册接口：http://localhost:8081/bbs/register
+需要传参account username password phone
+
+找回密码接口 http://localhost:8081/bbs/reset
+需要传参account和phone，密码重置为phone
+
+
+用户数据接口： http://localhost:8081/bbs/userShow
+需要传参 page num;page第几页从0开始，num页面个数
+
+批量删除用户:http://localhost:8081/bbs/userDeleteServlet
+需要传参 account数据集合中间用;分开
+
+展示 禁止ip接口
+http://localhost:8081/bbs/IPShow
+
+禁止ip接口
+http://localhost:8081/bbs/denyIPadd
+需要传参denyIP 
+
+放开禁止ip接口
+http://localhost:8081/bbs/IPAllowServlet
+
+需要传参allowIP
+
+管理员修改用户权限接口 http://localhost:8081/bbs/ModifyPowerServlet
+需要传参 account roleid position (int类型的)
+
+
+用户修改密码 http://localhost:8081/bbs/userModifyPassword
+需要传参  account和passowrd
+
+用户修改个人中心资料 http://localhost:8081/bbs/ModifyUserDataServlet
+传参
+"update user set username=?,signature=?,introduce=?,qq=?,blog=?,birplace=?,birthday=?,sex=? where account=?";
+account sex qq为int；birthday为date
+
