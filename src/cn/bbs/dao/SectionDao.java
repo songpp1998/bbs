@@ -18,4 +18,5 @@ public interface SectionDao {
 	public List<SectionBean> selectSectionByDistrictid(int sectionid);//按照分区查询板块  如果传入0则查询所有分区
 	public List<SectionBean> selectSectionByName(String name,int sectionid);//按名称查询
 	public SectionBean selectSctionById(int sectionid);//查询单个
+	public SectionBean selectSctionByRole(int roleid);//根据角色查询
 }

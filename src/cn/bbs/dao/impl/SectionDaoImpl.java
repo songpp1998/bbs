@@ -217,4 +217,37 @@ public class SectionDaoImpl implements SectionDao{
 			return list;
 	}
 
+	@Override
+	public SectionBean selectSctionByRole(int roleid) {
+		try {
+	           //1.获取连接
+	           conn = C3p0Utils.getConn();
+	           //2.定义sql
+	           String sql = "select * from section where roleid=?";
+	           //3.获取数据库操作对象
+	           pstmt = conn.prepareStatement(sql);
+	         //4.解析参数
+			   pstmt.setInt(1, roleid);
+	           //5.执行操作
+	           rs = pstmt.executeQuery();
+	           //6.遍历结果集
+	           SectionBean s=null;
+	           while (rs.next()) {
+	        	   s=new SectionBean();
+	        	   s.setSectionId(rs.getInt("sectionid"));
+	        	   s.setDistrictid(rs.getInt("districtid"));
+	        	   s.setName(rs.getString("name"));
+	        	   s.setRoleid(rs.getInt("roleid"));
+	        	   
+	        	   return s;
+	           }
+	       } catch (SQLException e) {
+	           e.printStackTrace();
+	       } finally {
+	           //释放资源
+	           C3p0Utils.close(rs, pstmt, conn);
+	       }
+			return null;
+	}
+
 }

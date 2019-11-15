@@ -41,14 +41,15 @@ public class ReplyDaoImpl implements ReplyDao{
            //1.获取连接
            conn = C3p0Utils.getConn();
            //2.定义sql
-           String sql = "insert into reply(postid,userid,content,replytime)"
-           		+ " VALUES (?,?,?,now())";
+           String sql = "insert into reply(postid,userid,content,replytime，username)"
+           		+ " VALUES (?,?,?,now(),?)";
            //3.获取数据库操作对象
            pstmt = conn.prepareStatement(sql);
            //4.解析参数
            pstmt.setInt(1, reply.getPostid());
            pstmt.setInt(2, reply.getUserid());
            pstmt.setString(3, reply.getContent());
+           pstmt.setString(4, reply.getUsername());
            //5.执行操作
            res = pstmt.executeUpdate();
 
@@ -133,6 +134,7 @@ public class ReplyDaoImpl implements ReplyDao{
         	   r.setUserid(rs.getInt("userid"));
         	   r.setContent(rs.getString("content"));
         	   r.setReplaytime(rs.getTimestamp("replytime"));
+        	   r.setUsername(rs.getString("username"));
         	   
         	   return r;
            }
@@ -169,6 +171,7 @@ public class ReplyDaoImpl implements ReplyDao{
 	        	   r.setUserid(rs.getInt("userid"));
 	        	   r.setContent(rs.getString("content"));
 	        	   r.setReplaytime(rs.getTimestamp("replytime"));
+	        	   r.setUsername(rs.getString("username"));
 	        	   
 	        	   list.add(r);
 	           }

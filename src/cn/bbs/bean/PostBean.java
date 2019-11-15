@@ -8,6 +8,8 @@ package cn.bbs.bean;
  */
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PostBean {
@@ -16,7 +18,7 @@ public class PostBean {
 	private int sectionid;//所属板块id
 	private String content;//内容
 	private String title;//标题
-	private Timestamp postdate;//发帖时间
+	private String postdate;//发帖时间
 	private int posttype;//帖子类型  0为普通主题，1为投票主题，2为公告
 	private String postip;//发布者IP
 	private int readnum;//阅读次数
@@ -24,7 +26,7 @@ public class PostBean {
 	private int hot;//精华帖
 	private int hotid;//精华帖推荐人
 	private String edituser;//编辑者用户名
-	private Timestamp edittime;//编辑时间
+	private String edittime;//编辑时间
 	private String hotreason;//热帖推荐原因
 	/****************************/
 	private String username;//作者名
@@ -72,11 +74,12 @@ public class PostBean {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Timestamp getPostdate() {
+	public String getPostdate() {
 		return postdate;
 	}
 	public void setPostdate(Timestamp postdate) {
-		this.postdate = postdate;
+		SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		this.postdate = df.format(postdate);
 	}
 	public int getPosttype() {
 		return posttype;
@@ -120,11 +123,12 @@ public class PostBean {
 	public void setEdituser(String edituser) {
 		this.edituser = edituser;
 	}
-	public Timestamp getEdittime() {
+	public String getEdittime() {
 		return edittime;
 	}
 	public void setEdittime(Timestamp edittime) {
-		this.edittime = edittime;
+		SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		this.edittime = df.format(edittime);
 	}
 	public String getHotreason() {
 		return hotreason;
@@ -132,8 +136,8 @@ public class PostBean {
 	public void setHotreason(String hotreason) {
 		this.hotreason = hotreason;
 	}
-	public PostBean(int postid, int userid, int sectionid, String content, String title, Timestamp postdate, int posttype,
-			String postip, int readnum, int replynum, int hot, int hotid, String edituser, Timestamp edittime,
+	public PostBean(int postid, int userid, int sectionid, String content, String title, String postdate, int posttype,
+			String postip, int readnum, int replynum, int hot, int hotid, String edituser, String edittime,
 			String hotreason) {
 		super();
 		this.postid = postid;

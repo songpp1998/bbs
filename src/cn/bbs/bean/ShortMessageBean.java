@@ -1,6 +1,7 @@
 package cn.bbs.bean;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 /**
  * 2019-11-06 09:56
@@ -14,7 +15,7 @@ public class ShortMessageBean {
 	private int senderid;//发信人
 	private int receiverid;//收信人
 	private String title;//标题
-	private Timestamp createtime;//发送时间
+	private String createtime;//发送时间
 	private int status;//消息状态 0是草稿 1是已发送 2是未读 3是已读
 	/*********************************/
 	private String sendername;//发信人名
@@ -62,11 +63,12 @@ public class ShortMessageBean {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public Timestamp getCreatetime() {
+	public String getCreatetime() {
 		return createtime;
 	}
 	public void setCreatetime(Timestamp createtime) {
-		this.createtime = createtime;
+		SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		this.createtime = df.format(createtime);
 	}
 	public int getStatus() {
 		return status;
@@ -79,7 +81,7 @@ public class ShortMessageBean {
 		// TODO Auto-generated constructor stub
 	}
 	public ShortMessageBean(int messageid, String message, int senderid, int receiverid, String title,
-			Timestamp createtime, int status) {
+			String createtime, int status) {
 		super();
 		this.messageid = messageid;
 		this.message = message;
