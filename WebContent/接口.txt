@@ -110,4 +110,5 @@ http://localhost:8081/bbs/IPAllowServlet
 传参
 "update user set username=?,signature=?,introduce=?,qq=?,blog=?,birplace=?,birthday=?,sex=? where account=?";
 account sex qq为int；birthday为date
-
+用户数据接口  登录后直接请求就可以得到数据
+http://localhost:8081/bbs/showUserFormation
