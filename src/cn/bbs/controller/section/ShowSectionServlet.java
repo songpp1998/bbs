@@ -26,10 +26,10 @@ public class ShowSectionServlet extends HttpServlet{
 		//获取数据
 		Message message=SectionService.showSection();
 		
-		//动态获取域
-		resp.setHeader("Access-Control-Allow-Origin",req.getHeader("origin"));
-		//允许携带cookie
-		resp.addHeader("Access-Control-Allow-Credentials","true");
+//		//动态获取域
+//		resp.setHeader("Access-Control-Allow-Origin",req.getHeader("origin"));
+//		//允许携带cookie
+//		resp.addHeader("Access-Control-Allow-Credentials","true");
 		
 		//返回json数据
 		resp.setContentType("text/json;charset=utf-8");

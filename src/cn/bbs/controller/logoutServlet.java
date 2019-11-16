@@ -28,7 +28,7 @@ public class logoutServlet extends HttpServlet {
 			response.getWriter().write("你已退出，请问重复退出");
 		}else {
 			String ip = str.split("#")[0];
-			int account = Integer.parseInt(str.split("#")[1]);
+			String account = str.split("#")[1];
 			logout = new Logout();
 			try {
 				if(logout.isLogout(account, ip)) {

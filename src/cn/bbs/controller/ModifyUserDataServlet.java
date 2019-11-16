@@ -34,11 +34,11 @@ public class ModifyUserDataServlet extends HttpServlet {
 		//signature=?,introduce=?,qq=?,"blog=?,birplace=?,birthday=?,sex=? where account=?";
 		
 		//接受前端参数
-		int account = Integer.parseInt(request.getParameter("account"));
+		String account = request.getParameter("account");
 		String username = request.getParameter("username");
 		String signature = request.getParameter("signature");
 		String introduce = request.getParameter("introduce");
-		int qq = Integer.parseInt(request.getParameter("qq")); 
+		String qq = request.getParameter("qq"); 
 		String birplace = request.getParameter("birplasce");
 		String birthday =  request.getParameter("birthday");
 		int sex = Integer.parseInt(request.getParameter("sex"));

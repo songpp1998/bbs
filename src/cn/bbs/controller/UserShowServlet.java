@@ -54,7 +54,7 @@ public class UserShowServlet extends HttpServlet {
 		
 		
 		JSONObject.fromObject(message).write(response.getWriter());
-		System.out.println(session.getAttribute("ticket"));
+//		System.out.println(session.getAttribute("ticket"));
 	}
 
 

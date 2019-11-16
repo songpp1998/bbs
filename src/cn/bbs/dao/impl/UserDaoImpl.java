@@ -21,7 +21,7 @@ public class UserDaoImpl implements UserDao{
 
 	//根据account查询用户名,密码
 	@Override
-	public UserBean findUserBeanByAccount(int account) {
+	public UserBean findUserBeanByAccount(String account) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		UserBean user = null;
@@ -30,15 +30,17 @@ public class UserDaoImpl implements UserDao{
 			conn = C3p0Utils.getConn();
 			String sql = "SELECT * FROM user where account=?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, account);
+			pstmt.setString(1, account);
 			rs = pstmt.executeQuery();			
 			while(rs.next()) {
 				user = new UserBean();
-				user.setAccount(rs.getInt("account"));
+				user.setAccount(rs.getString("account"));
                	user.setUsername(rs.getString("username"));
                	user.setPassword(rs.getString("password"));
+               	user.setUserId(rs.getInt("userid"));
+               	user.setImg(rs.getString("img"));
                	user.setRoleid(rs.getInt("roleid"));
-               	user.setPhone(rs.getInt("phone"));
+               	user.setPhone(rs.getString("phone"));
 	        }
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -50,7 +52,7 @@ public class UserDaoImpl implements UserDao{
 	
 	//根据account删除用户，true为删除成功，false为失败
 	@Override
-	public boolean deleteUserBeanByAccount(int account) {
+	public boolean deleteUserBeanByAccount(String account) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int rs = 0;
@@ -58,7 +60,7 @@ public class UserDaoImpl implements UserDao{
 			conn = C3p0Utils.getConn();
 			String sql = "delete * from user where account=?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, account);
+			pstmt.setString(1, account);
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;
@@ -86,12 +88,12 @@ public class UserDaoImpl implements UserDao{
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getSignature());
 			pstmt.setString(3, user.getIntroduce());
-			pstmt.setInt(4, user.getQq());
+			pstmt.setString(4, user.getQq());
 			pstmt.setString(5, user.getBlog());
 			pstmt.setString(6, user.getBirplace());
 			pstmt.setDate(7, user.getBirthday());
 			pstmt.setInt(8, user.getSex());
-			pstmt.setInt(9, user.getAccount());
+			pstmt.setString(9, user.getAccount());
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;
@@ -117,9 +119,9 @@ public class UserDaoImpl implements UserDao{
 			String sql = "insert into user(username,account,password,phone,registertime,roleid) values(?,?,?,?,now(),1)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getUsername());
-			pstmt.setInt(2, user.getAccount());
+			pstmt.setString(2, user.getAccount());
 			pstmt.setString(3, user.getPassword());
-			pstmt.setInt(4, user.getPhone());
+			pstmt.setString(4, user.getPhone());
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;
@@ -135,7 +137,7 @@ public class UserDaoImpl implements UserDao{
 	
 	//添加登陆时间和ip，登录成功时自动记录
 	@Override
-	public boolean addLoginTimeByAccount(int account,String ip) {
+	public boolean addLoginTimeByAccount(String account,String ip) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int rs = 0;
@@ -144,7 +146,7 @@ public class UserDaoImpl implements UserDao{
 			String sql = "update user set logintime=now(),loginip=? where account=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, ip);
-			pstmt.setInt(2, account);
+			pstmt.setString(2, account);
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;
@@ -159,7 +161,7 @@ public class UserDaoImpl implements UserDao{
 	
 	//添加上次登录时间和ip，注销时自动记录
 	@Override
-	public boolean addLastLoginTimeByAccount(int account,String ip) {
+	public boolean addLastLoginTimeByAccount(String account,String ip) {
 
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -169,7 +171,7 @@ public class UserDaoImpl implements UserDao{
 			String sql = "update user set lastlogintime=now(),lastloginip=? where account=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, ip);
-			pstmt.setInt(2, account);
+			pstmt.setString(2, account);
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;
@@ -184,7 +186,7 @@ public class UserDaoImpl implements UserDao{
 
 	//重置密码为注册手机号
 	@Override
-	public boolean resetPasswordByAccount(int account,int phone) {
+	public boolean resetPasswordByAccount(String account,String phone) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int rs = 0;
@@ -192,8 +194,8 @@ public class UserDaoImpl implements UserDao{
 			conn = C3p0Utils.getConn();
 			String sql = "update user set password=? where account=?";
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, phone);
-			pstmt.setInt(2, account);
+			pstmt.setString(1, phone);
+			pstmt.setString(2, account);
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;
@@ -230,18 +232,18 @@ public class UserDaoImpl implements UserDao{
 				user = new UserBean();
 				user.setUserId(rs.getInt("userid"));
 				user.setUsername(rs.getString("username"));
-				user.setAccount(rs.getInt("account"));
+				user.setAccount(rs.getString("account"));
 				user.setPassword(rs.getString("password"));
 				user.setSignature(rs.getString("signature"));
 				user.setIntroduce(rs.getString("introduce"));
-				user.setQq(rs.getInt("qq"));
+				user.setQq(rs.getString("qq"));
 				user.setBlog(rs.getString("blog"));
 				user.setBirplace(rs.getString("birplace"));
 				user.setBirthday(rs.getDate("birthday"));
 				user.setSex(rs.getInt("sex"));
 				user.setImg(rs.getString("img"));
 				user.setRoleid(rs.getInt("roleid"));
-				user.setPhone(rs.getInt("phone"));
+				user.setPhone(rs.getString("phone"));
 				user.setRegistertime(rs.getString("registertime"));
 				System.out.println(rs.getTimestamp("registertime"));
 				user.setLogintime(rs.getString("logintime"));
@@ -275,7 +277,7 @@ public class UserDaoImpl implements UserDao{
 			while(rs.next()) {
 				user = new UserBean();
 				user.setUserId(rs.getInt("userid"));
-				user.setAccount(rs.getInt("account"));
+				user.setAccount(rs.getString("account"));
                	user.setUsername(rs.getString("username"));
                	user.setPassword(rs.getString("password"));
 	        }
@@ -290,7 +292,7 @@ public class UserDaoImpl implements UserDao{
 
 	//管理员修改用户权限
 	@Override
-	public boolean modifyPower(int account, int roleid,int position) {
+	public boolean modifyPower(String account, int roleid,int position) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int rs = 0;
@@ -301,7 +303,7 @@ public class UserDaoImpl implements UserDao{
 			String sql = "update user set roleid=? where account=?;";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, roleid);
-			pstmt.setInt(2, account);
+			pstmt.setString(2, account);
 			rs = pstmt.executeUpdate();
 			
 			rs = 0;
@@ -332,7 +334,7 @@ public class UserDaoImpl implements UserDao{
 	
 	//用户修改密码
 	@Override
-	public boolean modifyPassowrdByAccount(int account, String password) {
+	public boolean modifyPassowrdByAccount(String account, String password) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		int rs = 0;
@@ -341,7 +343,7 @@ public class UserDaoImpl implements UserDao{
 			String sql = "update user set password=? where account=?;";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, password);
-			pstmt.setInt(2, account);
+			pstmt.setString(2, account);
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;

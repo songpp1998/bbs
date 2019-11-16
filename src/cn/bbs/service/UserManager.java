@@ -22,6 +22,20 @@ public class UserManager {
 	private List<UserBean> list = null;
 	private UserDaoImpl userDaoImpl = null;
 	private PageDao pageDao = null;
+	private UserBean user = null;
+	
+	//展示给用户的数据——username、userid、img
+	public HashMap<String,String> showUser(String account) {
+		userDaoImpl = new UserDaoImpl();
+		user = new UserBean();
+		user = userDaoImpl.findUserBeanByAccount(account);
+		HashMap<String,String> map = new HashMap<>();
+		map.put("userid", String.valueOf(user.getUserId()));
+		map.put("username", user.getUsername());
+		map.put("img", user.getImg());
+		System.out.println(map.get("useid")+"111");
+		return map;
+	}
 	
 	
 	//分页显示用户数据	
@@ -50,10 +64,10 @@ public class UserManager {
 	
 	
 	//根据account批量删除用户
-	public Message deleteByAccount(List<Integer> a) {
+	public Message deleteByAccount(List<String> a) {
 		userDaoImpl = new UserDaoImpl();
 		try {
-			for (int i : a) {
+			for (String i : a) {
 				userDaoImpl.deleteUserBeanByAccount(i);
 			}	
 		} catch (Exception e) {
@@ -72,7 +86,7 @@ public class UserManager {
 	}
 	
 	//根据account修改用户密码
-	public Message modifyPassword(int account,String password) {
+	public Message modifyPassword(String account,String password) {
 		userDaoImpl = new UserDaoImpl();
 		if(userDaoImpl.modifyPassowrdByAccount(account, password)) {
 			return new Message(false, 200, "修改成功", null);
@@ -81,7 +95,7 @@ public class UserManager {
 	}
 	
 	//管理员修改用户权限
-	public Message modifyAccount(int account,int roleid,int position) {
+	public Message modifyAccount(String account,int roleid,int position) {
 		userDaoImpl = new UserDaoImpl();
 		if(userDaoImpl.modifyPower(account, roleid,position)) {
 			return new Message(true, 200, "修改成功", null);

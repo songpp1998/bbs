@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  *跨域问题
  */
-@WebFilter("/CrossFilter")
+//@WebFilter("/CrossFilter")
 public class CrossFilter implements Filter {
 
 	public void destroy() {

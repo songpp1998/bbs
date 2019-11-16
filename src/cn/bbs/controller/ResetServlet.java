@@ -21,8 +21,8 @@ public class ResetServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int account = Integer.parseInt(request.getParameter("account"));
-		int phone = Integer.parseInt(request.getParameter("phone"));
+		String account = request.getParameter("account");
+		String phone = request.getParameter("phone");
 		System.out.println(account+phone);
 		
 		reset = new ResetPassword();

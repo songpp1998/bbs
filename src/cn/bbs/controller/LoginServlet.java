@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import cn.bbs.bean.UserBean;
+import cn.bbs.message.Message;
 import cn.bbs.service.Login;
+import net.sf.json.JSONObject;
 
 
 @WebServlet("/login")
@@ -20,28 +22,29 @@ public class LoginServlet extends HttpServlet {
 	private UserBean user = null;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		login = new Login();
 		//获取账户名和密码
-		int account = Integer.parseInt(request.getParameter("account"));
+		
+		String account = request.getParameter("account");
 		String password = request.getParameter("password");
+		
+//		System.out.println(account+password );
 		user = new UserBean();		
 		user.setAccount(account);
 		user.setPassword(password);
 		user.setLoginIp(getRemortIP(request));
-		System.out.println(getRemortIP(request));
+//		System.out.println(getRemortIP(request));
 		try {
 			//是否登陆成功
-			if(login.isLogin(user).success) {
+			Message message = login.isLogin(user);
+			if(message.success) {
 
 				HttpSession session = request.getSession();
-				session.setAttribute("ticket", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account)+login.findPositionByAccount(account));
-//				System.out.println(session.getAttribute("ticket"));
-				response.getWriter().append("welcome"+account);
-				response.setContentType("html/text;charset=utf-8");
-				response.sendRedirect("http://127.0.0.1:8081/bbs/bbs/cross.html");
-			}else {
-				response.getWriter().append("账户名或密码错误");
+				session.setAttribute("ticket", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account)+login.findPositionByAccount(account));				
 			}
+			response.setContentType("text/json;charset=utf-8");
+			JSONObject.fromObject(message).write(response.getWriter());			
 		} catch (Exception e) {
 			response.getWriter().append("500");
 		}

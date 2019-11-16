@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import cn.bbs.bean.UserBean;
+import cn.bbs.message.Message;
 import cn.bbs.service.Register;
 import net.sf.json.JSONObject;
 
@@ -20,30 +21,28 @@ public class RegisterServlet extends HttpServlet {
 	private UserBean user = null;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		reg = new Register();
-		int account = Integer.parseInt(request.getParameter("account"));
+		
+		//接受参数
+		String account = request.getParameter("account");
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		int phone = Integer.parseInt(request.getParameter("phone"));
-//		System.out.println(account+username+password);
-		response.setContentType("text/html;charset=utf-8");
+		String phone = request.getParameter("phone");
+		Message message = null;
 		try {
-			if(!reg.isExistAccount(account)) {
+			//查询账户是否存在
+			message = reg.isExistAccount(account);
+			if(!message.success) {
 				user = new UserBean();
 				user.setAccount(account);
 				user.setUsername(username);
 				user.setPassword(password);
 				user.setPhone(phone);
-				if(reg.isRegister(user)) {
-					System.out.println(account+"注册成功");
-					response.getWriter().write("注册成功");
-					response.setStatus(302);
-					response.sendRedirect("http://localhost:8020/bbs/login.html");
-				}else {
-					response.getWriter().append("注册失败，请检查注册信息是否合法");
-				}
-			}else {
-				response.getWriter().append(account+"已被注册");
-			}
+				//注册
+				message = reg.isRegister(user);
+
+			}			
+			response.setContentType("text/json;charset=utf-8");
+			JSONObject.fromObject(message).write(response.getWriter());
 		} catch (Exception e) {
 			response.getWriter().append("500内部服务器错误");
 		}

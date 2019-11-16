@@ -1,5 +1,7 @@
 package cn.bbs.service;
 
+import java.util.HashMap;
+
 import cn.bbs.bean.UserBean;
 import cn.bbs.dao.RoleDao;
 import cn.bbs.dao.impl.RoleDaoImpl;
@@ -14,21 +16,21 @@ public class Login {
 		userDaoImpl = new UserDaoImpl();
 		String password = userDaoImpl.findUserBeanByAccount(user.getAccount()).getPassword();
 		if(password.equals(user.getPassword())) {
-			userDaoImpl.addLoginTimeByAccount(user.getAccount(),user.getLoginIp());
+			userDaoImpl.addLoginTimeByAccount(user.getAccount(),user.getLoginIp());			
 			return new Message(true, 200, "登陆成功", null);
 		}
-		return new Message(false, 500, "登录失败", null);
+		return new Message(false, 300, "登录失败", null);
 	}
 	
 	//查看用户角色
-	public int findRoleByAccount(int account) {
+	public int findRoleByAccount(String account) {
 		userDaoImpl = new UserDaoImpl();
 		return userDaoImpl.findUserBeanByAccount(account).getRoleid();
 		
 	}
 	
 	//查看用户职位
-	public int findPositionByAccount(int account) {
+	public int findPositionByAccount(String account) {
 		roledao= RoleDaoImpl.getInstance();
 		userDaoImpl = new UserDaoImpl();
 		//获取user对象

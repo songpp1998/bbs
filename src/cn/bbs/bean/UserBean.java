@@ -8,17 +8,17 @@ public class UserBean {
 	private int userId;//用户id
 	private int roleid;//角色id
 	private String username;//用户名
-	private int account;//登录账户，可用于登录
+	private String account;//登录账户，可用于登录
 	private String password;
 	private String signature;//个性签名
 	private String introduce;//自我介绍
-	private int qq;
+	private String qq;
 	private String blog;//个人网站
 	private String birplace;//籍贯
 	private Date birthday;//生日
 	private int sex;//性别 
 	private String img;//图片url，头像
-	private int phone;//手机号
+	private String phone;//手机号
 	private String registertime;//注册时间，精确到s
 	private String logintime;//登录时间
 	private String lastlogintime;//上次登录时间，精确到s
@@ -27,6 +27,24 @@ public class UserBean {
 	
 	
 	
+	public String getAccount() {
+		return account;
+	}
+	public void setAccount(String account) {
+		this.account = account;
+	}
+	public String getQq() {
+		return qq;
+	}
+	public void setQq(String qq) {
+		this.qq = qq;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 	public String getRegistertime() {
 		return registertime;
 	}
@@ -63,12 +81,7 @@ public class UserBean {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public int getAccount() {
-		return account;
-	}
-	public void setAccount(int account) {
-		this.account = account;
-	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -87,12 +100,7 @@ public class UserBean {
 	public void setIntroduce(String introduce) {
 		this.introduce = introduce;
 	}
-	public int getQq() {
-		return qq;
-	}
-	public void setQq(int qq) {
-		this.qq = qq;
-	}
+
 	public String getBlog() {
 		return blog;
 	}
@@ -124,12 +132,6 @@ public class UserBean {
 		this.img = img;
 	}
 	
-	public int getPhone() {
-		return phone;
-	}
-	public void setPhone(int phone) {
-		this.phone = phone;
-	}
 	
 	public String getLoginIp() {
 		return loginIp;

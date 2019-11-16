@@ -18,17 +18,17 @@ public class ResetPassword {
 	private UserBean user = null;
 	
 	//是否通过验证，可以重置密码
-	public boolean isReset(int account,int phone) {
+	public boolean isReset(String account,String phone) {
 		userDaoImpl = new UserDaoImpl();
 		user = userDaoImpl.findUserBeanByAccount(account);
-		if(user.getAccount()==account&&user.getPhone()==phone) {
+		if(user.getAccount().equals(account)&&user.getPhone().equals(phone)) {
 			return true;
 		}
 		return false;
 	}
 	
 	//重置密码为注册手机号
-	public boolean Reset(int account,int phone) {
+	public boolean Reset(String account,String phone) {
 		userDaoImpl = new UserDaoImpl();
 		if(userDaoImpl.resetPasswordByAccount(account, phone)) {
 			return true;

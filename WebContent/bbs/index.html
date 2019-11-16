@@ -42,47 +42,54 @@
 		<div id="app">
 			<el-container style="border: 1px solid #eee">
 				<el-header>
-					<div class="el-col-md-3">
-						<span>代码改变世界</span>
-					</div>
-					<div class="el-col-md-3">
-						<el-image src="img/bbs-logo.png" fit='contain'></el-image>
-					</div>
-					<div style="text-align: right;">
-						<button>写博客</button>
-						<button>登录</button>
-						<button>注册</button>
-					</div>
-					<div id="mynav"></div>
+					<el-row>
+						<el-col :span="3">
+							<span>代码改变世界</span>
+						</el-col>
+						<el-col :span="5">
+							<el-image src="img/bbs-logo.png" fit='contain'></el-image>
+						</el-col>
+						<el-col :span="5">
+							<el-input v-model="input" placeholder="请输入内容"></el-input>							
+						</el-col>
+						<el-col :span="3">
+							<el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
+						</el-col>
+						<el-col :span="2" style="text-align: right;">
+							<el-button>写博客</el-button>
+						</el-col>
+						<el-col :span="6" style="text-align: right;" v-show="isOnline">
+							<el-button>登录</el-button>
+							<el-button>注册</el-button>
+						</el-col>
+						<el-col :span="6" v-show="!isOnline" style="text-align: right;">
+							<el-button><i class="el-icon-user"></i>  hydra</el-button>
+							<el-button>我的中心</el-button>
+							<el-button>注销</el-button>
+						</el-col>
+					</el-row>
 				</el-header>
 
 				<el-container>
 					<el-aside width="200px">
 						<a href="#">网站分类</a>
-						<!--<el-submenu v-for="(i,menu1) in caidan">
-								<el-menu-item-group index=i>
-									{{menu1.name}}
-									<el-menu-item v-for="(j,menu2) in menu1.list">
-										<el-menu-item index=j>{{menu2.name}}</el-menu-item>
-									</el-menu-item>
-								</el-menu-item-group>
-						</el-submenu>-->
 						<el-menu default-active="2" class="el-menu-vertical-demo" >
 							<el-submenu :index=i+'' v-for="(menu1,i) in caidan">
 								<template slot="title">
 									<span>{{menu1.name}}</span>
 								</template>
-								<!--							<el-menu-item>1232</el-menu-item>
--->
-
 								<el-menu-item v-for="(menu2,j) in menu1.list">{{menu2.name}}</el-menu-item>
 							</el-submenu>
 
 						</el-menu>
 					</el-aside>
 					<el-container>
-						<el-main>Main</el-main>
-						<el-footer>Footer</el-footer>
+						<el-main>
+							{{post}}
+						</el-main>
+						<el-footer>
+							
+						</el-footer>
 					</el-container>
 				</el-container>
 			</el-container>
@@ -90,31 +97,70 @@
 		</div>
 	</body>
 	<script>
-		var vue1 = new Vue({
+		new Vue({
 			el: '#app',
 			data() {
 				return {
 					src: 'img/bbslogo.png',
-					caidan: ''
+					isOnline:false,
+					caidan: '',
+					input:'内容',
+					post:''
 				}
 			},
 			methods: {
-
+				search:function(){
+					_this = this;
+					$.ajax({
+						url: 'http://localhost:8081/bbs/PostByName',
+						type: 'get',
+						dataType: "json",
+						data:{
+							name:'input',
+							page:0
+						},
+						xhrFields: {
+							withCredentials: false
+						},
+						success: function(data) {
+							console.log(data);
+							_this.post = data;
+						}
+				});
+				}
 			},
 			mounted: function() {
 				_this = this;
 				$.ajax({
-					url: 'http://localhost:8081/bbs/ShowSection', // 跨域URL
+					url: 'http://localhost:8081/bbs/ShowSection', //分区展示
 					type: 'get',
 					dataType: "json",
 					xhrFields: {
-						withCredentials: true
+						withCredentials: false
 					},
 					success: function(data) {
 						console.log(data);
 						_this.caidan = data.data;
 					}
 				});
+				
+//				$.ajax({
+//					url: 'http://localhost:8081/bbs/login', // 跨域URL
+//					type: 'get',
+//					dataType: "json",
+//					data:{
+//						account:1,
+//						password:1
+//					},
+//					xhrFields: {
+//						withCredentials: false
+//					},
+//					success: function(data) {
+//						console.log(data);
+//						_this.caidan = data.data;
+//					}
+//				});
+				
 			}
 		});
 	</script>

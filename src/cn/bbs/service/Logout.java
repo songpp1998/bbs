@@ -22,7 +22,7 @@ public class Logout {
 	 * @param ip
 	 * @return
 	 */
-	public boolean isLogout(int account,String ip) {
+	public boolean isLogout(String account,String ip) {
 		userDaoImpl = new UserDaoImpl();
 		if(userDaoImpl.addLastLoginTimeByAccount(account, ip)) {
 			return true;

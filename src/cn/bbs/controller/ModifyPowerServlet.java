@@ -20,7 +20,7 @@ public class ModifyPowerServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		userManager = new UserManager();
 		
-		int account = Integer.parseInt(request.getParameter("account"));
+		String account = request.getParameter("account");
 		int roleid = Integer.parseInt(request.getParameter("roleid"));
 		int position = Integer.parseInt(request.getParameter("position"));
 		

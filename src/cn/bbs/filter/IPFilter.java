@@ -21,7 +21,7 @@ import javax.servlet.annotation.WebFilter;
  * @author Hydra
  *
  */
-@WebFilter("/BanIpFilter")
+//@WebFilter("/IpFilter")
 public class IPFilter implements Filter {
 	
 	//要过滤的ip

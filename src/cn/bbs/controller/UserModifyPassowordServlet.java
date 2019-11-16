@@ -21,10 +21,8 @@ public class UserModifyPassowordServlet extends HttpServlet {
 		
 		userManager = new UserManager();
 		
-		int account = Integer.parseInt(request.getParameter("account"));
+		String account = request.getParameter("account");
 		String password = request.getParameter("password");
-//		int account = 2;
-//		String password = "123123";
 		
 		Message message = userManager.modifyPassword(account, password);
 		
