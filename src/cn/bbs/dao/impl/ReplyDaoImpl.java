@@ -41,7 +41,7 @@ public class ReplyDaoImpl implements ReplyDao{
            //1.获取连接
            conn = C3p0Utils.getConn();
            //2.定义sql
-           String sql = "insert into reply(postid,userid,content,replytime，username)"
+           String sql = "insert into reply(postid,userid,content,replytime,username)"
            		+ " VALUES (?,?,?,now(),?)";
            //3.获取数据库操作对象
            pstmt = conn.prepareStatement(sql);

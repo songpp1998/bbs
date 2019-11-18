@@ -27,10 +27,7 @@ import cn.bbs.message.Message;
 public class PostSelectService {
 	
 	private static final int PAGE_NUM=12;
-	
-	static int numbysection=0;
-	static int numbyuser=0;
-	static int numbyname=0;
+
 	
 	static UserDao userdao=null;
 	static PostDao postdao=null;
@@ -53,15 +50,12 @@ public class PostSelectService {
 		SectionBean section=sdao.selectSctionById(sectionid);
 		if(section==null) return new Message(false,240,"板块不存在",null);
 		//获取页数
-		if(numbysection==0) {
-			int num=postdao.selectPostCountBySection(sectionid);
-			num=(num-1)/PAGE_NUM+1;
-			numbysection=num;
-		}
+		int num=postdao.selectPostCountBySection(sectionid);
+		num=(num-1)/PAGE_NUM+1;
 		//获取第一页的数据
 		List<PostBean> list = postdao.selectPostBySection(section, page, PAGE_NUM);
 		HashMap<String, Object> map=new HashMap<>();
-		map.put("num", numbysection);
+		map.put("num", num);
 		map.put("list", list);
 		return new Message(true,130,"成功",map);
 	}
@@ -70,32 +64,24 @@ public class PostSelectService {
 		UserBean user = userdao.selectUserById(userid);
 		if(user==null) return new Message(false,241,"用户不存在",null);
 		//获取页数
-		if(numbyuser==0) {
-			int num=postdao.selectPostCountByUser(userid);
-			num=(num-1)/PAGE_NUM+1;
-//			System.out.println(num);
-			numbyuser=num;
-		}
+		int num=postdao.selectPostCountByUser(userid);
+		num=(num-1)/PAGE_NUM+1;
 		//获取第一页的数据
 		List<PostBean> list = postdao.selectPostByUser(user, page, PAGE_NUM);
 		HashMap<String, Object> map=new HashMap<>();
-		map.put("num", numbyuser);
+		map.put("num", num);
 		map.put("list", list);
 		return new Message(true,130,"成功",map);
 	}
 	/*按照关键字查询*/
 	public static Message PostCountByName(String name,int page) {
 		//获取页数
-		if(numbyname==0) {
-			int num=postdao.selectPostCountByName(name);
-			num=(num-1)/PAGE_NUM+1;
-			System.out.println(num);
-			numbyname=num;
-		}
+		int num=postdao.selectPostCountByName(name);
+		num=(num-1)/PAGE_NUM+1;
 		//获取第一页的数据
 		List<PostBean> list = postdao.selectPostByName(name, page, PAGE_NUM);
 		HashMap<String, Object> map=new HashMap<>();
-		map.put("num", numbyname);
+		map.put("num", num);
 		map.put("list", list);
 		return new Message(true,130,"成功",map);
 	}
