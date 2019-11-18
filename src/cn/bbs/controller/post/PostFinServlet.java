@@ -32,6 +32,8 @@ public class PostFinServlet extends HttpServlet{
 		Message message=PostService.PostFind(postid);
 		System.out.println(message);
 		
+		
+		
 		//动态获取域
 		resp.setHeader("Access-Control-Allow-Origin",req.getHeader("origin"));
 		//允许携带cookie
@@ -40,6 +42,8 @@ public class PostFinServlet extends HttpServlet{
 		//返回json数据
 		resp.setContentType("text/json;charset=utf-8");
 		JSONObject.fromObject(message).write(resp.getWriter());
+
+		
 	}
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

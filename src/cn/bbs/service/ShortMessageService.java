@@ -98,6 +98,11 @@ public class ShortMessageService {
 		user = userdao.selectUserById(message.getReceiverid());
 		message.setReceivername(user.getUsername());
 		
+		if(message.getStatus()==2) {
+			message.setStatus(3);
+			smdao.updateShortMessage(message);
+		}
+		
 		return new Message(true,103,"成功",message);
 	}
 	
