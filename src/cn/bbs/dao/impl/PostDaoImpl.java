@@ -50,8 +50,8 @@ public class PostDaoImpl implements PostDao{
            //4.解析参数
            pstmt.setInt(1, post.getUserid());//传入作者
            pstmt.setInt(2, post.getSectionid());//所属板块
-           pstmt.setString(4, post.getContent());//内容
-           pstmt.setString(3, post.getTitle());//标题
+           pstmt.setString(3, post.getContent());//内容
+           pstmt.setString(4, post.getTitle());//标题
            pstmt.setInt(5, post.getPosttype());//类型
            pstmt.setString(6, post.getPostip());//ip
            pstmt.setString(7, post.getEdituser());//最后编辑人

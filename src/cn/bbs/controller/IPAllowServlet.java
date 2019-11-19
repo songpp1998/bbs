@@ -17,13 +17,14 @@ import net.sf.json.JSONObject;
 /**
  * Servlet implementation class IPAllowServlet
  */
-@WebServlet("/IPAllowServlet")
+@WebServlet("/ipAllow")
 public class IPAllowServlet extends HttpServlet {
 
 	private DenyIPService denyIp = null;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		String ip = request.getParameter("allowIP");
+		System.out.println(ip);
 //		String ip = "127.0.0.8";
 		denyIp = new DenyIPService();
 		
@@ -38,9 +39,9 @@ public class IPAllowServlet extends HttpServlet {
 		response.setContentType("text/json;charset=utf-8");
 		
 		//动态获取域
-		response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
-		//允许携带cookie
-		response.addHeader("Access-Control-Allow-Credentials","true");
+//		response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
+//		//允许携带cookie
+//		response.addHeader("Access-Control-Allow-Credentials","true");
 		
 		JSONObject.fromObject(message).write(response.getWriter());
 	}

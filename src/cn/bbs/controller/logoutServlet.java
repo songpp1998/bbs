@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.websocket.Session;
 
 import cn.bbs.dao.impl.UserDaoImpl;
 import cn.bbs.service.Logout;
@@ -25,7 +24,7 @@ public class logoutServlet extends HttpServlet {
 		System.out.println(str);
 		response.setContentType("text/html;charset=utf-8");
 		if(str.equals("")) {
-			response.getWriter().write("你已退出，请问重复退出");
+			response.getWriter().write("浣犲凡閫�鍑猴紝璇烽棶閲嶅閫�鍑�");
 		}else {
 			String ip = str.split("#")[0];
 			String account = str.split("#")[1];
@@ -33,10 +32,10 @@ public class logoutServlet extends HttpServlet {
 			try {
 				if(logout.isLogout(account, ip)) {
 					session.invalidate();
-					response.getWriter().append("注销成功");
+					response.getWriter().append("娉ㄩ攢鎴愬姛");
 				}
 			} catch (Exception e) {
-				response.getWriter().append("500内部服务器错误");
+				response.getWriter().append("500鍐呴儴鏈嶅姟鍣ㄩ敊璇�");
 			}		
 		}
 

@@ -29,7 +29,6 @@ public class PostHotServlet extends HttpServlet{
 		//获取数据
 		PostBean post=new PostBean();
 		post.setPostid(Integer.parseInt(req.getParameter("postid")));
-		post.setHot(Integer.parseInt(req.getParameter("hot")));
 		post.setHotid(Integer.parseInt(req.getParameter("hotid")));
 		post.setHotreason(req.getParameter("hotreason"));
 		

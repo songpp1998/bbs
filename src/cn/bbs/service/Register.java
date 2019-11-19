@@ -11,10 +11,10 @@ public class Register {
 	public Message isExistAccount(String account) {
 		userDaoImpl = new UserDaoImpl();
 		if(userDaoImpl.findUserBeanByAccount(account)!=null) {
-			return new Message(true, 200, "账户已存在", null);
+			return new Message(false, 200, "账户已存在", null);
 		}
 		
-		return new Message(false, 200, "账号可以注册", null);
+		return new Message(true, 200, "账号可以注册", null);
 	}
 	
 	//注册是否成功

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<!-- 这是搜索文章 -->
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>BBS搜索</title>
+		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+		<link rel="stylesheet" href="../css/element-ui.css" />
+		<script type="text/javascript" src="../js/vue.js"></script>
+		<script type="text/javascript" src="../js/element-ui.js"></script>
+		<script src="../js/data.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<style>
+		[v-cloak]{
+			display: none;
+		}
+		/* 这是头和脚 */
+		.el-header {
+	    background-color: #B3C0D1;
+	    color: #333;
+	    text-align: center;
+	    line-height: 60px;
+		}
+		.el-footer{
+			text-align: center;
+			line-height: 60px;
+		}
+		/* 这是主体 */
+		.el-main {
+			background-color: #E9EEF3;
+			color: #333;
+		}
+		/* 这是标题 */
+		.title{
+			
+			font:italic bolder 25px "黑体";
+			height: 35px;
+		}
+		/* 这是内容 */
+		.content{
+			text-indent: 30px;
+			height: 85px;
+			overflow: hidden;
+			/* background-color: #00FF00; */
+		}
+		/* 这是评论数和阅读量 */
+		.reply{
+			margin-top: 5px;
+			height: 25px;
+			color: #82848A;
+		}
+	</style>
+	<body>
+		<div id="app">
+			<el-page-header @back="goBack" content="BBS搜索"></el-page-header>
+			<el-row v-cloak>
+				<el-col :span="20" :offset="2">
+					<el-container>
+						<el-header>
+							<el-col :span="6" :offset="10">
+								<el-input placeholder="输入需要搜索的内容" v-model="values" clearable>
+									<el-button @click="onclick" slot="append" icon="el-icon-search" />
+								</el-input>
+							</el-col>
+							<el-col :span="2" :offset="2">
+								<el-button>登录</button>
+							</el-col>
+						</el-header>
+						<el-main>
+							<el-card v-for="(post,i) in list" shadow="hover" @click.native="find(post.postid)">
+								<div class="title">{{post.title}}</div>
+								<div class="content">{{post.content}}</div>
+								<div class="reply">
+									<el-row>
+										<el-col :span="2" :offset="6">
+											<i class="el-icon-thumb">{{post.readnum}} 点击量</i>
+										</el-col>
+										<el-col :span="2" :offset="1">
+											<i class="el-icon-chat-dot-round"> {{post.replynum}}条评论</i>
+										</el-col>
+										<el-col :span="3" :offset="10">{{post.postdate}}</el-col>
+									</el-row>
+								</div>
+							</el-card>
+						</el-main>
+						<el-footer>
+							<el-pagination background @current-change="handleCurrentChange" :current-page.sync="page" layout="prev, pager, next, jumper"
+							 :total="num" :hide-on-single-page="num<=10">
+							</el-pagination>
+						</el-footer>
+					</el-container>
+				</el-col>
+			</el-row>
+		</div>
+	</body>
+	<script type="text/javascript">
+		new Vue({
+			el: "#app",
+			data: {
+				values: "", //搜索框中的内容
+				name: "", //要搜索的内容
+				list: [], //数据
+				num: 10, //页总数*10
+				page: 1, //当前页数
+
+			},
+			methods: {
+				goBack() {
+					console.log('go back');
+				},
+				//页码发生改变
+				handleCurrentChange(val) {
+					console.log(`当前页: ${val}`);
+					this.page = val;
+					this.search();
+				},
+				//点击搜索按钮
+				onclick() {
+					console.log('点击搜索');
+					if (this.values == "") {
+						console.log("空");
+						// return ;
+					}
+					this.name = this.values;
+					this.page = 1;
+					this.search();
+					
+				},
+				//查看某篇文章,会跳转到其他的界面
+				find(postid) {
+					console.log("文章的id为"+postid);
+					var url=post;
+					sessionStorage.setItem("postid", postid);
+					window.location.href = url;
+					
+				},
+				// 这是使用ajax对后端进行请求
+				// 其他方法只需要调用此方法即可
+				search: function() {
+					var url = 'http://' + address + ':' + interface + '/bbs/PostByName';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							name: this.name,
+							page: this.page - 1
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								_this.list = data.data.list;
+								_this.num = data.data.num * 10;
+							}
+							console.log(_this.num);
+						},
+						error: function(xhr, type, errorThrown) {
+							console.log('失败');
+						}
+					});
+				}
+			},
+			mounted() {
+				this.name=localStorage.getItem("name");
+				this.search();
+			}
+		})
+	</script>
+</html>

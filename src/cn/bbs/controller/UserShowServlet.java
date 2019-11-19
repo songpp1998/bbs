@@ -34,12 +34,12 @@ public class UserShowServlet extends HttpServlet {
 		int page = 0;
 		int num = 1;
 		
-//		try {
-//			page = Integer.parseInt(request.getParameter("page"));
-//			num = Integer.parseInt(request.getParameter("num"));			
-//		} catch (Exception e) {
-//			
-//		}
+		try {
+			page = Integer.parseInt(request.getParameter("page"));
+			num = Integer.parseInt(request.getParameter("num"));			
+		} catch (Exception e) {
+			
+		}
 		
 		Message message = userManager.findUserByPage(page, num);
 		System.out.println(message.getData());

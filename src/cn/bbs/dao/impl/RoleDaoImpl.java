@@ -17,7 +17,7 @@ import cn.bbs.util.C3p0Utils;
 */
 public class RoleDaoImpl implements RoleDao{
 
-	private RoleDaoImpl(){
+	public RoleDaoImpl(){
 	}
 	private static class Inner{
 		private static final RoleDaoImpl instance = new RoleDaoImpl();

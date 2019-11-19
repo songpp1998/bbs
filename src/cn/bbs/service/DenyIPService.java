@@ -19,6 +19,7 @@ import javax.servlet.ServletContext;
 
 import org.apache.commons.collections.map.HashedMap;
 
+import cn.bbs.bean.UserBean;
 import cn.bbs.filter.IPFilter;
 import cn.bbs.message.Message;
 
@@ -29,7 +30,8 @@ import cn.bbs.message.Message;
  */
 public class DenyIPService {
 	
-	private List<String> denyList = new ArrayList<String>();
+	private List<UserBean> denyList = new ArrayList<>();
+	private HashMap<String, Object> map = new HashMap<>();
 
 	/**
 	 * 获取禁止ip列表
@@ -37,6 +39,7 @@ public class DenyIPService {
 	 * @throws IOException
 	 */
 	public Message getIPList() throws IOException {
+		UserBean user = null;
 		
 		Properties props = new Properties();
 		//加载配置文件
@@ -53,18 +56,19 @@ public class DenyIPService {
 		if(null != denyIP && !"".equals(denyIP.trim())) {
 			String[] denyIPs = denyIP.split(",|;");
 			for(String ip : denyIPs) {
-				denyList.add(ip);
+				user = new UserBean();
+				user.setLoginIp(ip);
+				denyList.add(user);
 			}
+			map.put("list", denyList);
 		}
 		
 		
 		//打印所有黑名单ip
-		for(String str : denyList) {
+		for(UserBean str : denyList) {
 			System.out.println(str);
 		}
 	
-		HashMap<String, Object> map = new HashMap<>();
-		map.put("list", denyList);
 		
 		return new Message(true, 200, "查询成功",map );
 	}

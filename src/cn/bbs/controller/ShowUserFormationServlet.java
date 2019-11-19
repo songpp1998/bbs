@@ -24,7 +24,7 @@ public class ShowUserFormationServlet extends HttpServlet {
 		userManager = new UserManager();
 		
 		HttpSession session = request.getSession();
-		String ticket = (String) session.getAttribute("ticket");
+		String ticket = (String) session.getAttribute("ticket1");
 		System.out.println(ticket);
 		String account = ticket.split("#")[1];
 		

@@ -9,32 +9,33 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.bbs.message.Message;
 import cn.bbs.service.UserManager;
+import net.sf.json.JSONObject;
 
 
-@WebServlet("/userDeleteServlet")
+@WebServlet("/userDelete")
 public class UserDeleteServlet extends HttpServlet {
 	private UserManager userManager = null;
-	
+	private Message message = null;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		userManager = new UserManager();
 		
 		String[] str = request.getParameter("account").split(";");
 		response.setContentType("text/html;charset=utf-8");
 		if(str.length==0||str==null) {
 			response.getWriter().write("未选中");
 		}else {
-				ArrayList<String> a = null;
+				ArrayList<String> a = new ArrayList<>();
 				
 				for (String s : str) {
 					a.add(s);
 			}
-
-		if(userManager.deleteByAccount(a).success) {
-			response.getWriter().write("删除成功");
-		}else {
-			response.getWriter().write("删除失败");
+			message = userManager.deleteByAccount(a);
 		}
-		}
+		
+		JSONObject.fromObject(message).write(response.getWriter());
 		
 	}
 

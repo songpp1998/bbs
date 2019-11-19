@@ -13,7 +13,7 @@ import cn.bbs.service.UserManager;
 import net.sf.json.JSONObject;
 
 
-@WebServlet("/ModifyPowerServlet")
+@WebServlet("/modifyPowerServlet")
 public class ModifyPowerServlet extends HttpServlet {
 	private UserManager userManager = null;
 	
@@ -23,7 +23,7 @@ public class ModifyPowerServlet extends HttpServlet {
 		String account = request.getParameter("account");
 		int roleid = Integer.parseInt(request.getParameter("roleid"));
 		int position = Integer.parseInt(request.getParameter("position"));
-		
+		System.out.println(account+roleid+position);
 //		int account = 2;
 //		int roleid = 5;
 //		int position = 6;

@@ -20,7 +20,7 @@ public class LoginServlet extends HttpServlet {
 	
 	private Login login = null;
 	private UserBean user = null;
-	
+	private Message message = null;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		login = new Login();
@@ -29,26 +29,33 @@ public class LoginServlet extends HttpServlet {
 		String account = request.getParameter("account");
 		String password = request.getParameter("password");
 		
-//		System.out.println(account+password );
-		user = new UserBean();		
-		user.setAccount(account);
-		user.setPassword(password);
-		user.setLoginIp(getRemortIP(request));
+		if(account==""||password=="") {
+			message = new Message(false, 200, "请输入账号或密码", null);
+		}else {
+			
+			user = new UserBean();		
+			user.setAccount(account);
+			user.setPassword(password);
+			user.setLoginIp(getRemortIP(request));
 //		System.out.println(getRemortIP(request));
-		try {
-			//是否登陆成功
-			Message message = login.isLogin(user);
-			if(message.success) {
-
-				HttpSession session = request.getSession();
-				session.setAttribute("ticket", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account)+login.findPositionByAccount(account));				
+			try {
+				//是否登陆成功
+				message = login.isLogin(user);
+				if(message.success) {
+					
+					HttpSession session = request.getSession();
+					session.setAttribute("ticket1", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account)+login.findPositionByAccount(account));	
+					System.out.println(session.getAttribute("ticket1"));
+//					response.sendRedirect("http://localhost:8081/bbs/showUserFormation");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			response.setContentType("text/json;charset=utf-8");
-			JSONObject.fromObject(message).write(response.getWriter());			
-		} catch (Exception e) {
-			response.getWriter().append("500");
 		}
-
+		
+		
+		response.setContentType("text/json;charset=utf-8");
+		JSONObject.fromObject(message).write(response.getWriter());			
 	}
  
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -88,18 +88,20 @@
 					this.user.account = _this.form.account;
 					this.user.password = _this.form.password;
 					$.ajax({
-							url: 'http://localhost:8081/bbs/login',
+							url: 'http://localhost:8080/bbs/login',
 							type: 'get',
 							data:this.user,
 							dataType: "json",
+							crossDomain: true,
 							xhrFields: {
-								withCredentials: false
+								withCredentials: true
 							},
 							success: function(data) {
 								console.log(data);
 								if(data.success) {
 									_this.$message.success(data.message);
-//									window.location.href="http://localhost:8081/bbs/showUserFormation";
+									
+									window.location.href="index.html";
 								} else {
 									_this.$message.error(data.message);
 								}
@@ -109,7 +111,7 @@
 				},
 
 			}
-
+			
 		});
 	</script>
 

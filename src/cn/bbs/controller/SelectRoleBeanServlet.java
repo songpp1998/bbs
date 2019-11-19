@@ -8,34 +8,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import cn.bbs.service.DenyIPService;
+import cn.bbs.bean.RoleBean;
+import cn.bbs.message.Message;
+import cn.bbs.service.RoleService;
 import net.sf.json.JSONObject;
 
-/**
- * 展示iP的接口
- * @author DELL
- *
- */
-@WebServlet("/ipShow")
-public class IPShowServlet extends HttpServlet {
-	private DenyIPService denyIp = null;
+
+@WebServlet("/selectRoleBean")
+public class SelectRoleBeanServlet extends HttpServlet {
+	
+	private RoleService roleService = null;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		denyIp = new DenyIPService();
+		
+		roleService = new RoleService();
+		int roleid = Integer.parseInt(request.getParameter("roleid"));
+		System.out.println(roleid);
+		Message message = roleService.selectRoleBean(roleid);
+		
 		HttpSession session = request.getSession();
 		String ticket = (String) session.getAttribute("ticket");
 		response.setContentType("text/json;charset=utf-8");
-		
-//		//动态获取域
-//		response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
-//		//允许携带cookie
-//		response.addHeader("Access-Control-Allow-Credentials","true");
-		
-		JSONObject.fromObject(denyIp.getIPList()).write(response.getWriter());
-		System.out.println(session.getAttribute("ticket"));
+		JSONObject.fromObject(message).write(response.getWriter());				
 	}
 
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
 	}

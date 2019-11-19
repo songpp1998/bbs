@@ -28,10 +28,11 @@ public class UserDaoImpl implements UserDao{
 		ResultSet rs = null;
 	    try {
 			conn = C3p0Utils.getConn();
-			String sql = "SELECT * FROM user where account=?";
+			String sql = "SELECT * FROM user where account=? ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, account);
-			rs = pstmt.executeQuery();			
+			rs = pstmt.executeQuery();	
+			
 			while(rs.next()) {
 				user = new UserBean();
 				user.setAccount(rs.getString("account"));
@@ -50,6 +51,32 @@ public class UserDaoImpl implements UserDao{
 	    return user;
 	}
 	
+	public int loginTest(String account,String password ) {
+		int res=0;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		UserBean user = null;
+		ResultSet rs = null;
+	    try {
+			conn = C3p0Utils.getConn();
+			String sql = "SELECT * FROM user where account=? and password=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, account);
+			pstmt.setString(2, password);
+			rs = pstmt.executeQuery();	
+			if(rs.next()) {
+				res = 1;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			C3p0Utils.close(rs, pstmt, conn);
+		}	
+		return res;
+	}
+	
+	
 	//根据account删除用户，true为删除成功，false为失败
 	@Override
 	public boolean deleteUserBeanByAccount(String account) {
@@ -58,7 +85,7 @@ public class UserDaoImpl implements UserDao{
 		int rs = 0;
 		try {
 			conn = C3p0Utils.getConn();
-			String sql = "delete * from user where account=?";
+			String sql = "delete from user where account=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, account);
 			rs = pstmt.executeUpdate();
@@ -219,7 +246,7 @@ public class UserDaoImpl implements UserDao{
 		List<UserBean> list = null;
 		UserBean user = null;
 		try {
-			conn = C3p0Utils.getConn();
+			conn = C3p0Utils.getConn();			
 			String sql = "select * from user limit ? offset ?";
 			pstmt = conn.prepareStatement(sql);
 //			System.out.println("sql编译");
@@ -280,6 +307,7 @@ public class UserDaoImpl implements UserDao{
 				user.setAccount(rs.getString("account"));
                	user.setUsername(rs.getString("username"));
                	user.setPassword(rs.getString("password"));
+               	user.setRoleid(rs.getInt("roleid"));
 	        }
 		} catch (SQLException e) {
 			e.printStackTrace();

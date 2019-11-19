@@ -8,6 +8,7 @@
 		<link rel="stylesheet" href="css/element-ui.css" />
 		<script type="text/javascript" src="js/vue.js"></script>
 		<script type="text/javascript" src="js/element-ui.js"></script>
+		<script src="js/data.js" type="text/javascript" charset="utf-8"></script>
 		<style>
 			.el-header {
 				line-height: 60px;
@@ -16,8 +17,8 @@
 			.el-footer {
 				background-color: #B3C0D1;
 				color: #333;
-				/*				text-align: center;
-*/
+				text-align: center;
+
 				line-height: 60px;
 			}
 			
@@ -28,11 +29,30 @@
 				line-height: 100%;
 			}
 			
+			/* ********************************* */
+			
+			/* 这是主体 */
 			.el-main {
 				background-color: #E9EEF3;
 				color: #333;
-				text-align: center;
-				line-height: 160px;
+			}
+			/* 这是标题 */
+			.title{
+				font:italic bolder 25px "黑体";
+				height: 35px;
+			}
+			/* 这是内容 */
+			.content{
+				text-indent: 30px;
+				height: 50px;
+				overflow: hidden;
+				/* background-color: #00FF00; */
+			}
+			/* 这是评论数和阅读量 */
+			.reply{
+				margin-top: 5px;
+				height: 30px;
+				color: #82848A;
 			}
 		</style>
 
@@ -50,7 +70,7 @@
 							<el-image src="img/bbs-logo.png" fit='contain'></el-image>
 						</el-col>
 						<el-col :span="5">
-							<el-input v-model="input" placeholder="请输入内容"></el-input>							
+							<el-input v-model="input" placeholder="请输入内容"></el-input>
 						</el-col>
 						<el-col :span="3">
 							<el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
@@ -63,7 +83,7 @@
 							<el-button>注册</el-button>
 						</el-col>
 						<el-col :span="6" v-show="!isOnline" style="text-align: right;">
-							<el-button><i class="el-icon-user"></i>  hydra</el-button>
+							<el-button><i class="el-icon-user"></i> {{username}}</el-button>
 							<el-button>我的中心</el-button>
 							<el-button>注销</el-button>
 						</el-col>
@@ -73,23 +93,50 @@
 				<el-container>
 					<el-aside width="200px">
 						<a href="#">网站分类</a>
-						<el-menu default-active="2" class="el-menu-vertical-demo" >
+						<el-menu default-active="2" class="el-menu-vertical-demo">
 							<el-submenu :index=i+'' v-for="(menu1,i) in caidan">
 								<template slot="title">
 									<span>{{menu1.name}}</span>
 								</template>
-								<el-menu-item v-for="(menu2,j) in menu1.list">{{menu2.name}}</el-menu-item>
+								<el-menu-item @click="clicksection(menu2)" v-for="(menu2,j) in menu1.list">{{menu2.name}}</el-menu-item>
 							</el-submenu>
 
 						</el-menu>
 					</el-aside>
 					<el-container>
+						<!-- ================================================================== -->
 						<el-main>
-							{{post}}
+							<el-card v-for="(post,i) in postlist" shadow="hover">
+								<div class="title"  @click="find(post.postid)">{{post.title}}</div>
+								<el-col :span="20"  @click="find(post.postid)">
+									<div class="content">{{post.content}}</div>
+								</el-col>
+								<el-col :span="3" :offset="1">
+									<el-button-group v-show="operation">
+										<el-button type="primary" icon="el-icon-edit" circle @click="postedit(post.postid)"></el-button>
+										<el-button type="success" icon="el-icon-star-off" circle @click="openhot(post.postid)"></el-button>
+										<el-button type="danger" icon="el-icon-delete" circle @click="openremove(post.postid)"></el-button>
+									</el-button-group>
+								</el-col>
+								<div class="reply">
+									<el-row>
+										<el-col :span="2" :offset="6">
+											<i class="el-icon-thumb">{{post.readnum}} 点击量</i>
+										</el-col>
+										<el-col :span="2" :offset="1">
+											<i class="el-icon-chat-dot-round"> {{post.replynum}}条评论</i>
+										</el-col>
+										<el-col :span="3" :offset="10">{{post.postdate}}</el-col>
+									</el-row>
+								</div>
+							</el-card>
 						</el-main>
 						<el-footer>
-							
+							<el-pagination background @current-change="handleCurrentChange" :current-page.sync="page" layout="prev, pager, next, jumper"
+							 :total="num" :hide-on-single-page="num<=10">
+							</el-pagination>
 						</el-footer>
+						<!-- ======================================================================= -->
 					</el-container>
 				</el-container>
 			</el-container>
@@ -102,22 +149,32 @@
 			data() {
 				return {
 					src: 'img/bbslogo.png',
-					isOnline:false,
+					isOnline: false,
 					caidan: '',
-					input:'内容',
-					post:''
+					username: '',
+					input: '内容',
+					post: '',
+					/********************************/
+					user: {
+						userid:1
+					}, //用户
+					postlist: [], //显示出来的帖子列表
+					num: 10, //页总数*10
+					page: 1, //当前的页码
+					section: '', //所选的板块
+					operation:false //是否出现操作按钮
 				}
 			},
 			methods: {
-				search:function(){
+				search: function() {
 					_this = this;
 					$.ajax({
-						url: 'http://localhost:8081/bbs/PostByName',
+						url: 'http://localhost:8080/bbs/PostByName',
 						type: 'get',
 						dataType: "json",
-						data:{
-							name:'input',
-							page:0
+						data: {
+							name: 'input',
+							page: 0
 						},
 						xhrFields: {
 							withCredentials: false
@@ -126,41 +183,247 @@
 							console.log(data);
 							_this.post = data;
 						}
-				});
+					});
+				},
+				/****************************************/
+				/*这个需要修改*/
+				//选择板块
+				clicksection(section) {
+					console.log(section);
+					//请求文章数据
+					this.section = section.sectionId;
+					this.page = 1;
+					this.selectPostBySection();
+					if(this.userid==''||this.userid==null) return ;
+				},
+				//页码发生改变
+				handleCurrentChange(val) {
+					console.log(`当前页: ${val}`);
+					this.page = val;
+					if (this.section == '') this.selectPost();
+					else this.selectPostBySection();
+				},
+
+				//查看某篇文章,会跳转到其他的界面
+				find(postid) {
+					console.log("文章的id为" + postid);
+					var url = post;
+					sessionStorage.setItem("postid", postid);
+					window.location.href = url;
+				},
+				/*查看所有文章*/
+				selectPost() {
+					var url = 'http://' + address + ':' + interface + '/bbs/PostByName';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							name: '',
+							page: this.page - 1
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								_this.postlist = data.data.list;
+								_this.num = data.data.num * 10;
+							}
+							console.log(_this.postlist);
+							console.log(_this.num);
+						},
+						error: function(xhr, type, errorThrown) {
+							console.log('失败');
+						}
+					});
+				},
+				/*查看某板块的文章*/
+				selectPostBySection() {
+					var url = 'http://' + address + ':' + interface + '/bbs/PostBySection';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							sectionid: this.section,
+							page: this.page - 1
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								_this.postlist = data.data.list;
+								_this.num = data.data.num * 10;
+							}
+							console.log(_this.num);
+						},
+						error: function(xhr, type, errorThrown) {
+							console.log('失败');
+						}
+					});
+				},
+				/*编辑帖子*/
+				postedit(postid) {
+					console.log(postid);
+					var url=send;
+					sessionStorage.setItem("postid", postid);
+					window.location.href = url;
+				},
+				/*打开删除确认*/
+				 openremove(postid) {
+					 var _this = this;
+					this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+					  confirmButtonText: '确定',
+					  cancelButtonText: '取消',
+					  type: 'warning'
+					}).then(() => {
+						this.postremove(postid)
+					}).catch(() => {
+					  this.$message({
+						type: 'info',
+						message: '已取消删除'
+					  });          
+					});
+				},
+				/*打开加精确认*/
+				openhot(postid){
+					this.$prompt('原因', '确认加精？', {
+					  confirmButtonText: '确定',
+					  cancelButtonText: '取消',
+					}).then(({ value }) => {
+					  
+						this.posthot(postid,value)
+					
+					}).catch(() => {
+					  this.$message({
+						type: 'info',
+						message: '取消'
+					  });       
+					});
+				},
+				/*删除帖子*/
+				postremove(postid){
+					console.log(postid);
+					var url = 'http://' + address + ':' + interface + '/bbs/postDelete';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							userid: _this.user.userid,
+							postid: postid
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								//弹出消息
+								_this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								//刷新界面
+								_this.handleCurrentChange(_this.page);
+							} else {
+								//弹出错误信息
+								console.log(data);
+								_this.$message({
+									message: data.message,
+									type: 'error'
+								});
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							_this.$message({
+								message: "删除失败",
+								type: 'error'
+							});
+							console.log('失败');
+						}
+					});
+				},
+				/*加精帖子*/
+				posthot(postid,value){
+					console.log(postid);
+					var url = 'http://' + address + ':' + interface + '/bbs/PostHot';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							hotid: _this.user.userid,
+							postid: postid,
+							hotreason:value
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								//弹出消息
+								_this.$message({
+									message: '加精成功',
+									type: 'success'
+								});
+								
+							} else {
+								//弹出错误信息
+								console.log(data);
+								_this.$message({
+									message: data.message,
+									type: 'error'
+								});
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							_this.$message({
+								message: "失败",
+								type: 'error'
+							});
+							console.log('失败');
+						}
+					});
 				}
 			},
 			mounted: function() {
 				_this = this;
 				$.ajax({
-					url: 'http://localhost:8081/bbs/ShowSection', //分区展示
+					url: 'http://localhost:8080/bbs/ShowSection', //分区展示
 					type: 'get',
 					dataType: "json",
+					crossDomain: true,
 					xhrFields: {
-						withCredentials: false
+						withCredentials: true
 					},
 					success: function(data) {
 						console.log(data);
 						_this.caidan = data.data;
 					}
 				});
-				
-//				$.ajax({
-//					url: 'http://localhost:8081/bbs/login', // 跨域URL
-//					type: 'get',
-//					dataType: "json",
-//					data:{
-//						account:1,
-//						password:1
-//					},
-//					xhrFields: {
-//						withCredentials: false
-//					},
-//					success: function(data) {
-//						console.log(data);
-//						_this.caidan = data.data;
-//					}
-//				});
-				
+
+				$.ajax({
+					url: 'http://localhost:8080/bbs/showUserFormation', // 跨域URL
+					type: 'get',
+					dataType: "json",
+					crossDomain: true,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						_this.username = data.data.username;
+						_this.user=data.data;
+						//						if(data.status==500){
+						//							
+						//						}
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						_this.isOnline = true
+					}
+				});
+				/*****************************************/
+				//获取到显示的文章
+				this.selectPost();
+				//不能操作
+				this.operation=true;
 			}
 		});
 	</script>

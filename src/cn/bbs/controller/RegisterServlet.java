@@ -28,24 +28,29 @@ public class RegisterServlet extends HttpServlet {
 		String password = request.getParameter("password");
 		String phone = request.getParameter("phone");
 		Message message = null;
-		try {
-			//查询账户是否存在
-			message = reg.isExistAccount(account);
-			if(!message.success) {
-				user = new UserBean();
-				user.setAccount(account);
-				user.setUsername(username);
-				user.setPassword(password);
-				user.setPhone(phone);
-				//注册
-				message = reg.isRegister(user);
-
-			}			
-			response.setContentType("text/json;charset=utf-8");
-			JSONObject.fromObject(message).write(response.getWriter());
-		} catch (Exception e) {
-			response.getWriter().append("500内部服务器错误");
+		
+		if(account==""||username==""||password==""||phone=="") {
+			message = new Message(false, 200, "输入不合法", null);
+		}else {
+			try {
+				//查询账户是否存在
+				message = reg.isExistAccount(account);
+				if(message.success) {
+					user = new UserBean();
+					user.setAccount(account);
+					user.setUsername(username);
+					user.setPassword(password);
+					user.setPhone(phone);
+					//注册
+					message = reg.isRegister(user);
+				}			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
 		}
+		
+		response.setContentType("text/json;charset=utf-8");
+		JSONObject.fromObject(message).write(response.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

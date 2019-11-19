@@ -41,5 +41,4 @@ public interface UserDao {
 	//修改用户权限
 	public boolean modifyPower(String account,int roleid,int position);
 	
-
 }

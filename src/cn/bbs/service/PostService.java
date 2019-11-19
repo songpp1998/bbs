@@ -143,12 +143,13 @@ public class PostService {
 		if(user==null) return new Message(false,281,"查无此人",null);
 		//验证权限
 		boolean flag=true;
+		System.out.println(user.getUserId()+" ***"+user.getRoleid());
 		flag=PermissionsUtil.getJudge(user, post);
 		if(user.getUserId()==post.getUserid()) flag=false;
 		if(!flag) return new Message(false,282,"权限不足",null);
 		
 		//尝试修改数据
-		p.setHot(post.getHot());
+		p.setHot((p.getHot()+1)%2);
 		p.setHotid(post.getHotid());
 		p.setHotreason(post.getHotreason());
 		if(postdao.updatePost(p)==1) {
