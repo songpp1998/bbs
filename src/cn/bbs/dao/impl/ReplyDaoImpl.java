@@ -30,12 +30,12 @@ public class ReplyDaoImpl implements ReplyDao{
 		return Inner.instance;
 	}
 	
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;
 	
 	@Override
 	public int addReply(ReplyBean reply) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		int res=0;
     	try {
            //1.获取连接
@@ -64,6 +64,9 @@ public class ReplyDaoImpl implements ReplyDao{
 
 	@Override
 	public int updateReply(ReplyBean reply) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		int res=0;
     	try {
            //1.获取连接
@@ -91,6 +94,9 @@ public class ReplyDaoImpl implements ReplyDao{
 
 	@Override
 	public int deleteReply(ReplyBean reply) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		int res=0;
     	try {
            //1.获取连接
@@ -115,6 +121,9 @@ public class ReplyDaoImpl implements ReplyDao{
 
 	@Override
 	public ReplyBean selectReplyById(ReplyBean reply) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
            //1.获取连接
            conn = C3p0Utils.getConn();
@@ -149,6 +158,9 @@ public class ReplyDaoImpl implements ReplyDao{
 
 	@Override
 	public List<ReplyBean> selectReplyByPost(PostBean post) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		List<ReplyBean> list=null;
 		try {
 	           //1.获取连接

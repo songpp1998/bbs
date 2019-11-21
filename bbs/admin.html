@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>管理员后台</title>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<link rel="stylesheet" href="css/element-ui.css" />
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/element-ui.js"></script>
+		<script type="text/javascript" src="js/data.js"></script>
+		<style>
+			.el-header {
+				color: #333;
+				line-height: 60px;
+			}
+			
+			.el-aside {
+				color: #333;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<el-container>
+				<el-header>
+					<el-row>
+						<el-col :span="6">
+							<el-image src="img/bbs-logo.png" fit='contain'></el-image>
+						</el-col>
+						<el-col :span="5">
+							<!--<el-input placeholder="请输入内容" v-model="input"></el-input>-->
+							<template>
+								<el-select v-model="value" :multiple='false' :remote='false' filterable reserve-keyword placeholder="请输入关键词" :loading="loading">
+									<el-option v-for="item in tableData.list" :key="item.account" :label="item.username" :value="item.username">
+									</el-option>
+								</el-select>
+							</template>
+						</el-col>
+						<el-col :span="3">
+							<el-button type="primary" icon="el-icon-search" @click="search(value)">搜索</el-button>
+						</el-col>
+
+						<el-col :span="9" style="text-align: right;">
+							<span><i class="el-icon-user"></i> {{username}}</span>
+						</el-col>
+						<el-col :span="1" style="text-align: right;">
+							<el-dropdown>
+								<i class="el-icon-setting" style="margin-right: 15px"></i>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item @click.native="logout">注销</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+						</el-col>
+					</el-row>
+				</el-header>
+				<el-container style="height: 500px; border: 1px solid #eee">
+					<el-aside width="150px" style="background-color: rgb(238, 241, 246)">
+						<el-menu>
+							<el-menu-item @click="getUserForm()">用户管理</el-menu-item>
+							<el-menu-item @click="getIp()">ip管理</el-menu-item>
+							<el-menu-item @click="getUser()">权限管理</el-menu-item>
+							<el-menu-item>帖子管理</el-menu-item>
+							<el-menu-item @click="getSection()">版块管理</el-menu-item>
+						</el-menu>
+					</el-aside>
+					<el-main>
+						<div v-show="powerManager">
+							<el-table :data="tableData.list">
+
+								<el-table-column align="center" type="index" width="50" label="序号" fixed="left">
+								</el-table-column>
+								<el-table-column prop="registertime" label="注册日期" width="180">
+								</el-table-column>
+								<el-table-column prop="account" label="账户名" width="120">
+								</el-table-column>
+								<el-table-column prop="username" label="昵称" width="120">
+								</el-table-column>
+								<el-table-column prop="password" label="密码" width="120">
+								</el-table-column>
+								<el-table-column prop="lastlogintime" label="上次登录时间" width="180">
+								</el-table-column>
+								<el-table-column prop="roleid" label="权限" width="120">
+								</el-table-column>
+								<el-table-column prop="position" label="职位" width="120">
+								</el-table-column>
+								<el-table-column fixed="right" label="操作">
+									<template slot-scope="scope">
+										<el-button @click="power(scope.row)" type="text" size="small">权限管理</el-button>
+										<!--<el-button type="text" size="small">编辑</el-button>-->
+
+									</template>
+								</el-table-column>
+							</el-table>
+							<div class="block">
+								<span class="demonstration">页数</span>
+								<el-pagination layout="prev, pager, next, jumper" :total="userTotal">
+								</el-pagination>
+							</div>
+							<div>
+								<el-dialog title="修改权限" :visible.sync="powerDialog">
+									<title>修改权限</title>
+									<el-form v-model="userForm">
+										<el-form-item label="账号">
+											<el-input v-model="userForm.account" disabled></el-input>
+										</el-form-item>
+										<el-form-item label="昵称">
+											<el-input v-model="userForm.username" disabled></el-input>
+										</el-form-item>
+									</el-form>
+									<el-form v-model="roleForm">
+										<el-form-item label="权限">
+											<el-input v-model="roleForm.roleid"></el-input>
+										</el-form-item>
+										<el-form-item label="权限名">
+											<el-input v-model="roleForm.name" disabled></el-input>
+										</el-form-item>
+										<el-form-item label="职位">
+											<el-input v-model="roleForm.position" placeholder="如果职位改变，填写权限大小，否则不用填写"></el-input>
+										</el-form-item>
+									</el-form>
+									<span slot="footer" class="dialog-footer">
+								    <el-button @click="powerDialog = false">取 消</el-button>
+								    <el-button type="primary" @click="updatePower(userForm.account,roleForm.roleid,roleForm.position)">确 定</el-button>
+								</span>
+								</el-dialog>
+							</div>
+						</div>
+						<div v-show="ipManager">
+							<!--<el-form v-for="(ip,i) in ipList">
+								<el-form-item>
+									{{}}    {{ip}}    <el-button @click="">caozuo</el-button>
+									<hr />
+								</el-form-item>
+							</el-form>-->
+							<el-table :data="ipList.list">
+								<el-table-column align="center" type="index" width="400" label="序号" fixed="left" style="margin-left: 0px;"></el-table-column>
+
+								<el-table-column label="ip列表" prop="loginIp" width="400">
+
+								</el-table-column>
+								<el-table-column label="操作列表" fixed="right">
+									<template slot-scope="scope">
+										<el-button type="primary" icon="el-icon-edit" @click="ipAddDialog=!ipAddDialog">增加</el-button>
+										<el-button size="primary" type="danger" @click="ipDelete(scope.$index, scope.row)">Delete</el-button>
+									</template>
+								</el-table-column>
+							</el-table>
+							<div>
+								<el-dialog title="IP黑名单" :visible.sync="ipAddDialog">
+									<title>ip黑名单</title>
+									<el-form>
+										<el-form-item label="增加ip黑名单">
+											<el-input v-model="ipAdd" placeholder="添加ip到黑名单"></el-input>
+										</el-form-item>
+									</el-form>
+									<span slot="footer" class="dialog-footer">
+								    <el-button @click="ipAddDialog = false">取 消</el-button>
+								    <el-button type="primary" @click="addIP(ipAdd)">确 定</el-button>
+								</span>
+								</el-dialog>
+							</div>
+						</div>
+						<div v-show="userManager">
+							<el-table :data="tableData.list">
+								<el-table-column prop="registertime" label="注册日期" width="180">
+								</el-table-column>
+								<el-table-column prop="account" label="账户名" width="120">
+								</el-table-column>
+								<el-table-column prop="username" label="昵称" width="120">
+								</el-table-column>
+								<el-table-column prop="password" label="密码" width="120">
+								</el-table-column>
+								<el-table-column prop="lastlogintime" label="上次登录时间" width="180">
+								</el-table-column>
+								<el-table-column prop="logintime" label="登陆时间" width="120">
+								</el-table-column>
+								<el-table-column prop="lastloginIp" label="上次登录ip" width="120">
+								</el-table-column>
+								<el-table-column prop="loginIp" label="登录ip" width="120">
+								</el-table-column>
+								<el-table-column prop="qq" label="个人qq" width="120">
+								</el-table-column>
+								<el-table-column fixed="right" label="操作" width="120">
+									<template slot-scope="scope">
+										<el-button @click="deleteUser(scope.row)" type="text" size="small">删除</el-button>
+										<el-button type="text" size="small" @click="editUser(scope.row)">编辑</el-button>
+
+									</template>
+								</el-table-column>
+							</el-table>
+							<div class="block">
+								<span class="demonstration">页数</span>
+								<el-pagination layout="prev, pager, next, jumper" :total="userTotal">
+								</el-pagination>
+							</div>
+							<div>
+								<el-dialog title="修改用户信息" :visible.sync="userEditDialog">
+									<title>修改用户信息</title>
+									<el-form v-model="userEdit">
+										<el-form-item label="账号" disabled>
+											<el-input v-model="userEdit.account"></el-input>
+										</el-form-item>
+										<el-form-item label="昵称">
+											<el-input v-model="userEdit.username"></el-input>
+										</el-form-item>
+										<el-form-item label="密码">
+											<el-input v-model="userEdit.password"></el-input>
+										</el-form-item>
+										<el-form-item label="手机号">
+											<el-input v-model="userEdit.phone"></el-input>
+										</el-form-item>
+									</el-form>
+									<span slot="footer" class="dialog-footer">
+								    <el-button @click="userEditDialog = false">取 消</el-button>
+								    <el-button type="primary" @click="editUserConfirm()">确 定</el-button>
+								</span>
+								</el-dialog>
+							</div>
+						</div>
+						<div v-show="sectionManager"  style="height: 700px">
+							<iframe src="html/section.html" style="width: 100%; height: 100%;">
+								您的浏览器不支持iframe，请升级
+							</iframe>
+						</div>
+					</el-main>
+				</el-container>
+				<el-container>
+					<el-footer>Footer</el-footer>
+				</el-container>
+			</el-container>
+		</div>
+	</body>
+	<script>
+		new Vue({
+			el: '#app',
+			data() {
+				return {
+					userForm: {
+						account: '',
+						username: '',
+					},
+					userEdit: {
+						account: '',
+						username: '',
+						password: '',
+						phone: '',
+						sex:'0'
+					},
+					roleForm: {
+						roleid: '',
+						name: '',
+						position: ''
+					},
+					td: {},
+					tableData: [], //表单数据
+					powerManager: false,
+					input: '', //搜索框
+					username: '',
+					userManager: false,
+					powerDialog: false,
+					ipAddDialog: false,
+					userEditDialog: false,
+					ipManager: false,
+					sectionManager:false,
+					ipList: [],
+					ipAdd: '',
+					userTotal: 0,
+					options: [],
+					value: [],
+					list: [],
+					loading: false,
+					states: []
+				}
+			},
+			methods: {
+				logout(){
+					_this = this;
+					$.ajax({
+						url: ip+'bbs/logout',
+						type: 'get',
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							console.log(data);
+							window.location.href="index.html";
+						}
+					});
+				},
+				search() {
+					_this = this;
+					var value = _this.value;
+					console.log(value[0]);
+					if(value[0] != "") {
+						console.log(value[0]);
+						var count = 0;
+						for(var i = 0; i < 3; i++) {
+							console.log(_this.tableData.list[i].username);
+							if(value[0] == _this.tableData.list[i].username) {
+								console.log(_this.tableData.list[i]);
+								_this.td = _this.tableData.list[i];
+								_this.tableData.list = [];
+								_this.tableData.list.push(_this.td);
+
+								return _this.tableData;
+							}
+						}
+					}
+					return _this.tableData;
+				},
+				deleteUser(val) {
+					_this = this;
+					console.log(val.account);
+					$.ajax({
+						url: ip + 'bbs/userDelete', // 跨域URL
+						type: 'get',
+						data: {
+							account: val.account
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							_this.$message.success(data.message);
+
+						}
+					});
+				},
+				editUser(val) {
+					_this = this;
+					_this.userEditDialog = true;
+					_this.userEdit = val;
+					
+
+				},
+				editUserConfirm() {
+					_this = this;
+					$.ajax({
+						url: ip + 'bbs/ModifyUserDataServlet', // 跨域URL
+						type: 'get',
+						data: _this.userEdit,
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							console.log(data);
+//							_this.$message.success(data.data.message);
+							_this.userEditDialog = false;
+							_this.$options.methods.getUserForm();
+							
+						}
+					});
+				},
+				getUserForm() {
+					_this = this;
+					_this.userManager = true,
+					_this.ipManager = false,
+					_this.powerManager = false;
+					_this.sectionManager =false;
+					$.ajax({
+						url: ip + 'bbs/userShow', // 跨域URL
+						type: 'get',
+						data: {
+							page: 0,
+							num: 5
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							_this.tableData = data.data;
+						}
+					});
+				},
+				getUser() {
+					_this = this;
+					_this.userManager = false,
+					_this.ipManager = false,
+					_this.powerManager = true;
+					_this.sectionManager =false;
+					$.ajax({
+						url: ip + 'bbs/userShow', // 跨域URL
+						type: 'get',
+						data: {
+							page: 0,
+							num: 5
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							_this.tableData = data.data;
+						}
+					});
+				},
+				getIp() {
+					_this = this;
+					_this.userManager = false,
+					_this.ipManager = true,
+					_this.powerManager = false;
+					_this.sectionManager =false;
+					$.ajax({
+						url: ip + 'bbs/ipShow', // 跨域URL
+						type: 'get',
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							console.log(data.data.list);
+							_this.ipList = data.data;
+						}
+					});
+				},
+				updatePower(account, roleid, position) { //修改权限
+					_this = this;
+					console.log(account + '#' + roleid + '#' + position);
+					$.ajax({
+						url: ip + 'bbs/modifyPowerServlet', // 跨域URL
+						type: 'get',
+						data: {
+							account: account,
+							roleid: roleid,
+							position: position
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							console.log(data.success);
+							if(data.success) {
+								_this.$message.success(data.message);
+								_this.powerDialog = false;
+								_this.$options.methods.getUserForm();
+							} else {
+								_this.$message.error(data.message);
+							}
+						}
+					});
+				},
+				power(val) { //
+					_this = this;
+					_this.powerDialog = true;					
+					_this.userForm = val;
+					console.log(val.roleid);
+					$.ajax({
+						url: ip + 'bbs/selectRoleBean', // 跨域URL
+						type: 'get',
+						data: {
+							roleid: val.roleid,
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							console.log(data.data);
+							_this.roleForm.roleid = data.data.roleId;
+							_this.roleForm.position = data.data.postion;
+							_this.roleForm.name = data.data.name;
+							//						console.log(_this.roleForm.name);
+						}
+					});
+				},
+				getSection(){
+					_this = this;
+					_this.userManager = false,
+					_this.ipManager = false,
+					_this.powerManager = false;
+					_this.sectionManager =true;
+				},
+				handleClose(done) {
+					this.$confirm('确认关闭？')
+						.then(_ => {
+							done();
+						})
+						.catch(_ => {});
+				},
+				addIP(ipAdd) {
+					_this = this;
+					_this.ipAddDialog = false;
+					$.ajax({
+						url: ip + 'bbs/denyIPadd', // 跨域URL
+						type: 'get',
+						data: {
+							denyIP: ipAdd
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							console.log(data.data);
+							_this.$message.success(data.message);
+							_this.ipAddDialog = false;
+							_this.$options.methods.getIp();
+						}
+					});
+				},
+				ipDelete(index, row) {
+					console.log(index, row);
+					_this = this;
+					$.ajax({
+						url: ip + 'bbs/ipAllow', // 跨域URL
+						type: 'get',
+						data: {
+							allowIP: row.loginIp
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							_this.$message.success(data.message);
+							_this.$options.methods.getIp();
+							_this.reload();
+						}
+					});
+				},
+				//				remoteMethod(query) {
+				//					if(query !== '') {
+				//						this.loading = false;
+				//						setTimeout(() => {
+				//							this.loading = false;
+				//							this.options = this.list.filter(item => {
+				//								return item.label.toLowerCase()
+				//									.indexOf(query.toLowerCase()) > -1;
+				//									
+				//							});
+				//							console.log(this.options);
+				//						}, 200);
+				//					} else {
+				//						this.options = [];
+				//					}
+				//				}
+			},
+			mounted: function() {
+				_this = this;
+				$.ajax({
+					url: ip + 'bbs/showUserFormation', // 跨域URL
+					type: 'get',
+					dataType: "json",
+					crossDomain: true,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						_this.username = data.data.username;
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						//						_this.$message.success("登录已过期");
+						//						window.location.href = "index.html";
+					}
+				});
+				$.ajax({
+					url: ip + 'bbs/userShow', // 跨域URL
+					type: 'get',
+					data: {
+						page: 0,
+						num: 5
+					},
+					dataType: "json",
+					crossDomain: true,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						_this.tableData = data.data;
+
+					}
+				});
+				$.ajax({
+					url: ip + 'bbs/userPageHelper', // 跨域URL
+					type: 'get',
+					dataType: "json",
+					crossDomain: true,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						_this.userTotal = data.data.total;
+						console.log(_this.userTotal);
+					}
+				});
+			}
+		});
+	</script>
+
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+
+		<link rel="stylesheet" href="../css/element-ui.css" />
+
+		<script type="text/javascript" src="../js/vue.js"></script>
+		<script type="text/javascript" src="../js/element-ui.js"></script>
+		<script type="text/javascript" src="../js/data.js" ></script>
+	<style>
+			.el-header,
+			.el-footer {
+				background-color: #B3C0D1;
+				color: #333;
+				text-align: center;
+				line-height: 60px;
+			}
+			
+			.el-aside {
+				background-color: #D3DCE6;
+				color: #333;
+				text-align: center;
+				line-height: 80px;
+			}
+			
+			.el-main {
+				background-color: #E9EEF3;
+				color: #333;
+				text-align: center;
+				/*line-height: 500px;*/
+				height: 600px;
+				/*width: 450px;*/
+			}
+			
+			.el-main2 {
+				margin-top: 0px;
+				width: 600px;
+			}
+			
+			body>.el-container {
+				margin-bottom: 40px;
+			}
+			
+			.el-container:nth-child(5) .el-aside,
+			.el-container:nth-child(6) .el-aside {
+				line-height: 260px;
+			}
+			
+			.el-container:nth-child(7) .el-aside {
+				line-height: 320px;
+			}
+			
+			span{
+				color: #409EFF;
+				height: 100px;
+				margin-left: 20px;
+			}
+			label{
+				/*
+				display: inline-block;
+				margin-top: 20px;*/
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+
+			<el-container>
+				<el-aside width="200px">
+					<img :src="img" width="160px" height="150px"/><br />
+					<el-menu>
+						<el-menu-item>
+				         	<h3 @click="index">欢迎您  {{username}}</h3>
+				       </el-menu-item>
+				       <el-menu-item>
+				         	<h3 @click="writeMsg()">写信</h3>
+				       </el-menu-item>
+				       <el-menu-item >
+				         	<h3 @click="queryUnReadMsg">未读消息</h3>
+				       </el-menu-item>
+				        <el-menu-item >
+				         	<h3 @click="queryReadedMsg">已读消息</h3>
+				       </el-menu-item>
+				      <el-menu-item >
+				         	<h3 @click="querydrafts">草稿箱</h3>
+				       </el-menu-item>
+				        <el-menu-item >
+				         	<h3 @click="querySendedMsg">已发送</h3>
+				       </el-menu-item>
+				       
+				       
+				    </el-menu>
+				
+				</el-aside>
+				<el-container>
+					<el-header> <h3>消息通知</h3></el-header>
+					<el-main >
+						<el-main style="float: left;width: 600px; margin: 0px;padding: 0px;">
+							<el-menu>
+								<h3>{{newslist}}</h3>
+						      <el-menu-item v-for= "(obj,i) in arr" index="i" >
+						          <span style="margin-left: 10px;" v-on:click="queryInfo(obj.messageid)" >{{i}} 
+						          	<span> <small>发信人：</small> {{obj.sendername}}</span> <small>title:</small><strong>
+						          	{{obj.title}} </strong>
+						          <small>发送时间</small>  <span>{{obj.createtime}}</span>
+						          <span v-if="obj.status==0">当前未发送  <i class="el-icon-warning-outline"></i> </span>
+						          <span v-if="obj.status==1">已发送消息   <i class="el-icon-success"></i></span>
+						          <span v-if="obj.status==2">当前未读   <i class="el-icon-info"></i></span>
+						          <span v-if="obj.status==3">已读消息  <i class="el-icon-check"></i></span>
+						          
+						       </el-menu-item>
+						    </el-menu>
+						    
+						</el-main>
+
+						<!--
+                    	消息框
+                    -->
+						<el-main class="el-main2" style="background-color: white;float: right; margin-left: 0px;text-align: left;">
+	                       <big >
+	                       	
+	                       	<el-form :model="msg" label-width="90px" size="medium"  :disabled='read' >
+	                       		
+	                       		<el-form-item label="消息主题" >
+							    	<el-input style="width: 250px;" v-model="msg.title" > </el-input>
+							  	</el-form-item>
+							  	
+							  	<el-form-item label="发信人id" >
+							    	<el-input style="width: 150px;" :disabled='edit' size="small" v-model="msg.senderid"></el-input>
+							  	</el-form-item>
+							  	<el-form-item label="发信人姓名" >
+							    	<el-input style="width: 150px;" size="small" :disabled='edit' v-model="msg.sendername"></el-input>
+							  	</el-form-item>
+						
+							  	<el-form-item label="收信人id" >
+							    	<el-input style="width: 150px;" size="small" v-model="msg.receiverid"></el-input>
+							  	</el-form-item>
+							  	<el-form-item label="收信人姓名" >
+							    	<el-input style="width: 150px;" size="small" v-model="msg.receivername"></el-input>
+							  	</el-form-item>
+							  	<el-form-item label="发送时间" >
+							    	{{msg.createtime}}
+							  	</el-form-item>
+							  	<el-form-item label="消息正文" >
+							  		
+							    	<el-input type="textarea" rows='4' size="small" v-model="msg.message"></el-input>
+							    	
+							  	</el-form-item>
+	                      		  
+	                      		<el-form-item  >
+	                      			<el-button @click="sendMsg(1)">发送</el-button>
+							    	
+							    	<el-button @click="sendMsg(0)" v-if="show">存到草稿箱</el-button>
+							    	
+							    	<el-button @click="resetMsg" >清空</el-button>
+							  	</el-form-item>
+	                       		
+	                       	</el-form>
+	                       <el-button @click="deleteMsg()" type="danger" icon="el-icon-delete" > </el-button>
+						   </big>
+						</el-main>
+
+					</el-main>
+
+					<el-footer style="color:#409EFF;">欢迎来到源论坛</el-footer>
+				</el-container>
+			</el-container>
+		</div>
+	</body>
+	<script>
+		var myvue = new Vue({
+			el: '#app',
+			data(){
+				return{
+					ip: ipvalue,
+					port: portvalue,
+					arr: [],
+					obj: null,
+					userid:1,
+					status:0,
+					read:false,
+					show:false,
+					edit:true,
+					msg:{
+						messageid:"",
+						title:"",
+						createtime:"",
+						sendername:'',
+						senderid:'',
+						receiverid:'',
+						receivername:'',
+						message:'',
+						status:''
+					},
+					newslist:"首页",
+					username:"游客",
+					img:'../img/user1.jpg'
+				}
+				
+			},
+			methods: {
+				index:function(){
+					this.newslist="首页";
+					this.arr=[];
+				},
+				resetMsg:function(){
+					
+					this.msg={};
+				},
+				writeMsg:function(){
+					this.arr=[];
+					this.msg={};
+					this.read=false;
+					this.show=true;
+					this.newslist="写信";
+					
+				},
+				
+			     queryInfo:function(messageid){
+			     	$.ajax({
+						url: ip+'bbs/MessageFind',//'Messages.json',  跨域URL
+						type: 'get',
+						data: {
+							messageid:messageid
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: false
+						},
+						success: function(data) {
+							
+							if(data.data.status==0){
+								myvue.read=false;
+							}else{
+								myvue.read=true;
+									
+							}
+							myvue.msg=data.data;
+							/*
+							myvue.msg.title=data.data.title;
+							myvue.msg.messageid=data.data.messageid;
+							myvue.msg.createtime=data.data.createtime;
+							myvue.msg.sendname=data.data.sendername;
+							myvue.msg.sendid=data.data.senderid;
+							myvue.msg.message=data.data.message;
+							myvue.msg.receiverid=data.data.receiverid;
+							myvue.msg.receivername=data.data.receivername;*/
+						}
+				
+					});
+			     	
+			     	
+			     },
+			     sendMsg:function(status){
+			     	this.msg.status=status;
+			     	$.ajax({
+						url: ip+'bbs/MessageSend',//'Messages.json',  跨域URL
+						type: 'get',
+						data: {
+							message:myvue.msg.message,
+							senderid:myvue.userid,
+							receiverid:myvue.msg.receiverid,
+							title:myvue.msg.title,
+							status:myvue.msg.status
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: false
+						},
+						success: function(data) {
+							
+							if(status==0){
+								alert("存到草稿箱啦");
+							}else if(status==1){
+								alert("发送成功");
+							}
+							
+						},
+				
+					});
+			     },
+			     deleteMsg:function(){
+			     	$.ajax({
+						url: ip+'bbs/MessageDelete',//'Messages.json',  跨域URL
+						type: 'get',
+						data: {
+							messageid:myvue.msg.messageid
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: false
+						},
+						success: function(data) {
+							alert("删除成功");
+							window.location.reload();
+						}
+				
+					});
+			     },
+			     
+			     
+				//   status消息状态 0是草稿 1是已发送 2是未读 3是已读
+				querydrafts:function() {  //查看草稿箱
+					this.status=0;
+					this.arr=[];
+					this.msg={};
+					this.show=false;
+					myvue.newslist="";
+					$.ajax({
+						url: ip+'bbs/MessageSelect',//'Messages.json',  跨域URL
+						type: 'get',
+						data: {
+							userid: this.userid,
+							status: this.status
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: false
+						},
+						success: function(data) {
+							myvue.newslist="草稿箱"
+							myvue.arr = data.data;
+						}
+				
+					});
+				},queryReadedMsg: function() {  //查看已读消息
+					this.status=3;
+					this.arr=[];
+					this.show=false;
+					this.msg={};
+					myvue.newslist="";
+					$.ajax({
+						url: ip+'bbs/MessageSelect', //'Messages.json',  // 跨域URL
+						type: 'get',
+						data: {
+							userid:this.userid,
+							status:this.status
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: false
+						},
+						success: function(data) {
+							myvue.arr = data.data;
+							myvue.newslist="已读消息"
+							
+						}
+					});
+				},queryUnReadMsg:function() {//查看未读消息
+					this.show=false;
+					this.status=2;
+					this.arr=[];
+					this.msg={};
+					myvue.newslist="";
+					$.ajax({
+						url: ip+'bbs/MessageSelect',//'Messages.json',  跨域URL
+						type: 'get',
+						data: {
+							userid: this.userid,
+							status: this.status
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: false
+						},
+						success: function(data) {
+							myvue.newslist="未读消息";
+							myvue.arr = data.data;
+						}
+				
+					});
+				},querySendedMsg:function() {//查看已发送消息
+					this.status=1;
+					this.arr=[];
+					myvue.newslist="";
+					this.msg={};
+					$.ajax({
+						url: ip+'bbs/MessageSelect',//'Messages.json',  跨域URL
+						type: 'get',
+						data: {
+							userid: this.userid,
+							status: this.status
+						},
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: false
+						},
+						success: function(data) {
+							myvue.newslist="已发送消息";
+							myvue.arr = data.data;
+						}
+				
+					});
+				},
+				
+
+			},
+			mounted: function() {
+				$.ajax({
+					url: ip+'bbs/showUserFormation',//'Messages.json',  跨域URL
+					type: 'get',
+					
+					dataType: "json",
+					crossDomain: true,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						myvue.userid=data.data.userid;
+						myvue.username = data.data.username;
+						myvue.img=data.data.img;
+					}
+				});
+
+			}
+
+		});
+	</script>
+
+</html>

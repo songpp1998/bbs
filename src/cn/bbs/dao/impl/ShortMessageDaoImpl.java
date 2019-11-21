@@ -30,12 +30,12 @@ public class ShortMessageDaoImpl implements ShortMessageDao {
 		return Inner.instance;
 	}
 	
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;
-	
 	@Override
 	public int addShortMessage(ShortMessageBean message) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		int res=0;
     	try {
            //1.获取连接
@@ -65,6 +65,10 @@ public class ShortMessageDaoImpl implements ShortMessageDao {
 
 	@Override
 	public int deleteShortMessage(ShortMessageBean message) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		int res=0;
 		try {
 		   //1.获取连接
@@ -88,6 +92,10 @@ public class ShortMessageDaoImpl implements ShortMessageDao {
 
 	@Override
 	public int updateShortMessage(ShortMessageBean message) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		int res=0;
 		try {
 		   //1.获取连接
@@ -118,6 +126,10 @@ public class ShortMessageDaoImpl implements ShortMessageDao {
 
 	@Override
 	public List<ShortMessageBean> selectShortMessageBySender(UserBean user, int status) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		List<ShortMessageBean> list=null;
 		try {
 			   //1.获取连接
@@ -156,6 +168,10 @@ public class ShortMessageDaoImpl implements ShortMessageDao {
 	
 	@Override
 	public List<ShortMessageBean> selectShortMessageByReceiver(UserBean user, int status) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		List<ShortMessageBean> list=null;
 		try {
 			   //1.获取连接
@@ -194,6 +210,10 @@ public class ShortMessageDaoImpl implements ShortMessageDao {
 
 	@Override
 	public ShortMessageBean selectShortMessageById(ShortMessageBean message) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
 			   //1.获取连接
 			   conn = C3p0Utils.getConn();

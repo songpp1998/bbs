@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import cn.bbs.bean.UserBean;
-import cn.bbs.dao.PageDao;
 import cn.bbs.dao.impl.UserDaoImpl;
 import cn.bbs.message.Message;
 
@@ -21,7 +20,6 @@ public class UserManager {
 	
 	private List<UserBean> list = null;
 	private UserDaoImpl userDaoImpl = null;
-	private PageDao pageDao = null;
 	private UserBean user = null;
 	
 	//展示给用户的数据——username、userid、img
@@ -33,6 +31,8 @@ public class UserManager {
 		map.put("userid", String.valueOf(user.getUserId()));
 		map.put("username", user.getUsername());
 		map.put("img", user.getImg());
+		map.put("account", user.getAccount());
+		map.put("roleid", user.getRoleid()+"");
 		System.out.println(map.get("useid")+"111");
 		return map;
 	}
@@ -42,7 +42,6 @@ public class UserManager {
 	public Message findUserByPage(int page,int num) {
 		
 		userDaoImpl = new UserDaoImpl();
-		pageDao = new PageDao(page, num);
 		
 		list = new ArrayList<UserBean>();
 		

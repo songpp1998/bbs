@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<link rel="stylesheet" href="css/element-ui.css" />
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/element-ui.js"></script>
+		<link rel="stylesheet" href="css/index.css" media="all">
+		<script type="text/javascript" src="js/data.js" ></script>
+		<style type="text/css">
+			html {
+				height: 100%;
+				width: auto;
+				margin: 0;
+				padding: 0;
+				border: 0;
+			}
+			
+			body {
+				height: 100%;
+				width: auto;
+				margin: 0;
+				padding: 0;
+				border: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app" style="height: 100%;width:100%;margin: 0px;padding: 0px">
+			<el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
+				<el-menu-item index="1">选项01</el-menu-item>
+				<el-submenu index="2">
+					<template slot="title">选项02</template>
+					<el-menu-item index="2-1">选项1</el-menu-item>
+					<el-menu-item index="2-2">选项2</el-menu-item>
+					<el-menu-item index="2-3">选项3</el-menu-item>
+				</el-submenu>
+				<el-menu-item index="3">选项03</el-menu-item>
+				<div style="float: right;">
+
+					<el-submenu index="4">
+						<template slot="title">
+							<el-avatar :src="img"></el-avatar>
+						</template>
+						<template slot="title">
+							{{username}}
+						</template>
+						<el-menu-item index="4-1">个人中心</el-menu-item>
+						<el-menu-item index="4-2">退出登录</el-menu-item>
+					</el-submenu>
+
+				</div>
+
+			</el-menu>
+			<div style="height: 88%;width: 100%;margin: 0px ">
+				<iframe name="VIEW1" :src="iframe" style="height: 100%;width: 100%;margin: 0px "></iframe>
+			</div>
+		</div>
+
+	</body>
+	<script type="text/javascript" src="js/vue.js"></script>
+	<script type="text/javascript" src="js/vue-resource.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+	<script type="text/javascript">
+		var node = new Vue({
+			el: "#app",
+			data: {
+				activeIndex: '1',
+				username: "未知用户",
+				img: "",
+				iframe: ""
+			},
+			methods: {
+				handleSelect(key, keyPath) {
+					this.activeIndex = keyPath[0]
+					console.log(keyPath.length)
+					console.log(keyPath)
+					if(keyPath.length == 2) {
+						switch(keyPath[1]) {
+							case "4-1":
+								this.iframe = "personalcenter.html"
+								break;
+
+							default:
+								break;
+						}
+					}
+
+				},
+				indexs() {
+					//            this.$http.get(ip+'bbs/showUserFormation')
+					//            .then(function(res){
+					//          	  let obj=res.data.data
+					//          	  console.log(obj)
+					//          	  this.username=obj.username
+					//          	  this.img=obj.img
+					//          	  
+					//                
+					//            })
+					//            .catch(function(error){
+					//                console.log(error);
+					//            });
+
+					$.ajax({
+						url: ip+'bbs/showUserFormation', // 跨域URL
+						type: 'get',
+						dataType: "json",
+						crossDomain: true,
+						
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(res) {
+							let obj = res.data
+							node.username = obj.username
+							node.img = obj.img
+						},
+						error: function(jqXHR, textStatus, errorThrown) {}
+					});
+				}
+			},
+			created() {
+				this.indexs();
+			}
+		})
+	</script>
+
+</html>

@@ -31,13 +31,11 @@ public class PostDaoImpl implements PostDao{
 		return Inner.instance;
 	}
 	
-	
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;
-	
     @Override
 	public int addPost(PostBean post) {
+    	Connection conn = null;
+    	PreparedStatement pstmt = null;
+    	ResultSet rs = null;
     	int res=0;
     	try {
            //1.获取连接
@@ -69,6 +67,9 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public int updatePost(PostBean post) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		int res=0;
 		try {
 	           //1.获取连接
@@ -105,6 +106,9 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public int deletePost(PostBean post) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		int res=0;
 		try {
 		   //1.获取连接
@@ -128,6 +132,9 @@ public class PostDaoImpl implements PostDao{
 	
 	@Override
 	public int deletePostBySection(SectionBean section) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		int res=0;
 		try {
 		   //1.获取连接
@@ -151,6 +158,9 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public List<PostBean> selectPost(int page,int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		List<PostBean> list=null;
 		try {
            //1.获取连接
@@ -198,6 +208,9 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public List<PostBean> selectPostBySection(SectionBean section,int page,int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		List<PostBean> list=null;
 		try {
            //1.获取连接
@@ -246,6 +259,9 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public List<PostBean> selectPostByUser(UserBean user,int page,int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		List<PostBean> list=null;
 		try {
            //1.获取连接
@@ -294,6 +310,9 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public PostBean selectPostbyId(int postid) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		try {
            //1.获取连接
            conn = C3p0Utils.getConn();
@@ -338,6 +357,9 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public List<PostBean> selectPostByName(String name,int page, int num) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		List<PostBean> list=null;
 		try {
            //1.获取连接
@@ -386,6 +408,9 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public int selectPostCountBySection(int sectionid) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		List<PostBean> list=null;
 		try {
            //1.获取连接
@@ -416,6 +441,9 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public int selectPostCountByName(String name) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		List<PostBean> list=null;
 		try {
            //1.获取连接
@@ -445,6 +473,9 @@ public class PostDaoImpl implements PostDao{
 
 	@Override
 	public int selectPostCountByUser(int userid) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
 		List<PostBean> list=null;
 		try {
            //1.获取连接

@@ -110,7 +110,7 @@ public class UserDaoImpl implements UserDao{
 		try {
 			conn = C3p0Utils.getConn();
 			String sql = "update user set username=?,signature=?,introduce=?,qq=?,"
-					+ "blog=?,birplace=?,birthday=?,sex=? where account=?";
+					+ "blog=?,birplace=?,birthday=? where account=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getSignature());
@@ -118,9 +118,8 @@ public class UserDaoImpl implements UserDao{
 			pstmt.setString(4, user.getQq());
 			pstmt.setString(5, user.getBlog());
 			pstmt.setString(6, user.getBirplace());
-			pstmt.setDate(7, user.getBirthday());
-			pstmt.setInt(8, user.getSex());
-			pstmt.setString(9, user.getAccount());
+			pstmt.setString(7, user.getBirthday());
+			pstmt.setString(8, user.getAccount());
 			rs = pstmt.executeUpdate();
 			if(rs==1) {
 				return true;
@@ -266,7 +265,7 @@ public class UserDaoImpl implements UserDao{
 				user.setQq(rs.getString("qq"));
 				user.setBlog(rs.getString("blog"));
 				user.setBirplace(rs.getString("birplace"));
-				user.setBirthday(rs.getDate("birthday"));
+				user.setBirthday(rs.getString("birthday"));
 				user.setSex(rs.getInt("sex"));
 				user.setImg(rs.getString("img"));
 				user.setRoleid(rs.getInt("roleid"));
@@ -340,11 +339,11 @@ public class UserDaoImpl implements UserDao{
 			pstmt.setInt(1, position);
 			pstmt.setInt(2, roleid);
 			rs = pstmt.executeUpdate();
+			//提交事务
+			conn.commit();
 			if(rs==1) {
 				return true;
 			}
-			//提交事务
-			conn.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			try {

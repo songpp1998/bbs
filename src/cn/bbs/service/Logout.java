@@ -2,6 +2,7 @@ package cn.bbs.service;
 
 import cn.bbs.bean.UserBean;
 import cn.bbs.dao.impl.UserDaoImpl;
+import cn.bbs.message.Message;
 
 /** 
 
@@ -22,11 +23,15 @@ public class Logout {
 	 * @param ip
 	 * @return
 	 */
-	public boolean isLogout(String account,String ip) {
+	public Message isLogout(String account,String ip) {
+		
 		userDaoImpl = new UserDaoImpl();
-		if(userDaoImpl.addLastLoginTimeByAccount(account, ip)) {
-			return true;
+		
+		boolean flag = userDaoImpl.addLastLoginTimeByAccount(account, ip);
+		
+		if(flag) {
+			return new Message(true, 200, "IP记录成功", null);
 		}
-		return false;
+		return new Message(false, 500, "IP记录失败", null);
 	}
 }

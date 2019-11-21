@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import cn.bbs.dao.impl.UserDaoImpl;
+import cn.bbs.message.Message;
 import cn.bbs.service.Logout;
+import net.sf.json.JSONObject;
 
 
 @WebServlet("/logout")
@@ -20,25 +22,26 @@ public class logoutServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		HttpSession session = request.getSession(false);
-		String str = (String) session.getAttribute("ticket");
-		System.out.println(str);
-		response.setContentType("text/html;charset=utf-8");
+		String str = (String) session.getAttribute("ticket1");
+
+		Message message = null;
 		if(str.equals("")) {
-			response.getWriter().write("浣犲凡閫�鍑猴紝璇烽棶閲嶅閫�鍑�");
+			message = new Message(false, 500, "用户已注销,请勿重复操作", null);
 		}else {
 			String ip = str.split("#")[0];
 			String account = str.split("#")[1];
 			logout = new Logout();
 			try {
-				if(logout.isLogout(account, ip)) {
-					session.invalidate();
-					response.getWriter().append("娉ㄩ攢鎴愬姛");
-				}
+				message = logout.isLogout(account, ip);
+				session.invalidate();
+				message = new Message(true, 200, "用户注销成功", null);
 			} catch (Exception e) {
-				response.getWriter().append("500鍐呴儴鏈嶅姟鍣ㄩ敊璇�");
+				message = new Message(false, 500, "服务器异常", null);
 			}		
 		}
-
+		
+		response.setContentType("text/json;charset=utf-8");
+		JSONObject.fromObject(message).write(response.getWriter());	
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

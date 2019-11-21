@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>源论坛主页</title>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+		<link rel="stylesheet" href="css/element-ui.css" />
+		<script type="text/javascript" src="js/vue.js"></script>
+		<script type="text/javascript" src="js/element-ui.js"></script>
+		<script src="js/data.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			[v-cloak]{
+				display: none;
+			}
+			.el-header {
+				line-height: 60px;
+			}
+			
+			.el-footer {
+				background-color: #B3C0D1;
+				color: #333;
+				text-align: center;
+
+				line-height: 60px;
+			}
+			
+			.el-aside {
+				background-color: #D3DCE6;
+				color: #333;
+				text-align: center;
+				line-height: 100%;
+			}
+			
+			/* ********************************* */
+			
+			/* 这是主体 */
+			.el-main {
+				background-color: #E9EEF3;
+				color: #333;
+			}
+			/* 这是标题 */
+			.title{
+				font:italic bolder 25px "黑体";
+				height: 35px;
+			}
+			/* 这是内容 */
+			.content{
+				text-indent: 30px;
+				height: 50px;
+				overflow: hidden;
+				/* background-color: #00FF00; */
+			}
+			/* 这是评论数和阅读量 */
+			.reply{
+				margin-top: 5px;
+				height: 30px;
+				color: #82848A;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<div id="app">
+			<el-container v-cloak style="border: 1px solid #eee">
+				<el-header>
+					<el-row>
+						<el-col :span="3">
+							<span>代码改变世界</span>
+						</el-col>
+						<el-col :span="5">
+							<el-image src="img/bbs-logo.png" fit='contain'></el-image>
+						</el-col>
+						<el-col :span="5">
+							<el-input v-model="input" placeholder="请输入搜索内容"></el-input>
+						</el-col>
+						<el-col :span="3">
+							<el-button type="primary" icon="el-icon-search" @click="search()">搜索</el-button>
+						</el-col>
+						<el-col :span="2" style="text-align: right;">
+							<el-button><el-link type="primary" href="html/PostSend.html">写博客</el-link></el-button>
+						</el-col>
+						<el-col :span="6" style="text-align: right;" v-show="isOnline">
+							<el-button><el-link type="primary" href="login.html">登录</el-link></el-button>
+							<el-button><el-link type="primary" href="register.html">注册</el-link></el-button>
+						</el-col>
+						<el-col :span="6" v-show="!isOnline" style="text-align: right;">
+							<el-dropdown>
+							<el-button><i class="el-icon-user"></i> {{username}}</el-button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item><el-link type="primary" href="background.html">个人中心</el-link></el-dropdown-item>
+									<el-dropdown-item><el-link type="primary" href="html/shortMessage.html">私信</el-link></el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
+							<el-button @click.native="logout">注销</el-button>
+						</el-col>
+					</el-row>
+				</el-header>
+				
+				<el-col :span="20" :offset="2">
+				<el-container>
+					<el-aside width="200px">
+						
+						<el-menu default-active="2" @open="sectionopen" @close="sectionclose" unique-opened>
+							<el-submenu  :index=menu1.roleid+'' v-for="(menu1,i) in caidan">
+								<template slot="title" >
+									<span>{{menu1.name}}</span>
+								</template>
+								<el-menu-item @click="clicksection(menu2)" v-for="(menu2,j) in menu1.list">{{menu2.name}}</el-menu-item>
+							</el-submenu>							
+						</el-menu>
+						<el-menu>
+							<el-submenu  index="20">
+								<template slot="title" >
+									<span>站务专区</span>
+								</template>
+								<el-menu-item index="20-1" @click="bbsMyAdmin">版主专区</el-menu-item>
+								<el-menu-item index="20-2"  @click="bbsMyAdmin">管理员专区</el-menu-item>
+							</el-submenu>
+						</el-menu>
+					</el-aside>
+					<el-container>
+						<!-- ================================================================== -->
+						<el-main>
+							<el-card v-for="(post,i) in postlist" shadow="hover">
+								<div class="title"  @click="find(post.postid)">{{post.title}}</div>
+								<el-col :span="20"  @click="find(post.postid)">
+									<div class="content">{{post.content}}</div>
+								</el-col>
+								<el-col :span="3" :offset="1">
+									<el-button-group v-show="operation">
+										<el-button type="primary" icon="el-icon-edit" circle @click="postedit(post.postid)"></el-button>
+										<el-button type="success" icon="el-icon-star-off" circle @click="openhot(post.postid)"></el-button>
+										<el-button type="danger" icon="el-icon-delete" circle @click="openremove(post.postid)"></el-button>
+									</el-button-group>
+								</el-col>
+								<div class="reply">
+									<el-row>
+										<el-col :span="2" :offset="6">
+											<i class="el-icon-thumb">{{post.readnum}} 点击量</i>
+										</el-col>
+										<el-col :span="2" :offset="1">
+											<i class="el-icon-chat-dot-round"> {{post.replynum}}条评论</i>
+										</el-col>
+										<el-col :span="3" :offset="10">{{post.postdate}}</el-col>
+									</el-row>
+								</div>
+							</el-card>
+						</el-main>
+						<el-footer>
+							<el-pagination background @current-change="handleCurrentChange" :current-page.sync="page" layout="prev, pager, next, jumper"
+							 :total="num" :hide-on-single-page="num<=10">
+							</el-pagination>
+						</el-footer>
+						<!-- ======================================================================= -->
+					</el-container>
+				</el-container>
+				</el-col>
+			</el-container>
+
+		</div>
+	</body>
+	<script>
+		new Vue({
+			el: '#app',
+			data() {
+				return {
+					src: 'img/bbslogo.png',
+					isOnline: false,
+					caidan: '',
+					username: '',
+					input: '',
+					post: '',
+					/********************************/
+					user: {
+						userid:1,
+						roleid:'3'
+					}, //用户
+					postlist: [], //显示出来的帖子列表
+					num: 10, //页总数*10
+					page: 1, //当前的页码
+					section: {}, //所选的板块
+					districtid: '', //所属的分区(的角色)
+					operation:false //是否出现操作按钮
+				}
+			},
+			methods: {
+				bbsMyAdmin:function(){
+					_this = this;
+					$.ajax({
+						url: ip+'bbs/isAdmin',
+						type: 'get',
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							if(data.success){
+								console.log(data);
+								window.location.href=adminurl+data.data.url;
+								console.log(adminurl+data.data.url);
+							}else{
+								_this.$message.error(data.message);
+							}
+							
+						}
+					});
+				},				
+				logout:function(){
+					_this = this;
+					$.ajax({
+						url: ip+'bbs/logout',
+						type: 'get',
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							console.log(data);
+							window.location.href="index.html";
+						}
+					});
+				},
+				search: function() {
+					_this = this;
+					$.ajax({
+						url: ip+'bbs/PostByName',
+						type: 'get',
+						dataType: "json",
+						data: {
+							name: 'input',
+							page: 0
+						},
+						xhrFields: {
+							withCredentials: false
+						},
+						success: function(data) {
+							console.log(data);
+							_this.post = data;
+						}
+					});
+				},
+				/****************************************/
+				/*这个需要修改*/
+				/*展开分区*/
+				sectionopen(index,indexPath){
+					console.log('打开'+indexPath+(this.user.roleid==index)+this.user.roleid);
+					// this.operation=(this.user.roleid==index);
+					this.districtid=index;
+				},
+				/*关闭分区 这个暂时用不到了*/
+				sectionclose(index,indexPath){
+					console.log('关闭'+index);
+				},
+				//选择板块
+				clicksection(section) {
+					console.log(section);
+					//请求文章数据
+					this.section = section.sectionId;
+					this.page = 1;
+					this.selectPostBySection();
+					if(this.user.userid==''||this.user.userid==null) return ;
+					//判断权限
+					 console.log(this.user.roleid);
+					this.operation=(this.user.roleid==section.roleid)||(this.user.roleid==this.districtid);
+				},
+				//页码发生改变
+				handleCurrentChange(val) {
+					console.log(`当前页: ${val}`);
+					this.page = val;
+					if (this.section == '') this.selectPost();
+					else this.selectPostBySection();
+				},
+				//点击搜索
+				search(){
+					console.log(this.input);
+					var url=search;
+					sessionStorage.setItem("name",this.input);
+					window.location.href = url;
+				},
+				//查看某篇文章,会跳转到其他的界面
+				find(postid) {
+					console.log("文章的id为" + postid);
+					var url = post;
+					sessionStorage.setItem("postid", postid);
+					window.location.href = url;
+				},
+				/*查看所有文章*/
+				selectPost() {
+					var url = 'http://' + address + ':' + interface + '/bbs/PostByName';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							name: '',
+							page: this.page - 1
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								_this.postlist = data.data.list;
+								_this.num = data.data.num * 10;
+							}
+							console.log(_this.postlist);
+							console.log(_this.num);
+						},
+						error: function(xhr, type, errorThrown) {
+							console.log('失败');
+						}
+					});
+				},
+				/*查看某板块的文章*/
+				selectPostBySection() {
+					var url = 'http://' + address + ':' + interface + '/bbs/PostBySection';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							sectionid: this.section,
+							page: this.page - 1
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								_this.postlist = data.data.list;
+								_this.num = data.data.num * 10;
+							}
+							console.log(_this.num);
+						},
+						error: function(xhr, type, errorThrown) {
+							console.log('失败');
+						}
+					});
+				},
+				/*编辑帖子*/
+				postedit(postid) {
+					console.log(postid);
+					var url=send;
+					sessionStorage.setItem("post", postid);
+					window.location.href = url;
+				},
+				/*打开删除确认*/
+				 openremove(postid) {
+					 var _this = this;
+					this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+					  confirmButtonText: '确定',
+					  cancelButtonText: '取消',
+					  type: 'warning'
+					}).then(() => {
+						this.postremove(postid)
+					}).catch(() => {
+					  this.$message({
+						type: 'info',
+						message: '已取消删除'
+					  });          
+					});
+				},
+				/*打开加精确认*/
+				openhot(postid){
+					this.$prompt('原因', '确认加精？', {
+					  confirmButtonText: '确定',
+					  cancelButtonText: '取消',
+					}).then(({ value }) => {
+					  
+						this.posthot(postid,value)
+					
+					}).catch(() => {
+					  this.$message({
+						type: 'info',
+						message: '取消'
+					  });       
+					});
+				},
+				/*删除帖子*/
+				postremove(postid){
+					console.log(postid);
+					var url = 'http://' + address + ':' + interface + '/bbs/postDelete';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							userid: _this.user.userid,
+							postid: postid
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								//弹出消息
+								_this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								//刷新界面
+								_this.handleCurrentChange(_this.page);
+							} else {
+								//弹出错误信息
+								console.log(data);
+								_this.$message({
+									message: data.message,
+									type: 'error'
+								});
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							_this.$message({
+								message: "删除失败",
+								type: 'error'
+							});
+							console.log('失败');
+						}
+					});
+				},
+				/*加精帖子*/
+				posthot(postid,value){
+					console.log(postid);
+					var url = 'http://' + address + ':' + interface + '/bbs/PostHot';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							hotid: _this.user.userid,
+							postid: postid,
+							hotreason:value
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								//弹出消息
+								_this.$message({
+									message: '加精成功',
+									type: 'success'
+								});
+								
+							} else {
+								//弹出错误信息
+								console.log(data);
+								_this.$message({
+									message: data.message,
+									type: 'error'
+								});
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							_this.$message({
+								message: "失败",
+								type: 'error'
+							});
+							console.log('失败');
+						}
+					});
+				}
+			},
+			mounted: function() {
+				_this = this;
+				$.ajax({
+					url: ip+'bbs/ShowSection', //分区展示
+					type: 'get',
+					dataType: "json",
+					crossDomain: true,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						console.log(data);
+						_this.caidan = data.data;
+					}
+				});
+
+				$.ajax({
+					url: ip+'bbs/showUserFormation', // 跨域URL
+					type: 'get',
+					dataType: "json",
+					crossDomain: true,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						_this.username = data.data.username;
+						_this.user=data.data;						
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						_this.isOnline = true;
+					}
+				});
+				/*****************************************/
+				//获取到显示的文章
+				this.selectPost();
+				//不能操作
+				this.operation=false;
+			}
+		});
+	</script>
+
+</html>

@@ -31,12 +31,12 @@ public class SectionDaoImpl implements SectionDao{
 		return Inner.instance;
 	}
 	
-	Connection conn = null;
-	PreparedStatement pstmt = null;
-	ResultSet rs = null;	
-	
 	@Override
 	public int addSection(SectionBean section) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
 		int res=0;
     	try {
            //1.获取连接
@@ -63,6 +63,10 @@ public class SectionDaoImpl implements SectionDao{
 
 	@Override
 	public int updateSection(SectionBean section) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
 		int res=0;
     	try {
            //1.获取连接
@@ -91,6 +95,10 @@ public class SectionDaoImpl implements SectionDao{
 
 	@Override
 	public int deleteSection(SectionBean section) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
 		int res=0;
     	try {
            //1.获取连接
@@ -115,6 +123,10 @@ public class SectionDaoImpl implements SectionDao{
 
 	@Override
 	public List<SectionBean> selectSectionByDistrictid(int sectionid) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
 		List<SectionBean> list=null;
 		try {
 	           //1.获取连接
@@ -150,6 +162,10 @@ public class SectionDaoImpl implements SectionDao{
 
 	@Override
 	public SectionBean selectSctionById(int sectionid) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
 		try {
 	           //1.获取连接
 	           conn = C3p0Utils.getConn();
@@ -183,6 +199,10 @@ public class SectionDaoImpl implements SectionDao{
 
 	@Override
 	public List<SectionBean> selectSectionByName(String name, int sectionid) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
 		List<SectionBean> list=null;
 		try {
 	           //1.获取连接
@@ -219,6 +239,10 @@ public class SectionDaoImpl implements SectionDao{
 
 	@Override
 	public SectionBean selectSctionByRole(int roleid) {
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;	
 		try {
 	           //1.获取连接
 	           conn = C3p0Utils.getConn();

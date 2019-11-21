@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>操作版块</title>
+		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+		<link rel="stylesheet" href="../css/element-ui.css" />
+		<script type="text/javascript" src="../js/vue.js"></script>
+		<script type="text/javascript" src="../js/element-ui.js"></script>
+		<script src="../js/data.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			[v-cloak] {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<el-card>
+				<el-table :data="sectionlist" height="600" stripe border>
+					<el-table-column type="expand" stripe>
+						<template slot-scope="props">
+							<el-table :data="props.row.list" border>
+								<el-table-column prop="sectionId" label="板块号">
+								</el-table-column>
+								<el-table-column prop="name" label="板块">
+								</el-table-column>
+								<el-table-column prop="roleid" label="角色id">
+								</el-table-column>
+								<el-table-column>
+									<template slot="header" slot-scope="scope">
+										操作
+									</template>
+									<template slot-scope="scope">
+										<el-button @click="findsection(scope.row)">查看</el-button>
+										<el-button @click="updatesection(scope.row)" type="primary">修改</el-button>
+										<el-button @click="removesection(scope.row)" type="danger">删除</el-button>
+									</template>
+								</el-table-column>
+							</el-table>
+						</template>
+					</el-table-column>
+					<el-table-column prop="sectionId" label="分区号">
+					</el-table-column>
+					<el-table-column prop="name" label="分区">
+					</el-table-column>
+					<el-table-column prop="roleid" label="角色id">
+					</el-table-column>
+					<el-table-column>
+						<template slot="header" slot-scope="scope">
+							<el-button type="success" @click="addsection(0)">新增分区</el-button>
+						</template>
+						<template slot-scope="scope">
+							<!-- <el-button @click="findsection(scope.row)">查看</el-button> -->
+							<el-button @click="updatesection(scope.row)" type="primary">修改</el-button>
+							<el-button @click="removesection(scope.row)" type="danger">删除</el-button>
+							<el-button @click="addsection(scope.row.sectionId)" type="success">新增板块</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+			</el-card>
+			<el-dialog title="修改" :visible.sync="sectiondialog">
+				名称：
+				<el-input v-model="section.name" placeholder="请输入名称" style="width: 200px;" ></el-input>
+				<br />
+				所属分区：
+				<el-select :disabled='section.flag' v-model="section.districtid" placeholder="选择分区">
+					<el-option v-for="item in sectionlist" :key="item.sectionId" :label="item.name" :value="item.sectionId">
+					</el-option>
+				</el-select>
+				<div slot="footer" class="dialog-footer">
+					<el-button @click="sectiondialog = false">取 消</el-button>
+					<el-button type="primary" @click="sectionupdate">确 定</el-button>
+				</div>
+			</el-dialog>
+		</div>
+	</body>
+	<script type="text/javascript">
+		new Vue({
+			el: "#app",
+			data: {
+				sectionlist: [],
+				section: {
+					sectionid: '',
+					name: '',
+					districtid: '',
+					flag:false,
+				},
+				sectiondialog: false
+			},
+			methods: {
+				//点击新增
+				addsection(val) {
+					this.$prompt('请输入名称', '新增', {
+					  confirmButtonText: '确定',
+					  cancelButtonText: '取消',
+					}).then(({ value }) => {
+						
+						this.sectionadd(val,value);
+						
+					}).catch(() => {
+					  this.$message({
+						type: 'info',
+						message: '取消'
+					  });       
+					});
+				},
+				//点击查看
+				findsection(val) {
+					console.log(val);
+				},
+				//点击修改
+				updatesection(val) {
+					this.section.name=val.name;
+					this.section.sectionid=val.sectionId;
+					this.section.districtid=val.districtid;
+					this.section.flag=(val.districtid==0);
+					this.sectiondialog=true;
+				},
+				//点击删除
+				removesection(val) {
+					// console.log(val);
+					this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+						type: 'warning'
+					}).then(() => {
+						//执行删除
+						this.sectiondelete(val.sectionId);
+					}).catch(() => {
+						this.$message({
+							type: 'info',
+							message: '已取消删除'
+						});
+					});
+				},
+				//修改板块
+				sectionupdate(){
+					var _this = this;
+					var url = "http://" + address + ":" + interface + "/bbs/SectionEdit";
+					$.ajax({
+						url: url,
+						data: {
+							sectionid:_this.section.sectionid,
+							districtid: _this.section.districtid,
+							name:_this.section.name
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								//弹出消息
+								_this.$message({
+									message: '修改成功',
+									type: 'success'
+								});
+								//刷新界面
+								_this.getsectiion();
+							}
+							//弹出错误信息
+							else {
+								_this.$message({
+									message: data.message,
+									type: 'error'
+								});
+							}
+							console.log(data);
+						},
+						error: function(xhr, type, errorThrown) {
+							//弹出错误信息
+							// console.log(data);
+							_this.$message({
+								message: "修改失败",
+								type: 'error'
+							});
+						}
+					});
+					_this.section={
+					sectionid: '',
+					name: '',
+					districtid: '',
+					flag:false,
+				};
+					_this.sectiondialog=false;
+				},
+				//新增板块
+				sectionadd(districtid,name){
+					var _this = this;
+					var url = "http://" + address + ":" + interface + "/bbs/SectionAdd";
+					$.ajax({
+						url: url,
+						data: {
+							districtid: districtid,
+							name:name
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								//弹出消息
+								_this.$message({
+									message: '添加成功',
+									type: 'success'
+								});
+								//刷新界面
+								_this.getsectiion();
+							}
+							//弹出错误信息
+							else {
+								_this.$message({
+									message: data.message,
+									type: 'error'
+								});
+							}
+							console.log(data);
+						},
+						error: function(xhr, type, errorThrown) {
+							//弹出错误信息
+							// console.log(data);
+							_this.$message({
+								message: "新增失败",
+								type: 'error'
+							});
+						}
+					})
+				},
+				//删除板块
+				sectiondelete(sectionid) {
+					var _this = this;
+					var url = "http://" + address + ":" + interface + "/bbs/SectionDelete";
+					$.ajax({
+						url: url,
+						data: {
+							sectionid: sectionid
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								//弹出消息
+								_this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								//刷新界面
+								_this.getsectiion();
+							}
+							//弹出错误信息
+							else {
+								_this.$message({
+									message: data.message,
+									type: 'error'
+								});
+							}
+							console.log(data);
+						},
+						error: function(xhr, type, errorThrown) {
+							//弹出错误信息
+							// console.log(data);
+							_this.$message({
+								message: "删除失败",
+								type: 'error'
+							});
+						}
+					})
+				},
+				//获取到所有的板块
+				getsectiion() {
+					var _this = this;
+					var url = "http://" + address + ":" + interface + "/bbs/ShowSection";
+					$.ajax({
+						url: url,
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								_this.sectionlist = data.data;
+							}
+							//弹出错误信息
+							else {
+								_this.$message({
+									message: data.message,
+									type: 'error'
+								});
+							}
+							console.log(data);
+						},
+						error: function(xhr, type, errorThrown) {
+							//弹出错误信息
+							// console.log(data);
+							_this.$message({
+								message: "获取失败",
+								type: 'error'
+							});
+						}
+					});
+				}
+			},
+			mounted() {
+				this.getsectiion();
+			}
+		});
+	</script>
+</html>

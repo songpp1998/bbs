@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>个人中心</title>
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<style type="text/css">
+			html {
+				height: 100%;
+				width: auto;
+				margin: 0;
+				padding: 0;
+				border: 0;
+			}
+			
+			body {
+				height: 100%;
+				width: auto;
+				margin: 0;
+				padding: 0;
+				border: 0;
+			}
+			
+			.layui-layout-admin .layui-body {
+				left: 0;
+				bottom: 0;
+			}
+		</style>
+	</head>
+
+	<body class="layui-layout-body">
+		<div class="layui-side layui-bg-black">
+			<div class="layui-side-scroll">
+				<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+				<ul class="layui-nav layui-nav-tree layui-inline" lay-filter="user">
+					<li class="layui-nav-item layui-this">
+						<a href="mymianpage.html" target="VIEW2">
+							<i class="layui-icon layui-icon-username"></i> 我的主页
+						</a>
+					</li>
+					<li class="layui-nav-item   ">
+						<a href="baseinfo.html" target="VIEW2"> <i class="layui-icon layui-icon-set-fill"></i> 基本设置
+						</a>
+					</li>
+					<li class="layui-nav-item ">
+						<a href="/user/message/" target="VIEW2"> <i class="layui-icon"></i> 我的消息
+						</a>
+					</li>
+					<li class="layui-nav-item ">
+						<a href="html/mypost.html" target="VIEW2">
+							<i class="layui-icon layui-icon-align-left"></i> 我的帖子
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="layui-body" style="height: 100%; width: 100%">
+			<iframe name="VIEW2" style="height: 100%; width: 100%; margin: 0px" src="mymianpage.html"></iframe>
+		</div>
+	</body>
+	<script type="text/javascript" src="layui/layui.all.js"></script>
+	<script type="text/javascript">
+	</script>
+
+</html>

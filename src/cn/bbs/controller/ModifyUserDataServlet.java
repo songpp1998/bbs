@@ -41,16 +41,14 @@ public class ModifyUserDataServlet extends HttpServlet {
 		String qq = request.getParameter("qq"); 
 		String birplace = request.getParameter("birplasce");
 		String birthday =  request.getParameter("birthday");
-		int sex = Integer.parseInt(request.getParameter("sex"));
-		
-		//字符串转换成日期格式				
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		java.sql.Date date = null;
-		try {
-			date = (Date) sf.parse(birthday);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+//		//字符串转换成日期格式				
+//		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+//		java.sql.Date date = null;
+//		try {
+//			date = (Date) sf.parse(birthday);
+//		} catch (ParseException e) {
+//			e.printStackTrace();
+//		}
 		
 		user.setAccount(account);
 		user.setUsername(username);
@@ -58,8 +56,7 @@ public class ModifyUserDataServlet extends HttpServlet {
 		user.setIntroduce(introduce);
 		user.setQq(qq);
 		user.setBirplace(birplace);
-		user.setBirthday(date);
-		user.setSex(sex);
+		user.setBirthday(birthday);
 		
 		Message message = userManager.updateUserByAccount(user);
 		

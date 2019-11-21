@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import cn.bbs.message.Message;
 import cn.bbs.service.ResetPassword;
+import net.sf.json.JSONObject;
 /**
  * 重置密码
  * @author Hydra
@@ -23,21 +25,23 @@ public class ResetServlet extends HttpServlet {
 		
 		String account = request.getParameter("account");
 		String phone = request.getParameter("phone");
+		
 		System.out.println(account+phone);
 		
+		Message message = null;
 		reset = new ResetPassword();
-		response.setContentType("text/html;charset=utf-8");
+		
 		try {
-			if(reset.isReset(account, phone)) {
-				reset.Reset(account, phone);
-				response.getWriter().write("修改成功");
-			}else {
-				response.getWriter().write("输入有误，请检查后再次输入");
+			message = reset.isReset(account, phone);
+			if (message.success) {
+				message = 	reset.Reset(account, phone);			
 			}
 		} catch (Exception e) {
-			response.getWriter().write("账号不存在");
+			e.printStackTrace();
 		}
 
+		response.setContentType("text/json;charset=utf-8");
+		JSONObject.fromObject(message).write(response.getWriter());	
 	}
 
 

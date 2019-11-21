@@ -107,6 +107,7 @@ public class IPFilter implements Filter {
 		
 		//打印所有黑名单ip
 		for(String str : denyList) {
+			System.out.println("禁用ip");
 			System.out.println(str);
 		}
 	}

@@ -36,25 +36,21 @@ public class UserShowServlet extends HttpServlet {
 		
 		try {
 			page = Integer.parseInt(request.getParameter("page"));
-			num = Integer.parseInt(request.getParameter("num"));			
+			num = Integer.parseInt(request.getParameter("num"));	
+			System.out.println(page+num);
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 		
 		Message message = userManager.findUserByPage(page, num);
 		System.out.println(message.getData());
-		HttpSession session = request.getSession();
-		String ticket = (String) session.getAttribute("ticket");
+//		HttpSession session = request.getSession();
+//		String ticket = (String) session.getAttribute("ticket1");
+		
 		response.setContentType("text/json;charset=utf-8");
-		
-//		//动态获取域
-//		response.setHeader("Access-Control-Allow-Origin",request.getHeader("origin"));
-//		//允许携带cookie
-//		response.addHeader("Access-Control-Allow-Credentials","true");
-		
+				
 		
 		JSONObject.fromObject(message).write(response.getWriter());
-//		System.out.println(session.getAttribute("ticket"));
 	}
 
 

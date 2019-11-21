@@ -44,9 +44,9 @@ public class LoginServlet extends HttpServlet {
 				if(message.success) {
 					
 					HttpSession session = request.getSession();
-					session.setAttribute("ticket1", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account)+login.findPositionByAccount(account));	
-					System.out.println(session.getAttribute("ticket1"));
-//					response.sendRedirect("http://localhost:8081/bbs/showUserFormation");
+					System.out.println(session);
+					session.setAttribute("ticket1", user.getLoginIp()+"#"+account+"#"+login.findRoleByAccount(account)+"#"+login.findPositionByAccount(account));	
+
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

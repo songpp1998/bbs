@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html style="width: 80%;">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+		<link rel="stylesheet" href="../css/element-ui.css" />
+		<script type="text/javascript" src="../js/vue.js"></script>
+		<script type="text/javascript" src="../js/element-ui.js"></script>
+		<script src="../js/data.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			[v-cloak]{
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<!-- <el-card v-for="(post,i) in list" shadow="hover" @click.native="find(post.postid)"> -->
+			<el-card v-for="(post,i) in list" shadow="hover" >
+				
+				<div class="title" >{{post.title}}</div>
+				
+				<el-col :span="20" >
+					<div class="content">{{post.content}}</div>
+				</el-col>
+				
+					<el-button-group>
+					<!-- <el-button type="primary" icon="el-icon-edit"  @click="postedit(post.postid)">编辑</el-button> -->
+					<el-button type="primary" icon="el-icon-edit"  @click="asdasd()">编辑</el-button>
+					<el-button type="danger" icon="el-icon-delete"  @click="openremove(post.postid)">删除</el-button>
+					</el-button-group>
+				<div class="reply">
+					<el-row>
+						<el-col :span="2" :offset="6">
+							<i class="el-icon-thumb">{{post.readnum}} 点击量</i>
+						</el-col>
+						<el-col :span="2" :offset="1">
+							<i class="el-icon-chat-dot-round"> {{post.replynum}}条评论</i>
+						</el-col>
+						<el-col :span="3" :offset="10">{{post.postdate}}</el-col>
+					</el-row>
+				</div>
+			</el-card>
+			<el-pagination background @current-change="handleCurrentChange" :current-page.sync="page" layout="prev, pager, next, jumper"
+			 :total="num" :hide-on-single-page="num<=10">
+			</el-pagination>
+			
+		</div>
+	</body>
+	<script type="text/javascript">
+		new Vue({
+			el: "#app",
+			data: {
+				list: [], //数据
+				num: 10, //页总数*10
+				page: 1, //当前页数
+				userid: ''
+			},
+			methods: {
+				asdasd(){
+					console.log('编辑');
+				},
+				//页码发生改变
+				handleCurrentChange(val) {
+					console.log(`当前页: ${val}`);
+					this.page = val;
+					this.getlist();
+				},
+				//查看某篇文章,会跳转到其他的界面
+				find(postid) {
+					console.log("文章的id为"+postid);
+					var url=post;
+					sessionStorage.setItem("postid", postid);
+					window.location.href = url;
+					
+				},
+				/*编辑帖子*/
+				postedit(postid) {
+					console.log('编辑');
+					var url=send;
+					sessionStorage.setItem("post", postid);
+					window.location.href = url;
+				},
+				/*打开删除确认*/
+				 openremove(postid) {
+					 console.log(123);
+					 var _this = this;
+					this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+					  confirmButtonText: '确定',
+					  cancelButtonText: '取消',
+					  type: 'warning'
+					}).then(() => {
+						this.postremove(postid)
+					}).catch(() => {
+					  this.$message({
+						type: 'info',
+						message: '已取消删除'
+					  });          
+					});
+				},
+				/*删除帖子*/
+				postremove(postid){
+					console.log(postid);
+					var url = 'http://' + address + ':' + interface + '/bbs/postDelete';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							userid: _this.user.userid,
+							postid: postid
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								//弹出消息
+								_this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								//刷新界面
+								_this.handleCurrentChange(_this.page);
+							} else {
+								//弹出错误信息
+								console.log(data);
+								_this.$message({
+									message: data.message,
+									type: 'error'
+								});
+							}
+						},
+						error: function(xhr, type, errorThrown) {
+							_this.$message({
+								message: "删除失败",
+								type: 'error'
+							});
+							console.log('失败');
+						}
+					});
+				},
+				// 这是使用ajax对后端进行请求
+				// 其他方法只需要调用此方法即可
+				getlist: function() {
+					if(this.userid==''||this.userid==null) return ;
+					var url = 'http://' + address + ':' + interface + '/bbs/PostByUser';
+					var _this = this;
+					$.ajax({
+						url: url,
+						data: {
+							userid: this.userid,
+							page: this.page - 1
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 10000, //超时时间设置为10秒；
+						success: function(data) {
+							if (data.success) {
+								_this.list = data.data.list;
+								_this.num = data.data.num * 10;
+							}
+							console.log(_this.num);
+						},
+						error: function(xhr, type, errorThrown) {
+							console.log('失败');
+						}
+					});
+				}
+			},
+			mounted() {
+				//获取用户
+				var _this=this;
+				$.ajax({
+					url: ip+'bbs/showUserFormation', // 跨域URL
+					type: 'get',
+					dataType: "json",
+					crossDomain: true,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						_this.userid = data.data.userid;
+						console.log(_this.userid);
+						_this.getlist();
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+					}
+				});
+				
+			}
+		})
+	</script>
+</html>

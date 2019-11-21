@@ -15,7 +15,7 @@ public class UserBean {
 	private String qq;
 	private String blog;//个人网站
 	private String birplace;//籍贯
-	private Date birthday;//生日
+	private String birthday;//生日
 	private int sex;//性别 
 	private String img;//图片url，头像
 	private String phone;//手机号
@@ -113,10 +113,11 @@ public class UserBean {
 	public void setBirplace(String birplace) {
 		this.birplace = birplace;
 	}
-	public Date getBirthday() {
+	
+	public String getBirthday() {
 		return birthday;
 	}
-	public void setBirthday(Date birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 	public int getSex() {

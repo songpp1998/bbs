@@ -11,6 +11,7 @@ package cn.bbs.service;
 
 import cn.bbs.bean.UserBean;
 import cn.bbs.dao.impl.UserDaoImpl;
+import cn.bbs.message.Message;
 
 public class ResetPassword {
 
@@ -18,21 +19,21 @@ public class ResetPassword {
 	private UserBean user = null;
 	
 	//是否通过验证，可以重置密码
-	public boolean isReset(String account,String phone) {
+	public Message isReset(String account,String phone) {
 		userDaoImpl = new UserDaoImpl();
 		user = userDaoImpl.findUserBeanByAccount(account);
 		if(user.getAccount().equals(account)&&user.getPhone().equals(phone)) {
-			return true;
+			return new Message(true, 200, "可以重置密码", null);
 		}
-		return false;
+		return new Message(false, 300, "输入信息有误", null);
 	}
 	
 	//重置密码为注册手机号
-	public boolean Reset(String account,String phone) {
+	public Message Reset(String account,String phone) {
 		userDaoImpl = new UserDaoImpl();
 		if(userDaoImpl.resetPasswordByAccount(account, phone)) {
-			return true;
+			return new Message(true, 200, "密码重置成功", null);
 		}
-		return false;
+		return new Message(false, 500, "密码输入有误", null);
 	}
 }

@@ -30,6 +30,7 @@ public class ShowUserFormationServlet extends HttpServlet {
 		
 		HashMap<String, String> map = userManager.showUser(account);
 		Message message = new Message(true, 200, "查询成功", map);
+		response.setContentType("text/json;charset=utf-8");
 		JSONObject.fromObject(message).write(response.getWriter());
 	}
 

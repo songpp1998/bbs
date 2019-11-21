@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>我的主页</title>
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<script type="text/javascript" src="js/data.js" ></script>
+		<style type="text/css">
+			html {
+				height: 100%;
+				width: auto;
+				margin: 0;
+				padding: 0;
+				border: 0;
+			}
+			
+			body {
+				height: 100%;
+				width: auto;
+				margin: 0;
+				padding: 0;
+				border: 0;
+			}
+		</style>
+	</head>
+
+	<body class="layui-layout-body" style="background-image: url('');background-repeat: no-repeat; background-size: 100% 100%; ">
+		<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+			<legend>个人详情</legend>
+		</fieldset>
+
+		<div id="msg" class="layui-tab-item layui-show">
+
+			<div style="padding: 20px; background-color: #F2F2F2;">
+				<div class="layui-row layui-col-space15 layui-container">
+					<div class="layui-col-md4">
+						<div class="layui-card">
+							<div class="layui-card-header">昵称</div>
+							<div id="name" class="layui-card-body">
+								昵称未知
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-card">
+							<div class="layui-card-header">账号</div>
+							<div id="account" class="layui-card-body">
+								账号未知
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md4">
+						<div class="layui-card">
+							<div id="" class="layui-card-body">
+								<div style="height: 75px;width: 75px">
+									<img style="width: 100%; height: 100%" id="img" src="" alt="显示错误">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md6">
+						<div class="layui-card">
+							<div class="layui-card-header">性别</div>
+							<div id="sex" class="layui-card-body">
+								性别未知
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md6">
+						<div class="layui-card">
+							<div class="layui-card-header">身份</div>
+							<div id="role" class="layui-card-body">
+								身份未知
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md6">
+						<div class="layui-card">
+							<div class="layui-card-header">手机号</div>
+							<div id="phone" class="layui-card-body">
+								手机号未知
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md6">
+						<div class="layui-card">
+							<div class="layui-card-header">QQ</div>
+							<div id="qq" class="layui-card-body">
+								QQ未知
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md6">
+						<div class="layui-card">
+							<div class="layui-card-header">生日</div>
+							<div id="birthday" class="layui-card-body">
+								生日未知
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md6">
+						<div class="layui-card">
+							<div class="layui-card-header">出生地</div>
+							<div id="birplace" class="layui-card-body">
+								出生地未知
+							</div>
+						</div>
+					</div>
+					<div class="layui-col-md12">
+						<div class="layui-card">
+							<div class="layui-card-header">个人签名</div>
+							<div id="course" class="layui-card-body">
+								<div id="sign" class="layui-card-body">
+									签名未知
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+	<script type="text/javascript" src="layui/layui.all.js"></script>
+	<script type="text/javascript">
+		var $ = layui.jquery;
+		var table = layui.table;
+		var layer = layui.layer;
+		var element = layui.element;
+		var form = layui.form;
+		var laydate = layui.laydate;
+
+		$(function() {
+			$.ajax({
+				type: "get",
+				url: ip+"bbs/queryAccountInfo",
+				crossDomain: true,
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function(data) {
+					if(data.result) {
+						data = data.data
+						$("#name").text(data.username)
+						$("#account").text(data.account)
+						$("#sex").text(data.sex)
+						$("#role").text(data.rolename)
+						$("#phone").text(data.phone)
+						$("#qq").text(data.qq)
+						$("#birthday").text(data.birthday)
+						$("#birplace").text(data.birplace)
+						$("#sign").text(data.sign)
+						$("#img").attr("src", data.img)
+
+					} else {
+						layer.msg("数据获取失败")
+					}
+				}
+			})
+		});
+	</script>
+
+</html>

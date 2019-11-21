@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>基本设置</title>
+		<link rel="stylesheet" href="layui/css/layui.css" media="all">
+		<script type="text/javascript" src="js/data.js" ></script>
+		<style type="text/css">
+			html {
+				height: 100%;
+				width: auto;
+				margin: 0;
+				padding: 0;
+				border: 0;
+			}
+			
+			body {
+				height: 100%;
+				width: auto;
+				margin: 0;
+				padding: 0;
+				border: 0;
+			}
+		</style>
+	</head>
+
+	<body class="layui-layout-body" style="background-image: url('');background-repeat: no-repeat; background-size: 100% 100%; ">
+		<div class="layui-tab">
+			<ul class="layui-tab-title">
+				<li class="layui-this">我的资料</li>
+				<li>密码</li>
+			</ul>
+			<div class="layui-tab-content">
+				<div class="layui-tab-item layui-show" align="center" style="margin-top: 100px">
+					<div class="layui-col-xs12 ">
+						<form id="accountinfo" class="layui-form" action="">
+
+							<div class="layui-row">
+								<div class="layui-form-item layui-inline">
+									<label class="layui-form-label">昵称修改</label>
+									<div class="layui-input-block">
+										<input id="name" type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入昵称" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item  layui-inline">
+									<label class="layui-form-label">性别修改</label>
+									<div class="layui-input-block">
+										<input type="radio" name="sex" value="1" title="男">
+										<input type="radio" name="sex" value="0" title="女">
+									</div>
+								</div>
+							</div>
+							<div class="layui-row">
+								<div class="layui-form-item layui-inline">
+									<div class="layui-input-block" style="margin-left: 0">
+
+										<label class="layui-form-label">头像修改</label>
+										<div style="height: 92px; width: 92px; border: 1px none #000;" class="layui-upload-list layui-inline">
+											<img style="width: 100%; height: 100%;border: 1px solid #000;" class="layui-upload-img layui-circle" id="touxiang">
+											<p id="reupload"></p>
+											<input id="img" type="text" name="img" style="display: none;" value="">
+										</div>
+									</div>
+								</div>
+								<div class="layui-form-item layui-inline">
+									<label class="layui-form-label">签名修改</label>
+									<div class="layui-input-block">
+										<textarea id="sign" style="height:100px" type="text" name="sign" lay-verify="required" lay-reqtext="" placeholder="请输入签名" autocomplete="off" class="layui-input"></textarea>
+									</div>
+								</div>
+								<input name="account" style="display: none;" id="account">
+							</div>
+							<div class="layui-row">
+								<div class="layui-form-item layui-inline">
+									<label class="layui-form-label">QQ修改</label>
+									<div class="layui-input-block">
+										<input id="qq" type="text" name="qq" lay-verify="required" autocomplete="off" placeholder="请输入QQ" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item layui-inline">
+									<label class="layui-form-label">手机号修改</label>
+									<div class="layui-input-block">
+										<input id="phone" style="" type="text" name="phone" lay-verify="required" lay-reqtext="" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+							</div>
+							<div class="layui-row">
+								<div class="layui-form-item layui-inline">
+									<label class="layui-form-label">生日修改</label>
+									<div class="layui-input-block">
+										<input id="birthday" type="text" name="birthday" lay-verify="required" autocomplete="off" placeholder="请输入生日" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item layui-inline">
+									<label class="layui-form-label">出生地修改</label>
+									<div class="layui-input-block">
+										<input id="birplace" style="" type="text" name="birplace" lay-verify="required" lay-reqtext="" placeholder="请输入出生地" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+							</div>
+
+							<button style="" id="subm" class="layui-btn" lay-submit lay-filter="submitfilter1">提交修改</button>
+						</form>
+					</div>
+				</div>
+				<div class="layui-tab-item" align="center" style="margin-top: 100px">
+					<form class="layui-form" id="pwd">
+						<table>
+							<tr>
+								<td>
+									<div class="layui-inline layui-form-item">
+										<label class="layui-form-label">请输入原密码</label>
+										<div class="layui-input-inline">
+											<input type="password" id="oldpwd" name="oldpwd" required autocomplete="off" class="layui-input">
+										</div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="layui-inline">
+										<label class="layui-form-label">请输入新密码</label>
+										<div class="layui-input-inline">
+											<input type="password" id="newpwd1" required name="newpwd1" lay-verify="required" autocomplete="off" class="layui-input">
+										</div>
+									</div>
+								</td>
+								<td>
+									<div class="layui-inline">
+										<label class="layui-form-label">请确认新密码</label>
+										<div class="layui-input-inline">
+											<input type="password" id="newpwd2" required name="newpwd2" lay-verify="repass|required" autocomplete="off" class="layui-input">
+										</div>
+									</div>
+								</td>
+							</tr>
+						</table>
+						<button style="" id="subm" class="layui-btn" lay-submit lay-filter="submitfilter2">提交修改</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="layui/layui.all.js"></script>
+	<script type="text/javascript">
+		var $ = layui.jquery;
+		var table = layui.table;
+		var layer = layui.layer;
+		var element = layui.element;
+		var form = layui.form;
+		var laydate = layui.laydate;
+		var upload = layui.upload;
+		laydate.render({
+			elem: '#birthday'
+		});
+		var uploadInst = upload.render({
+			elem: '#touxiang',
+			url: ip+'bbs/imageServlet',
+			before: function(obj) {
+				obj.preview(function(index, file, result) {
+					console.log(index)
+					console.log(file)
+					console.log(result)
+					$('#touxiang').attr('src', result); //图片链接（base64）
+				});
+			},
+			done: function(res) {
+				//如果上传失败
+				if(res.code > 0) {
+					return layer.msg('上传失败');
+				}
+				$("#img").val(res.img)
+				console.log(res.img)
+				return layer.msg('上传成功');
+			},
+			error: function() {
+				//演示失败状态，并实现重传
+				var reupload = $('#reupload');
+				reupload.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs try-reload">重试</a>');
+				reupload.find('.try-reload').on('click', function() {
+					uploadInst.upload();
+				});
+			}
+		});
+
+		form.on('submit(submitfilter1)', function(obj) {
+			$.ajax({
+				type: "post",
+				url: ip+"bbs/modifyAccountInfo",
+				crossDomain: true,
+				xhrFields: {
+					withCredentials: true
+				},
+				data: $('#accountinfo').serialize(),
+			}).success(function(message) {
+				layer.msg(message.result)
+
+			});
+			return false;
+		})
+			  form.on('submit(submitfilter2)', function(obj){
+			  	if($("#newpwd1").val()!=$("#newpwd2").val()){
+			  		console.log("俺进来了")
+			  		layer.msg("新密码不一致")
+			  		return false;
+			  	}
+			  	
+			  	console.log("俺进来了2")
+			   	   $.ajax({
+			   	       type: "post",
+			   	       url: ip+"bbs/modifyAccountPwd",
+			   	       crossDomain: true,
+				xhrFields: {
+					withCredentials: true
+				},
+			   	       data: $('#pwd').serialize(),
+			   	   }).success(function(message) {
+			 		layer.msg(message.result)
+			 		$("#img").val(message.img)  
+					  });
+			   	  return false;
+			  })
+
+		$(function() {
+			$.ajax({
+				type: "get",
+				url: ip+"bbs/queryAccountInfo",
+				crossDomain: true,
+				xhrFields: {
+					withCredentials: true
+				},
+				success: function(data) {
+					data = data.data
+					$("#name").val(data.username)
+					$("#account").val(data.account)
+					data.sex == '女' ? $("input[name='sex'][value='1']").attr("checked", true) : $("input[name='sex'][value='0']").attr("checked", true)
+					$("#phone").val(data.phone)
+					$("#qq").val(data.qq)
+					$("#birthday").val(data.birthday)
+					$("#birplace").val(data.birplace)
+					$("#sign").val(data.sign)
+					$("#img").val(data.img)
+					$("#touxiang").attr("src", data.img)
+					form.render()
+				}
+			})
+		});
+	</script>
+
+</html>

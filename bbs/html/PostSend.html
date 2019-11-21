@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>发帖</title>
+		<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+
+		<link rel="stylesheet" href="../css/element-ui.css" />
+
+		<script type="text/javascript" src="../js/vue.js"></script>
+		<script type="text/javascript" src="../js/element-ui.js"></script>
+		<script type="text/javascript" src="../js/Names.js"></script>
+
+		<link rel="stylesheet" href="../css/sendpost.css" />
+		<script type="text/javascript" src="../js/data.js" ></script>
+	</head>
+
+	<body>
+
+		<div id="app">
+			
+			
+
+			<el-container>
+				<el-aside width="200px">
+					<img :src='img' width="150px" height="150px" /><br />
+					{{username}}
+					
+				</el-aside>
+				<el-container>
+					<el-main>
+						<h3 v-if="flg">发帖</h3>
+						<h3 v-else="flg">编辑帖子</h3>
+						<div style="width: 600px;border: 1px solid #B4BCCC;margin: auto;">
+							<el-form :model='post' label='100x' >
+								<el-form-item label='标题'prop='title' :rules="{ required: true, message: '标题不能为空'}" >
+									<el-input v-model='post.title' style="width: 400px;"></el-input>
+								</el-form-item>
+								
+								<el-form-item label='正文' prop='content' :rules="{ required: true, message: '正文不能为空'}">
+									<el-input v-model='post.content' style="width: 400px;" type="textarea" rows='4' ></el-input>
+								</el-form-item>
+								
+								<el-form-item v-if="flg" label='模块选择' prop='sectionId'  >
+										<el-select size="medium" v-model="eloption.sectionId" value-key="sectionId"  placeholder="请选择"
+											@change="choose">
+										    <el-option v-for="item in options" :value='item.sectionId' :label="item.name" v-model="item.sectionId" 
+										    	>
+										    </el-option>
+									  	</el-select>
+									  
+									  	<el-select size="medium" v-model="eloptionson.sectionId" value-key="sectionId"  placeholder="请选择">
+										    <el-option 
+										      v-for="item in optionsons" :value="item.sectionId" :label="item.name" v-model="item.sectionId" >
+										    </el-option>
+									  	</el-select>
+									 
+								</el-form-item>
+								<el-form-item v-if='!flg' label='板块名字' >
+									<el-input v-model='post.sectionname' disabled style="width: 400px;"></el-input>
+								</el-form-item>
+								
+								
+								<el-form-item >
+									<el-button v-if='flg' @click='sendPost'>发布</el-button>
+									
+									<el-button v-if='!flg' @click='updatePost'>保存修改</el-button>
+									<el-button v-if='!flg' @click='writePost'>返回发帖</el-button>
+									<el-button @click='cancel' >返回</el-button>
+									<el-button @click='resetform'>清空</el-button>
+									
+								</el-form-item>
+							</el-form>
+						</div>
+						
+					</el-main>
+					
+				</el-container>
+			</el-container>
+
+		</div>
+
+	</body>
+	<script>
+		var myvue=new Vue({
+			el:'#app',
+			data(){
+				return{
+					flg:true,
+					userid:'',
+					username:"游客",
+					img:'../img/user1.jpg',
+					options:[],
+					optionsons:[],
+					eloptionson:{
+						districtid:null ,
+						list:[],
+						name: "",
+						roleid: null,
+						sectionId: null
+					},
+					
+					eloption:{
+						districtid:null ,
+						list:[],
+						name: "",
+						roleid: null,
+						sectionId: null
+					
+					},
+					post:{
+						title:'',
+						content:'',
+						posttype:0,
+						sectionid:'',
+						sectionname:''
+					},
+					postid:''
+					
+				}
+			},
+			methods:{
+				writePost:function(){
+					this.flg=true;
+					sessionStorage.removeItem('post');
+					this.post={};
+				},
+				updatePost:function(){
+					if(myvue.post.title==""||myvue.post.title==null){
+						alert("标题不能为空");
+					}else if(myvue.post.content==""||myvue.post.content==null){
+						alert("正文不能为空");
+					}else{
+						$.ajax({
+							type:"get",
+							url:ip+'bbs/PostEdit', //postid=4 & title= & content=neirongxiugai & userid=1
+							data:{
+								userid:myvue.userid,
+								title:myvue.post.title,
+								content:myvue.post.content,
+								postid:myvue.postid
+							},
+							dataType: "json",
+							xhrFields: {
+								withCredentials: false
+							},
+							success: function(data) {
+								if(data.success){
+									alert("修改成功");
+									
+									//window.location.reload();
+								}
+								
+							},
+							error:function(){
+								alert("修改失败");
+							}
+						});
+					}
+				
+				},
+				choose:function(){
+					for (var i = 0; i < this.options.length; i++) {  
+					        if(this.eloption.sectionId==this.options[i].sectionId){
+					        	this.optionsons=this.options[i].list;
+					        }
+					    }  
+					
+					console.log(this.eloption.sectionId)
+				},
+				test:function(){
+					alert(this.eloptionson.sectionId);
+				},
+				resetform:function(){
+					this.post={};
+				},
+				cancel:function(){
+					window.location.href='../index.html';
+				},
+				sendPost:function(){        //发帖子  http://localhost:8081/bbs/PostSend
+											//   userid=1&title=title&content=neirong&sectionid=2&posttype=0
+					if(myvue.post.title==""||myvue.post.title==null){
+						alert("标题不能为空");
+					}else if(myvue.post.content==""||myvue.post.content==null){
+						alert("正文不能为空");
+					}else if(myvue.post.content==""||myvue.post.content==null){
+						alert("请选择发布帖子的板块");
+					}
+					else if(myvue.eloptionson.sectionId!=null&&myvue.eloptionson.sectionId!=""){
+						this.post.posttype=0;
+						$.ajax({
+							type:"get",
+							url:ip+"bbs/PostSend",
+							data:{
+								userid:myvue.userid,
+								title:myvue.post.title,
+								content:myvue.post.content,
+								posttype:myvue.post.posttype,
+								sectionid:myvue.eloptionson.sectionId
+							},
+							dataType: "json",
+							xhrFields: {
+								withCredentials: false
+							},
+							success: function(data) {
+								alert("发布成功");
+								window.location.reload();
+							},
+							error:function(){
+								alert("发布失败");
+							}
+						});
+					}
+				}
+			},
+			
+
+			mounted:function(){
+				
+				$.ajax({
+					url: ip+"bbs/showUserFormation",//'Messages.json',  跨域URL
+					type: "get",
+					
+					dataType: "json",
+					crossDomain: true,
+					xhrFields: {
+						withCredentials: true
+					},
+					success: function(data) {
+						myvue.userid=data.data.userid;
+						myvue.username = data.data.username;
+						if(data.data.img!=null){
+							myvue.img=data.data.img;
+						}
+						
+					}
+				});
+				
+				$.ajax({
+						url: ip+'bbs/ShowSection',//,  跨域URL
+						type: 'get',
+						
+						dataType: "json",
+						crossDomain: true,
+						xhrFields: {
+							withCredentials: true
+						},
+						success: function(data) {
+							myvue.options = data.data;
+							//console.log(myvue.options);
+						}
+				});
+				{
+					if(sessionStorage.getItem("post")!=null){
+						this.flg=false;
+						this.postid=sessionStorage.getItem("post");
+							$.ajax({
+								url: ip+'bbs/PostFind',//,  跨域URL
+								type: 'get',
+								data:{
+									postid:this.postid
+	//								postid:1
+								},
+								dataType: "json",
+								crossDomain: true,
+								xhrFields: {
+									withCredentials: false
+								},
+								success: function(data) {
+									myvue.post=data.data.post;
+									//console.log(myvue.options);
+									myvue.eloptionson.sectionname=data.data.post.sectionname;
+									
+								}
+						});
+					}
+				}
+				
+				
+			}
+		});
+		
+		
+		
+	</script>
+
+</html>
